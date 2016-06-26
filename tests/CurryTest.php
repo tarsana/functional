@@ -31,4 +31,16 @@ class CurryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(10, $add(5, 5));
     }
 
+    public function testCurryWithMultipleArgs() {
+        $introduce = F\curry(function($firstName, $lastName, $age, $job){
+            return "My name is {$firstName} {$lastName}, I am {$age} years old and my job is {$job}";
+        });
+
+        $result = 'My name is Amine Ben hammou, I am 26 years old and my job is Software Engineer';
+
+        $introduceMe = $introduce('Amine', 'Ben hammou');
+
+        $this->assertEquals($result, $introduceMe(26, 'Software Engineer'));
+        $this->assertEquals($result, $introduce('Amine', 'Ben hammou', 26, 'Software Engineer'));
+    }
 }
