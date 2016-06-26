@@ -1,0 +1,24 @@
+{
+    "name": "tarsana/functional",
+    "description": "functional programming library for Tarsana",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amine Ben hammou",
+            "email": "webneat@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tarsana\\Functional\\": "src/"
+        },
+        "files": ["src/functions.php"]
+    },
+    "require": {
+        "cypresslab/php-curry": "^0.2.0"
+    }
+}
