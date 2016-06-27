@@ -1,3 +1,3 @@
 <?php namespace Tarsana\Functional\Exceptions;
 
-class InvalidArguments extends \Exception {}
+class InvalidArgument extends \Exception {}

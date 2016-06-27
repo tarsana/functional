@@ -12,7 +12,7 @@ class ApplyTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('The result', F\apply($fn, []));
     }
 
-    public function testCurryWithOneArg() {
+    public function testApplyWithOneArg() {
         $fn = function($x){
             return $x + 1;
         };
@@ -20,7 +20,17 @@ class ApplyTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2, F\apply($fn, [1]));
     }
 
-    public function testCurryWithMultipleArgs() {
+    public function testApplyIsCurried() {
+        $fn = function($x){
+            return $x + 1;
+        };
+
+        $applyFn = F\apply($fn);
+
+        $this->assertEquals(2, $applyFn([1]));
+    }
+
+    public function testApplyWithMultipleArgs() {
         $introduce = function($firstName, $lastName, $age, $job){
             return "My name is {$firstName} {$lastName}, I am {$age} years old and my job is {$job}";
         };

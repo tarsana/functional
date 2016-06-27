@@ -43,4 +43,18 @@ class CurryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($result, $introduceMe(26, 'Software Engineer'));
         $this->assertEquals($result, $introduce('Amine', 'Ben hammou', 26, 'Software Engineer'));
     }
+
+    public function testCurryFunctionUsingFuncGetArgs() {
+        $fn = function($x, $y) {
+            return implode(', ', func_get_args());
+        };
+
+        $curried = F\curry($fn);
+
+        $curriedOne = $curried('foo');
+
+        $this->assertEquals('foo, bar', $fn('foo', 'bar'));
+        $this->assertEquals('foo, bar', $curried('foo', 'bar'));
+        $this->assertEquals('foo, bar', $curriedOne('bar'));
+    }
 }
