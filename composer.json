@@ -18,7 +18,13 @@
         },
         "files": ["src/functions.php"]
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/webNeat/php-curry"
+        }
+    ],
     "require": {
-        "cypresslab/php-curry": "^0.2.0"
+        "cypresslab/php-curry": "dev-master"
     }
 }
