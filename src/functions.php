@@ -65,3 +65,15 @@ function pipe() {
         return $result;
     });
 }
+
+/**
+ * A function that takes one argument and 
+ * returns exactly the given argument.
+ *
+ * @signature * -> *
+ * @return callable
+ */
+function identity($value) {
+    return $value;
+}
+
