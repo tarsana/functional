@@ -16,7 +16,11 @@
         "psr-4": {
             "Tarsana\\Functional\\": "src/"
         },
-        "files": ["src/functions.php"]
+        "files": [
+          "src/collections.php",
+          "src/functions.php",
+          "src/math.php"
+        ]
     },
     "repositories": [
         {

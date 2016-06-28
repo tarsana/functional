@@ -4,7 +4,7 @@ use Tarsana\Functional as F;
 
 class CurryTest extends PHPUnit_Framework_TestCase {
 
-    public function testCurryWithoutArg() {
+    public function test_curry_without_arg() {
         $fn = F\curry(function(){
             return 'The result';
         });
@@ -12,7 +12,7 @@ class CurryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('The result', $fn());
     }
 
-    public function testCurryWithOneArg() {
+    public function test_curry_with_one_arg() {
         $fn = F\curry(function($x){
             return $x + 1;
         });
@@ -20,7 +20,7 @@ class CurryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $fn(1));
     }
 
-    public function testCurryWithTwoArgs() {
+    public function test_curry_with_two_args() {
         $add = F\curry(function($x, $y){
             return $x + $y;
         });
@@ -31,7 +31,7 @@ class CurryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(10, $add(5, 5));
     }
 
-    public function testCurryWithMultipleArgs() {
+    public function test_curry_with_multiple_args() {
         $introduce = F\curry(function($firstName, $lastName, $age, $job){
             return "My name is {$firstName} {$lastName}, I am {$age} years old and my job is {$job}";
         });
@@ -44,7 +44,7 @@ class CurryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($result, $introduce('Amine', 'Ben hammou', 26, 'Software Engineer'));
     }
 
-    public function testCurryFunctionUsingFuncGetArgs() {
+    public function test_curry_function_using_func_get_args() {
         $fn = function($x, $y) {
             return implode(', ', func_get_args());
         };

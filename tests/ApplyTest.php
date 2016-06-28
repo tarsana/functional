@@ -4,7 +4,7 @@ use Tarsana\Functional as F;
 
 class ApplyTest extends PHPUnit_Framework_TestCase {
 
-    public function testApplyWithoutArg() {
+    public function test_apply_without_arg() {
         $fn = function(){
             return 'The result';
         };
@@ -12,7 +12,7 @@ class ApplyTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('The result', F\apply($fn, []));
     }
 
-    public function testApplyWithOneArg() {
+    public function test_apply_with_one_arg() {
         $fn = function($x){
             return $x + 1;
         };
@@ -20,7 +20,7 @@ class ApplyTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2, F\apply($fn, [1]));
     }
 
-    public function testApplyIsCurried() {
+    public function test_apply_is_curried() {
         $fn = function($x){
             return $x + 1;
         };
@@ -30,7 +30,7 @@ class ApplyTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $applyFn([1]));
     }
 
-    public function testApplyWithMultipleArgs() {
+    public function test_apply_with_multiple_args() {
         $introduce = function($firstName, $lastName, $age, $job){
             return "My name is {$firstName} {$lastName}, I am {$age} years old and my job is {$job}";
         };

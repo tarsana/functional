@@ -24,21 +24,21 @@ class PipeTest extends PHPUnit_Framework_TestCase {
     /**
      * @expectedException Tarsana\Functional\Exceptions\InvalidArgument
      */
-    public function testPipeWithoutArg() {
+    public function test_pipe_without_arg() {
         F\pipe();
     }
 
-    public function testPipeOneFunctionWithoutArgs() {
+    public function test_pipe_one_function_without_args() {
         $fn = F\pipe($this->hello);
         $this->assertEquals("Hello", $fn());
     }
 
-    public function testPipeOneFunctionWithTwoArgs() {
+    public function test_pipe_one_function_with_two_args() {
         $add = F\pipe($this->add);
         $this->assertEquals(11, $add(4, 7));
     }
 
-    public function testPipeTwoFunctions() {
+    public function test_pipe_two_functions() {
         $lowerHello = F\pipe($this->hello, 'strtolower');
         $this->assertEquals('hello', $lowerHello());
 
@@ -49,7 +49,7 @@ class PipeTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(10, $doubleThenSum([2, 3]));
     }
 
-    public function testPipeInstanceMethod() {
+    public function test_pipe_instance_method() {
         $upperHello = F\pipe($this->hello, [new ForTest, 'upper']);
 
         $this->assertEquals('HELLO', $upperHello());

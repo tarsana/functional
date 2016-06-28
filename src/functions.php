@@ -1,9 +1,9 @@
 <?php namespace Tarsana\Functional;
-
-use Tarsana\Functional\Exceptions\InvalidArgument;
 /**
  * This file contains functions dealing with functions.
  */
+
+use Tarsana\Functional\Exceptions\InvalidArgument;
 
 /**
  * Returns a curried equivalent of the provided function.
@@ -13,10 +13,16 @@ use Tarsana\Functional\Exceptions\InvalidArgument;
  * @return callable
  */
 function curry(callable $fn) {
-    // This condition to be removed when using the next version of Curry
-    if(\Cypress\Curry\_number_of_required_params($fn) < 2)
-        return $fn;
     return \Cypress\Curry\curry($fn);
+}
+
+/**
+ * Argument placeholder.
+ * 
+ * @return \Cypress\Curry\Placeholder
+ */
+function __() {
+    return \Cypress\Curry\__();
 }
 
 /**
