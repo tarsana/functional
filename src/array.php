@@ -27,7 +27,9 @@ function value() {
  * @return array
  */
 function map() {
-    return apply(curry('array_map'), func_get_args());
+    return apply(curry(function($fn, $array){
+        return array_map($fn, $array);
+    }), func_get_args());
 }
 
 /**
