@@ -112,7 +112,7 @@ function pipe() {
  * ```
  *
  * @signature * -> *
- * @return callable
+ * @return mixed
  */
 function identity($value) {
     return $value;

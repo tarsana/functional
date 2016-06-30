@@ -30,3 +30,7 @@ The script I am using to generate the [Reference Documentation](#reference-docum
 - [Operators](https://github.com/tarsana/functional/blob/master/docs/operators.md)
 
 - [String](https://github.com/tarsana/functional/blob/master/docs/string.md)
+
+# Feedbacks & Contributions
+
+Any feedback or contribution is welcome. Enjoy !
