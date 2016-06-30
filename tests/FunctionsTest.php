@@ -145,6 +145,12 @@ class FunctionsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($result, F\apply($introduce, ['Amine', 'Ben hammou', 26, 'Software Engineer']));
     }
 
+    public function test_identity() {
+        $this->assertEquals(5, F\identity(5));
+        $this->assertEquals([1, 2], F\identity([1, 2]));
+        $this->assertEquals('Hello World', F\identity('Hello World'));
+        $this->assertNotEquals(5, F\identity(6));
+    }
 }
 
 class ForTest {
