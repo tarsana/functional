@@ -5,7 +5,7 @@
 
 /**
  * Computes `$x + $y`.
- * ```
+ * ```php
  * $plusTwo = plus(2);
  * $plusTwo(5); // 7
  * ```
@@ -24,10 +24,10 @@ function plus() {
 
 /**
  * Computues `$x - $y`.
- * ```
+ * ```php
  * minus(7, 2); // 5
  * ```
- * 
+ *
  * @signature Number -> Number -> Number
  * @param  int|float $x
  * @param  int|float $y
@@ -42,7 +42,7 @@ function minus() {
 
 /**
  * Computes `- $x`.
- * ```
+ * ```php
  * negate(5); // -5
  * negate(-7); // 7
  * ```
@@ -57,7 +57,7 @@ function negate($x) {
 
 /**
  * Computes `$x * $y`.
- * ```
+ * ```php
  * $double = multiply(2);
  * $double(5); // 10
  * ```
@@ -76,7 +76,7 @@ function multiply() {
 
 /**
  * Computes `$x / $y`.
- * ```
+ * ```php
  * divide(10, 2); // 5
  * ```
  *
@@ -94,7 +94,7 @@ function divide() {
 
 /**
  * Computes `$x % $y`.
- * ```
+ * ```php
  * modulo(10, 3); // 1
  * ```
  *
@@ -112,6 +112,10 @@ function modulo() {
 
 /**
  * Computes the sum of an array of numbers.
+ * ```php
+ * sum([1, 2, 3, 4]) // 10
+ * sum([]) // 0
+ * ```
  *
  * @signature [Number] -> Number
  * @param  array $numbers
@@ -123,6 +127,10 @@ function sum($numbers) {
 
 /**
  * Computes the product of an array of numbers.
+ * ```php
+ * product([1, 2, 3, 4]) // 24
+ * product([]) // 1
+ * ```
  *
  * @signature [Number] -> Number
  * @param  array $numbers

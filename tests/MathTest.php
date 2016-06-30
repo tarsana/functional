@@ -41,10 +41,12 @@ class MathTest extends PHPUnit_Framework_TestCase {
 
     public function test_sum() {
         $this->assertEquals(10, F\sum([1, 2, 3, 4]));
+        $this->assertEquals(0, F\sum([]));
     }
 
     public function test_product() {
         $this->assertEquals(12, F\product([2, 2, 3]));
+        $this->assertEquals(1, F\product([]));
     }
 
 }

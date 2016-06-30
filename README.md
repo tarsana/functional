@@ -6,7 +6,20 @@
 
 Functional programming library for Tarsana
 
-# Reference
+# Installation
+
+Please use **composer** to install this library:
+
+```
+composer require tarsana/functional
+```
+
+# Real use case
+
+The script I am using to generate the [Reference Documentation](#reference-documentation) files for this library is a good example of usage: [Check the code here](https://github.com/tarsana/functional/blob/master/generate-docs.php)
+
+
+# Reference Documentation
 
 - [Array](https://github.com/tarsana/functional/blob/master/docs/array.md)
 

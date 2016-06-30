@@ -4,7 +4,11 @@
  */
 
 /**
- * Currie;d version of `explode()`.
+ * Curried version of `explode()`.
+ * ```php
+ * $words = split(' ');
+ * $words('Hello World'); // ['Hello', 'World']
+ * ```
  *
  * @signature String -> String -> [String]
  * @param string $delimiter
@@ -17,6 +21,10 @@ function split() {
 
 /**
  * Curried version of `implode()`.
+ * ```php
+ * $sentence = join(' ');
+ * $sentence(['Hello', 'World']); // 'Hello World'
+ * ```
  *
  * @signature String -> [String] -> String
  * @param string $glue
@@ -31,6 +39,13 @@ function join() {
 
 /**
  * Curried version of `str_replace()`.
+ * ```php
+ * $string = 'a b c d e f';
+ * $noSpace = replace(' ', '');
+ * $noSpace($string); // 'abcdef'
+ * replace(['a', 'b', ' '], '', $string) // 'bcdef'
+ * replace(['a', 'e', ' '], ['x', 'y', ''], $string); // 'xbcdyf'
+ * ```
  *
  * @signature String|[String] -> String -> String|[String] -> String
  * @param  string $search
@@ -44,6 +59,11 @@ function replace() {
 
 /**
  * Curried version of `preg_replace()`.
+ * ```php
+ * $string = 'A12;b_{F}|d';
+ * $aplha = regReplace('/[^a-z]+/i', '');
+ * $alpha($string); // 'AbFd'
+ * ```
  *
  * @signature String -> String -> String -> String
  * @param  string $pattern
@@ -57,10 +77,13 @@ function regReplace() {
 
 /**
  * Alias of `strtoupper`.
+ * ```php
+ * upperCase('hello') // 'HELLO'
+ * ```
  *
  * @signature String -> String
  * @param  string $string
- * @retur;n string
+ * @return string
  */
 function upperCase($string) {
     return strtoupper($string);
@@ -68,6 +91,9 @@ function upperCase($string) {
 
 /**
  * Alias of `strtolower`.
+ * ```php
+ * lowerCase('HELLO') // 'hello'
+ * ```
  *
  * @signature String -> String
  * @param  string $string
@@ -79,6 +105,9 @@ function lowerCase($string) {
 
 /**
  * Gets the camlCase version of a string.
+ * ```php
+ * camlCase('Yes, we can! 123') // 'yesWeCan123'
+ * ```
  *
  * @signature String -> String
  * @param  string $string
@@ -98,7 +127,7 @@ function camlCase($string) {
  * Gets the snake-case of the string using `$delimiter` as separator.
  * ```
  * $underscoreCase = snakeCase('_');
- * $under;scoreCase('IAm-Happy'); // i_am_happy
+ * $underscoreCase('IAm-Happy'); // i_am_happy
  * ```
  *
  * @signature String -> String -> String
@@ -122,6 +151,11 @@ function snakeCase() {
 
 /**
  * Checks if `$string` starts with `$token`.
+ * ```php
+ * $http = startsWith('http://');
+ * $http('http://gitbub.com'); // true
+ * $http('gitbub.com'); // false
+ * ```
  *
  * @signature String -> String -> Boolean
  * @param  string $token
@@ -140,6 +174,11 @@ function startsWith() {
 
 /**
  * Checks if `$string` ends with `$token`.
+ * ```php
+ * $dotCom = endsWith('.com');
+ * $dotCom('http://gitbub.com'); // true
+ * $dotCom('php.net'); // false
+ * ```
  *
  * @signature String -> String -> Boolean
  * @param  string $token
@@ -158,6 +197,11 @@ function endsWith() {
 
 /**
  * Checks if a string matches a regular expression.
+ * ```php
+ * $numeric = test('/^[0-9.]+$/');
+ * $numeric('123.43'); // true
+ * $numeric('12a3.43'); // false
+ * ```
  *
  * @signature String -> String -> Boolean
  * @param  string $pattern
@@ -174,6 +218,11 @@ function test() {
 /**
  * Performs a global regular expression match
  * and returns array of results.
+ * ```php
+ * $numbers = match('/[0-9.]+/');
+ * $numbers('Hello World'); // []
+ * $numbers('12 is 4 times 3'); // ['12', '4', '3']
+ * ```
  *
  * @signature String -> String -> [String]
  * @param  string $pattern
