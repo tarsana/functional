@@ -3,8 +3,6 @@
  * This file contains some useful Math functions.
  */
 
-use Tarsana\Functional\Exceptions\InvalidArgument;
-
 /**
  * Computes `$x + $y`.
  * ```

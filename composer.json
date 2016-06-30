@@ -17,8 +17,10 @@
             "Tarsana\\Functional\\": "src/"
         },
         "files": [
-          "src/collections.php",
           "src/functions.php",
+          "src/operators.php",
+          "src/string.php",
+          "src/array.php",
           "src/math.php"
         ]
     },
