@@ -18,7 +18,8 @@ function curry(callable $fn) {
 
 /**
  * Argument placeholder.
- * 
+ *
+ * @signature * -> Placeholder
  * @return \Cypress\Curry\Placeholder
  */
 function __() {
@@ -40,7 +41,7 @@ function _apply($fn, $args) {
 /**
  * Apply the provided function to the list of arguments.
  *
- * @signture (*... -> a) -> [*] -> a
+ * @signature (*... -> a) -> [*] -> a
  * @param  callable $fn
  * @param  array    $args
  * @return mixed
@@ -50,8 +51,8 @@ function apply() {
 }
 
 /**
- * Performs left-to-right function composition. 
- * The leftmost function may have any arity; 
+ * Performs left-to-right function composition.
+ * The leftmost function may have any arity;
  * the remaining functions must be unary.
  * The result of pipe is curried.
  *
@@ -73,7 +74,7 @@ function pipe() {
 }
 
 /**
- * A function that takes one argument and 
+ * A function that takes one argument and
  * returns exactly the given argument.
  *
  * @signature * -> *

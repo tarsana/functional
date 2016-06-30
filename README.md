@@ -5,3 +5,15 @@
 [![License](https://poser.pugx.org/laravel/framework/license.svg)](http://opensource.org/licenses/MIT)
 
 Functional programming library for Tarsana
+
+# Reference
+
+- [Array](#https://github.com/tarsana/functional/blob/master/docs/array.md)
+
+- [Functions](#https://github.com/tarsana/functional/blob/master/docs/functions.md)
+
+- [Math](#https://github.com/tarsana/functional/blob/master/docs/math.md)
+
+- [Operators](#https://github.com/tarsana/functional/blob/master/docs/operators.md)
+
+- [String](#https://github.com/tarsana/functional/blob/master/docs/string.md)
