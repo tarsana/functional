@@ -18,8 +18,8 @@ class ArrayTest extends PHPUnit_Framework_TestCase {
 
     public function test_map(){
         $numbers = [1, 2, 3, 4];
-        $doubles = F\map(function($x){ return 2 * $x; });
-        $this->assertEquals([2, 4, 6, 8], $doubles($numbers));
+        $doubles = function($x){ return 2 * $x; };
+        $this->assertEquals([2, 4, 6, 8], F\map($doubles, $numbers));
     }
 
     public function test_filter(){

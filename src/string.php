@@ -7,14 +7,14 @@
  * Currie;d version of `explode()`.
  *
  * @signature String -> String -> [String]
- * @param string $delimiter 
+ * @param string $delimiter
  * @param string $string
  * @return array
  */
 function split() {
     return apply(curry('explode'), func_get_args());
 }
-;
+
 /**
  * Curried version of `implode()`.
  *
@@ -24,17 +24,19 @@ function split() {
  * @return string
  */
 function join() {
-    return apply(curry('implode'), func_get_args());
-};
+    return apply(curry(function($glue, $pieces){
+        return implode($glue, $pieces);
+    }), func_get_args());
+}
 
 /**
  * Curried version of `str_replace()`.
  *
  * @signature String|[String] -> String -> String|[String] -> String
- * @param  string $search     
+ * @param  string $search
  * @param  string $replacement
- * @param  string $string     
- * @return string             
+ * @param  string $string
+ * @return string
  */
 function replace() {
     return apply(curry('str_replace'), func_get_args());
@@ -44,10 +46,10 @@ function replace() {
  * Curried version of `preg_replace()`.
  *
  * @signature String -> String -> String -> String
- * @param  string $pattern     
+ * @param  string $pattern
  * @param  string $replacement
- * @param  string $string     
- * @return string             
+ * @param  string $string
+ * @return string
  */
 function regReplace() {
     return apply(curry('preg_replace'), func_get_args());
@@ -55,7 +57,7 @@ function regReplace() {
 
 /**
  * Alias of `strtoupper`.
- * 
+ *
  * @signature String -> String
  * @param  string $string
  * @retur;n string
@@ -66,7 +68,7 @@ function upperCase($string) {
 
 /**
  * Alias of `strtolower`.
- * 
+ *
  * @signature String -> String
  * @param  string $string
  * @return string
@@ -128,8 +130,8 @@ function snakeCase() {
  */
 function startsWith() {
     $startsWith = function($token, $string) {
-        return ( 
-            strlen($token) <= strlen($string) && 
+        return (
+            strlen($token) <= strlen($string) &&
             substr($string, 0, strlen($token)) === $token
         );
     };
@@ -147,7 +149,7 @@ function startsWith() {
 function endsWith() {
     $endsWith = function($token, $string) {
         return (
-            strlen($token) <= strlen($string) && 
+            strlen($token) <= strlen($string) &&
             substr($string, - strlen($token)) === $token
         );
     };
@@ -159,7 +161,7 @@ function endsWith() {
  *
  * @signature String -> String -> Boolean
  * @param  string $pattern
- * @param  string $string 
+ * @param  string $string
  * @return bool
  */
 function test() {
