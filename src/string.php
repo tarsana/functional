@@ -80,7 +80,7 @@ function lowerCase($string) {
 /**
  * Gets the camlCase version of a string.
  *
- * @signa;ture String -> String
+ * @signature String -> String
  * @param  string $string
  * @return string
  */

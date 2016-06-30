@@ -79,7 +79,7 @@ camlCase(string $string) : string
 ```
 
 ```
-
+String -> String
 ```
 
 Gets the camlCase version of a string.
