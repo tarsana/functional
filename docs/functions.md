@@ -83,7 +83,7 @@ $addThenDouble(2, 3) // 10
 ## identity
 
 ```php
-identity() : callable
+identity() : mixed
 ```
 
 ```
