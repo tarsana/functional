@@ -38,8 +38,8 @@ class StringTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('hi 123 !', F\lowerCase('Hi 123 !'));
     }
 
-    public function test_camlCase(){
-        $this->assertEquals('yesWeCan123', F\camlCase('Yes, we can! 123'));
+    public function test_camelCase(){
+        $this->assertEquals('yesWeCan123', F\camleCase('Yes, we can! 123'));
     }
 
     public function test_snakeCase(){
