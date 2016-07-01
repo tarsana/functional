@@ -43,7 +43,7 @@ function join() {
  * $string = 'a b c d e f';
  * $noSpace = replace(' ', '');
  * $noSpace($string); // 'abcdef'
- * replace(['a', 'b', ' '], '', $string) // 'bcdef'
+ * replace(['a', 'b', ' '], '', $string) // 'cdef'
  * replace(['a', 'e', ' '], ['x', 'y', ''], $string); // 'xbcdyf'
  * ```
  *
@@ -106,14 +106,14 @@ function lowerCase($string) {
 /**
  * Gets the camlCase version of a string.
  * ```php
- * camlCase('Yes, we can! 123') // 'yesWeCan123'
+ * camelCase('Yes, we can! 123') // 'yesWeCan123'
  * ```
  *
  * @signature String -> String
  * @param  string $string
  * @return string
  */
-function camlCase($string) {
+function camelCase($string) {
     return apply(pipe(
         regReplace('/[^a-z0-9]+/i', ' '),
         'trim',

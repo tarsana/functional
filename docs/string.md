@@ -47,7 +47,7 @@ Curried version of `str_replace()`.
 $string = 'a b c d e f';
 $noSpace = replace(' ', '');
 $noSpace($string); // 'abcdef'
-replace(['a', 'b', ' '], '', $string) // 'bcdef'
+replace(['a', 'b', ' '], '', $string) // 'cdef'
 replace(['a', 'e', ' '], ['x', 'y', ''], $string); // 'xbcdyf'
 ```
 
@@ -98,10 +98,10 @@ Alias of `strtolower`.
 lowerCase('HELLO') // 'hello'
 ```
 
-## camlCase
+## camelCase
 
 ```php
-camlCase(string $string) : string
+camelCase(string $string) : string
 ```
 
 ```
@@ -110,7 +110,7 @@ String -> String
 
 Gets the camlCase version of a string.
 ```php
-camlCase('Yes, we can! 123') // 'yesWeCan123'
+camelCase('Yes, we can! 123') // 'yesWeCan123'
 ```
 
 ## snakeCase
