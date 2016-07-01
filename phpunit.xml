@@ -14,7 +14,7 @@
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
     <testsuites>
-        <testsuite name="Tarsana Command Test Suite">
+        <testsuite name="Tarsana Functional Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

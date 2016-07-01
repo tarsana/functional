@@ -1,4 +1,4 @@
-<?php
+<?php namespace Demo;
 /**
  * This script is an example of usage Tarsana\Functional
  * It is used to generate the Reference documentation of
@@ -112,11 +112,11 @@ function markdown($fn) {
 // String -> IO
 function handle($file) {
     $content = F\pipe(
-        F\map('block'),
+        F\map('Demo\\block'),
         F\filter(function($block){
             return $block->type == 'function' && !$block->is_internal;
         }),
-        F\map('markdown'),
+        F\map('Demo\\markdown'),
         function($parts) use ($file) {
             $name = F\replace(['src/', '.php'], '', $file);
             return array_merge(["# {$name}"], $parts);
@@ -131,4 +131,4 @@ function handle($file) {
 }
 
 // The entry point
-F\each('handle', files());
+F\each('Demo\\handle', files());
