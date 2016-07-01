@@ -39,7 +39,7 @@ class StringTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_camelCase(){
-        $this->assertEquals('yesWeCan123', F\camleCase('Yes, we can! 123'));
+        $this->assertEquals('yesWeCan123', F\camelCase('Yes, we can! 123'));
     }
 
     public function test_snakeCase(){
