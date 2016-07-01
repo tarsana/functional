@@ -1,5 +1,7 @@
 # Tarsana Functional
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f3809eb7-6efa-498d-83b2-598d6e7eb9c6/small.png)](https://insight.sensiolabs.com/projects/f3809eb7-6efa-498d-83b2-598d6e7eb9c6)
+
 [![Build Status](https://travis-ci.org/tarsana/functional.svg?branch=master)](https://travis-ci.org/tarsana/functional)
 [![Coverage Status](https://coveralls.io/repos/github/tarsana/functional/badge.svg?branch=master)](https://coveralls.io/github/tarsana/functional?branch=master)
 [![License](https://poser.pugx.org/laravel/framework/license.svg)](http://opensource.org/licenses/MIT)
