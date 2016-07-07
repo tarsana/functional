@@ -85,4 +85,48 @@ class ArrayTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(3, F\length([1, 2, 3]));
         $this->assertEquals(5, F\length('Hello'));
     }
+
+    public function test_all(){
+        $allNotNull = F\all(F\notEq(0));
+        $this->assertTrue($allNotNull([9, 3, 2, 4]));
+        $this->assertFalse($allNotNull([9, 3, 0, 4]));
+    }
+
+    public function test_any(){
+        $anyNumeric = F\any('is_numeric');
+        $this->assertTrue($anyNumeric(['Hello', '12', []]));
+        $this->assertFalse($anyNumeric(['Hello', 'Foo']));
+    }
+
+    public function test_concat(){
+        $this->assertEquals(F\concat([1, 2], [3, 4]), [1, 2, 3, 4]);
+        $this->assertEquals(F\concat('Hello ', 'World'), 'Hello World');
+    }
+
+    public function test_append(){
+        $this->assertEquals(F\append(5, [1, 2, 3]), [1, 2, 3, 5]);
+        $this->assertEquals(F\append(' World', 'Hello'), 'Hello World');
+    }
+
+    public function test_take(){
+        $items = ['Foo', 'Bar', 'Baz'];
+        $this->assertEquals(F\take(2, $items), ['Foo', 'Bar']);
+        $this->assertEquals(F\take(0, $items), []);
+        $this->assertEquals(F\take(-2, $items), []);
+        $this->assertEquals(F\take(5, 'Hello World'), 'Hello');
+        $this->assertEquals(F\take(-5, 'Hello World'), '');
+    }
+
+    public function test_toPairs(){
+        $array = ['key' => 'value', 'number' => 53, 'foo', 'bar'];
+        $this->assertEquals(F\toPairs($array), [['key', 'value'], ['number', 53], [0, 'foo'], [1, 'bar']]);
+    }
+
+    public function test_chain(){
+        $words = F\chain(F\split(' '));
+        $this->assertEquals(
+            $words(['Hello World', 'How are you']),
+            ['Hello', 'World', 'How', 'are', 'you']
+        );
+    }
 }

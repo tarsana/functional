@@ -14,7 +14,7 @@ use Tarsana\Functional as F;
 
 // Reads the list of sources files from 'composer.json'
 // * -> IO [String]
-function files() {
+function modules() {
     $composer = json_decode(file_get_contents(__DIR__.'/composer.json'));
     return $composer->autoload->files;
 }
@@ -62,6 +62,35 @@ function returnOf($data) {
         : null;
 }
 
+// Extracts the type of a block
+// Object -> String
+function typeOf($data) {
+    if (isset($data->ctx->type))
+        return $data->ctx->type;
+    if (F\length(tags('var', $data)) > 0)
+        return 'attr';
+    if (F\length(tags('return', $data)) > 0)
+        return 'method';
+}
+
+// Extract keywords
+// Object -> [String]
+function keywords($data) {
+    if (!isset($data->code)) {
+        return [];
+    }
+    $size = strpos($data->code, '(');
+    if ($size === false)
+        $size = strlen($data->code);
+    $keywords = F\pipe(
+        F\take($size),
+        F\split(' '),
+        F\map('trim'),
+        F\filter(F\notEq(''))
+    );
+    return $keywords($data->code);
+}
+
 // Object -> DocBlock
 /**
  * @type DocBlock
@@ -74,43 +103,52 @@ function returnOf($data) {
  * @field signatures [String]
  * @field description String
  * @field is_internal Boolean
+ * @field is_static Boolean
  */
 function block($data) {
+    $keywords = keywords($data);
     return (object) [
-        'type' => isset($data->ctx->type) ? $data->ctx->type : null,
-        'name' => isset($data->ctx->name) ? $data->ctx->name : null,
+        'type' => typeOf($data),
+        'name' => isset($data->ctx->name) ? $data->ctx->name : F\last($keywords),
         'args' => argsOf($data),
         'return' => returnOf($data),
         'signatures' => signaturesOf($data),
         'description' => $data->description->full,
-        'is_internal' => (0 < F\length(tags('internal', $data)))
+        'is_static' => in_array('static', $keywords),
+        'is_internal' => (0 < F\length(tags('internal', $data))) && !in_array('public', $keywords)
     ];
 }
 
 // Get a markdown code block
 // String -> String -> String
 function code($lang, $text) {
+    if(trim($text) == '')
+        return '';
     return "```{$lang}\n{$text}\n```";
 }
 
-// Gets the markdown of a function
+// Gets the markdown of a function/method/class
 // DocBlock -> String
 function markdown($fn) {
-    $args = F\map(function($arg) {
-        return $arg->type . ' ' . $arg->name;
-    }, $fn->args);
-    $proto = $fn->name . '('. F\join(', ', $args) .') : ' . $fn->return;
-    return F\join("\n\n", [
-        "## {$fn->name}",
-        code('php', $proto),
-        code('', F\join("\n", $fn->signatures)),
-        $fn->description
-    ]);
+    if ($fn->type == 'class') {
+        return $fn->description;
+    } else {
+        $args = F\map(function($arg) {
+            return $arg->type . ' ' . $arg->name;
+        }, $fn->args);
+        $proto = $fn->name . '('. F\join(', ', $args) .') : ' . $fn->return;
+        return F\join("\n\n", [
+            "## {$fn->name}",
+            code('php', $proto),
+            code('', F\join("\n", $fn->signatures)),
+            $fn->description
+        ]);
+    }
 }
 
-// Generates documentation for a file
+// Generates documentation for a module of functions
 // String -> IO
-function handle($file) {
+function generateModule($file) {
     $content = F\pipe(
         F\map('Demo\\block'),
         F\filter(function($block){
@@ -130,5 +168,33 @@ function handle($file) {
     );
 }
 
+// Generates documentation for a class
+// String -> IO
+function generateClass($name) {
+    $content = F\pipe(
+        F\map('Demo\\block'),
+        F\filter(function($block){
+            return in_array($block->type, ['method', 'class']) && !$block->is_internal;
+        }),
+        f\map(function($block) use ($name) {
+            if ($block->type == 'method')
+                $block->name = $name . '::' . $block->name;
+            return $block;
+        }),
+        F\map('Demo\\markdown'),
+        function($parts) use ($name) {
+            return array_merge(["# {$name}"], $parts);
+        },
+        F\join("\n\n"),
+        F\regReplace('/\\n+/', "\n")
+    );
+
+    file_put_contents (
+        "docs/{$name}.md",
+        $content(json_decode(shell_exec("dox -r < src/{$name}.php")))
+    );
+}
+
 // The entry point
-F\each('Demo\\handle', files());
+F\each('Demo\\generateModule', modules());
+F\each('Demo\\generateClass', ['Stream', 'Error']);

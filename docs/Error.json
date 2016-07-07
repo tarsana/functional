@@ -1,0 +1,205 @@
+[
+  {
+    "tags": [],
+    "description": {
+      "full": "This class represents an error.",
+      "summary": "This class represents an error.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "isClass": false,
+    "isEvent": false,
+    "ignore": false,
+    "line": 3,
+    "codeStart": 6,
+    "code": "class Error {",
+    "ctx": {
+      "type": "class",
+      "constructor": "Error",
+      "cons": "Error",
+      "name": "Error",
+      "extends": "",
+      "string": "new Error()"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "var",
+        "string": "string"
+      }
+    ],
+    "description": {
+      "full": "A message describing the error.",
+      "summary": "A message describing the error.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "isClass": false,
+    "isEvent": false,
+    "ignore": false,
+    "line": 7,
+    "codeStart": 12,
+    "code": "protected $message;",
+    "ctx": false
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "string": "string     $message",
+        "name": "string",
+        "description": "$message",
+        "types": [],
+        "typesDescription": "",
+        "variable": false,
+        "nonNullable": false,
+        "nullable": false,
+        "optional": false
+      },
+      {
+        "type": "param",
+        "string": "Error|null $error",
+        "name": "Error|null",
+        "description": "$error",
+        "types": [],
+        "typesDescription": "",
+        "variable": false,
+        "nonNullable": false,
+        "nullable": false,
+        "optional": false
+      },
+      {
+        "type": "return",
+        "string": "Error",
+        "types": [],
+        "typesDescription": "",
+        "variable": false,
+        "nonNullable": false,
+        "nullable": false,
+        "optional": false,
+        "description": "Error"
+      }
+    ],
+    "description": {
+      "full": "Creates a new Error.",
+      "summary": "Creates a new Error.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "isClass": false,
+    "isEvent": false,
+    "ignore": false,
+    "line": 14,
+    "codeStart": 21,
+    "code": "public static function of ($message, Error $error = null)\n{\n    return new Error($message, $error);\n}",
+    "ctx": false
+  },
+  {
+    "tags": [
+      {
+        "type": "internal",
+        "string": ""
+      },
+      {
+        "type": "param",
+        "string": "string     $message",
+        "name": "string",
+        "description": "$message",
+        "types": [],
+        "typesDescription": "",
+        "variable": false,
+        "nonNullable": false,
+        "nullable": false,
+        "optional": false
+      },
+      {
+        "type": "param",
+        "string": "Error|null $error",
+        "name": "Error|null",
+        "description": "$error",
+        "types": [],
+        "typesDescription": "",
+        "variable": false,
+        "nonNullable": false,
+        "nullable": false,
+        "optional": false
+      }
+    ],
+    "description": {
+      "full": "Creates a new Error.",
+      "summary": "Creates a new Error.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "isClass": false,
+    "isEvent": false,
+    "ignore": false,
+    "line": 26,
+    "codeStart": 33,
+    "code": "protected function __construct ($message, Error $error = null)\n{\n    if (null != $error)\n        $message = $error->message() . ' -> ' . $message;\n    $this->message = $message;\n}",
+    "ctx": false
+  },
+  {
+    "tags": [
+      {
+        "type": "return",
+        "string": "string",
+        "types": [],
+        "typesDescription": "",
+        "variable": false,
+        "nonNullable": false,
+        "nullable": false,
+        "optional": false,
+        "description": "string"
+      }
+    ],
+    "description": {
+      "full": "Gets the error's message.",
+      "summary": "Gets the error's message.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "isClass": false,
+    "isEvent": false,
+    "ignore": false,
+    "line": 40,
+    "codeStart": 45,
+    "code": "public function message ()\n{\n    return $this->message;\n}",
+    "ctx": false
+  },
+  {
+    "tags": [
+      {
+        "type": "return",
+        "string": "string",
+        "types": [],
+        "typesDescription": "",
+        "variable": false,
+        "nonNullable": false,
+        "nullable": false,
+        "optional": false,
+        "description": "string"
+      }
+    ],
+    "description": {
+      "full": "Returns the string representation of the error.",
+      "summary": "Returns the string representation of the error.",
+      "body": ""
+    },
+    "isPrivate": false,
+    "isConstructor": false,
+    "isClass": false,
+    "isEvent": false,
+    "ignore": false,
+    "line": 50,
+    "codeStart": 55,
+    "code": "public function __toString()\n{\n    return \"[Error: {$this->message}]\";\n}\n}",
+    "ctx": false
+  }
+]

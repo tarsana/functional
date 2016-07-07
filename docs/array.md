@@ -207,3 +207,124 @@ Alias for `count()` and `strlen()`.
 length([1, 2, 3, 4]) // 4
 length('Hello') // 5
 ```
+
+## all
+
+```php
+all(callable $predicate, array $array) : bool
+```
+
+```
+(a -> Boolean) -> [a] -> Boolean
+```
+
+Checks if the `$predicate` is verified by **all** items of the array.
+```php
+$allNotNull = all(notEq(0));
+$allNotNull([9, 3, 2, 4]); // true
+$allNotNull([9, 3, 0, 4]); // false
+```
+
+## any
+
+```php
+any(callable $predicate, array $array) : bool
+```
+
+```
+(a -> Boolean) -> [a] -> Boolean
+```
+
+Checks if the `$predicate` is verified by **any** items of the array.
+```php
+$anyNumeric = any('is_numeric');
+$anyNumeric(['Hello', '12', []]); // true
+$anyNumeric(['Hello', 'Foo']); // false
+```
+
+## concat
+
+```php
+concat(array $array1, array $array2) : array
+```
+
+```
+[*] -> [*] -> [*]
+```
+
+Concatenates two arrays or strings.
+```php
+concat([1, 2], [3, 4]) // [1, 2, 3, 4]
+concat('Hello ', 'World') // 'Hello World'
+```
+
+## append
+
+```php
+append(mixed $item, array $array) : array
+```
+
+```
+* -> [*] -> [*]
+String -> String -> String
+```
+
+Appends an item to an array.
+```php
+append(5, [1, 2, 3]) // [1, 2, 3, 5]
+append(' World', 'Hello') // 'Hello World'
+```
+
+## take
+
+```php
+take(int $count, array $array) : array
+```
+
+```
+Number -> [a] -> [a]
+Number -> String -> String
+```
+
+Takes a number of elements from an array.
+```php
+$items = ['Foo', 'Bar', 'Baz'];
+take(2, $items) // ['Foo', 'Bar']
+take(0, $items) // []
+take(-2, $items) // []
+take(5, 'Hello World') // 'Hello'
+take(-5, 'Hello World') // ''
+```
+
+## toPairs
+
+```php
+toPairs(array $array) : array
+```
+
+```
+[a => b] -> [(a,b)]
+```
+
+Converts an associative array to an array of [key,value] pairs.
+```php
+$array = ['key' => 'value', 'number' => 53, 'foo', 'bar'];
+toPairs($array); // [['key', 'value'], ['number', 53], [0, 'foo'], [1, 'bar']]
+```
+
+## chain
+
+```php
+chain(callable $fn, array $array) : array
+```
+
+```
+(a -> [b]) -> [a] -> [b]
+```
+
+Applies a function to items of the array and concatenates the results.
+This is also known as `flatMap` in some libraries.
+```php
+$words = chain(split(' '));
+$words(['Hello World', 'How are you']) // ['Hello', 'World', 'How', 'are', 'you']
+```

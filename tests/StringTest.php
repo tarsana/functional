@@ -1,6 +1,8 @@
 <?php
 
 use Tarsana\Functional as F;
+use Tarsana\Functional\Error;
+use Tarsana\Functional\Stream;
 
 class StringTest extends PHPUnit_Framework_TestCase {
 
@@ -78,4 +80,26 @@ class StringTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(['12', '3', '09'], $numbers('12 fo3o bar09'));
     }
 
+    public function test_toString(){
+        $this->assertEquals('53', F\toString(53));
+        $this->assertEquals('true', F\toString(true));
+        $this->assertEquals('false', F\toString(false));
+        $this->assertEquals('null', F\toString(null));
+        $this->assertEquals('Hello World', F\toString('Hello World'));
+        $this->assertEquals('[]', F\toString([]));
+        $this->assertEquals('[hi, hello, yo]', F\toString(['hi', 'hello', 'yo']));
+        $this->assertEquals('[Object]', F\toString(new \stdClass));
+        $this->assertEquals('[Function]', F\toString(function(){}));
+        $this->assertEquals('[Resource]', F\toString(fopen('php://temp', 'r')));
+        $this->assertEquals('[Error: Ooops]', F\toString(Error::of('Ooops')));
+        $data = [
+            'object' => Stream::of(null),
+            'numbers' => [1, 2, 3],
+            'message'
+        ];
+        $this->assertEquals(
+            '[object => Stream(Null), numbers => [1, 2, 3], 0 => message]',
+            F\toString($data)
+        );
+    }
 }

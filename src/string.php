@@ -237,3 +237,36 @@ function match() {
     };
     return apply(curry($match), func_get_args());
 }
+
+function toString ($something) {
+    switch (type($something)) {
+        case 'String':
+            return $something;
+        break;
+        case 'Boolean':
+            return $something ? 'true' : 'false';
+        break;
+        case 'Null':
+            return 'null';
+        break;
+        case 'Number':
+            return (string) $something;
+        break;
+        case 'List':
+            return '[' . join(', ', map('Tarsana\\Functional\\toString', $something)) . ']';
+        break;
+        case 'ArrayObject':
+        case 'Array':
+            return '[' . join(', ', map(function($pair){
+                return $pair[0].' => '. toString($pair[1]);
+            }, toPairs($something))) . ']';
+        break;
+        case 'Error':
+        case 'Stream':
+        case 'Object':
+            return method_exists($something, '__toString') ? $something->__toString() : '[Object]';
+        break;
+        default:
+            return '['.type($something).']';
+    }
+}

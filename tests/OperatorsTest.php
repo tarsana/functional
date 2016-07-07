@@ -1,6 +1,7 @@
 <?php
 
 use Tarsana\Functional as F;
+use Tarsana\Functional\Error;
 
 class OperatorsTest extends PHPUnit_Framework_TestCase {
     public function test_and(){
@@ -74,6 +75,22 @@ class OperatorsTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue(F\gte(6, 4));
         $this->assertTrue(F\gte(4, 4));
         $this->assertFalse(F\gte(2, 4));
+    }
+
+    public function test_type(){
+        $this->assertEquals(F\type(null), 'Null');
+        $this->assertEquals(F\type(true), 'Boolean');
+        $this->assertEquals(F\type(false), 'Boolean');
+        $this->assertEquals(F\type('Hello World'), 'String');
+        $this->assertEquals(F\type(1234), 'Number');
+        $this->assertEquals(F\type('123'), 'String');
+        $this->assertEquals(F\type(function($x) {return $x;}), 'Function');
+        $this->assertEquals(F\type(new \stdClass), 'Object');
+        $this->assertEquals(F\type(['name' => 'Foo', 'age' => 21]), 'ArrayObject');
+        $this->assertEquals(F\type(['Hello', 'World', 123, true]), 'List');
+        $this->assertEquals(F\type(['name' => 'Foo', 'Hello', 'Mixed']), 'Array');
+        $this->assertEquals(F\type(fopen('php://temp', 'r')), 'Resource');
+        $this->assertEquals(F\type(Error::of('Ooops !')), 'Error');
     }
 
 }

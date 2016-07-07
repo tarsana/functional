@@ -47,6 +47,9 @@ class FunctionsTest extends PHPUnit_Framework_TestCase {
 
         $doubleThenSum = F\pipe(ForTest::map(['ForTest', 'double']), $this->sum);
         $this->assertEquals(10, $doubleThenSum([2, 3]));
+
+        $helloLength = F\pipe($this->hello, 'Tarsana\\Functional\\length');
+        $this->assertEquals(5, $helloLength());
     }
 
     public function test_pipe_instance_method() {

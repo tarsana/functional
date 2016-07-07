@@ -131,3 +131,29 @@ gte(mixed $a, mixed $b) : bool
 ```
 
 Returns `$x >= $y`.
+
+## type
+
+```php
+type(mixed $data) : string
+```
+
+
+
+Gets the type of the given argument.
+```php
+type(null); // 'Null'
+type(true); // 'Boolean'
+type(false); // 'Boolean'
+type('Hello World'); // 'String'
+type(1234); // 'Number'
+type('123'); // 'String'
+type(function($x) {return $x;}); // 'Function'
+type(new \stdClass); // 'Object'
+type(['name' => 'Foo', 'age' => 21]); // 'ArrayObject'
+type(['Hello', 'World', 123, true]); // 'List'
+type(['name' => 'Foo', 'Hello', 'Mixed']); // 'Array'
+type(fopen('php://temp')); // 'Resource'
+type(Error::of('Ooops !')); // 'Error'
+// Anything else is 'Unknown'
+```

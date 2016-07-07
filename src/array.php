@@ -246,3 +246,150 @@ function length($array) {
         : count($array);
 }
 
+/**
+ * Checks if the `$predicate` is verified by **all** items of the array.
+ * ```php
+ * $allNotNull = all(notEq(0));
+ * $allNotNull([9, 3, 2, 4]); // true
+ * $allNotNull([9, 3, 0, 4]); // false
+ * ```
+ *
+ * @signature (a -> Boolean) -> [a] -> Boolean
+ * @param  callable $predicate
+ * @param  array $array
+ * @return bool
+ */
+function all() {
+    $all = function($predicate, $array) {
+        return length(filter($predicate, $array)) == length($array);
+    };
+    return apply(curry($all), func_get_args());
+}
+
+
+/**
+ * Checks if the `$predicate` is verified by **any** items of the array.
+ * ```php
+ * $anyNumeric = any('is_numeric');
+ * $anyNumeric(['Hello', '12', []]); // true
+ * $anyNumeric(['Hello', 'Foo']); // false
+ * ```
+ *
+ * @signature (a -> Boolean) -> [a] -> Boolean
+ * @param  callable $predicate
+ * @param  array $array
+ * @return bool
+ */
+function any() {
+    // TODO: use findBy when available instead of filter !
+    $any = function($predicate, $array) {
+        return length(filter($predicate, $array)) > 0;
+    };
+    return apply(curry($any), func_get_args());
+}
+
+/**
+ * Concatenates two arrays or strings.
+ * ```php
+ * concat([1, 2], [3, 4]) // [1, 2, 3, 4]
+ * concat('Hello ', 'World') // 'Hello World'
+ * ```
+ *
+ * @signature [*] -> [*] -> [*]
+ * @param  array $array1
+ * @param  array $array2
+ * @return array
+ */
+function concat() {
+    $concat = function($array1, $array2) {
+        if (is_string($array1))
+            return $array1 . $array2;
+        return array_merge($array1, $array2);
+    };
+    return apply(curry($concat), func_get_args());
+}
+
+/**
+ * Appends an item to an array.
+ * ```php
+ * append(5, [1, 2, 3]) // [1, 2, 3, 5]
+ * append(' World', 'Hello') // 'Hello World'
+ * ```
+ *
+ * @signature * -> [*] -> [*]
+ * @signature String -> String -> String
+ * @param  mixed $item
+ * @param  array $array
+ * @return array
+ */
+function append() {
+    $append = function ($item, $array) {
+        if (is_string($array))
+            return $array . $item;
+        return array_merge($array, [$item]);
+    };
+    return apply(curry($append), func_get_args());
+}
+
+/**
+ * Takes a number of elements from an array.
+ * ```php
+ * $items = ['Foo', 'Bar', 'Baz'];
+ * take(2, $items) // ['Foo', 'Bar']
+ * take(0, $items) // []
+ * take(-2, $items) // []
+ * take(5, 'Hello World') // 'Hello'
+ * take(-5, 'Hello World') // ''
+ * ```
+ *
+ * @signature Number -> [a] -> [a]
+ * @signature Number -> String -> String
+ * @param  int $count
+ * @param  array $array
+ * @return array
+ */
+function take() {
+    $take = function($count, $array) {
+        if(is_string($array))
+            return ($count > 0) ? substr($array, 0, $count) : '';
+        return ($count > 0) ? array_slice($array, 0, $count) : [];
+    };
+    return apply(curry($take), func_get_args());
+}
+
+/**
+ * Converts an associative array to an array of [key,value] pairs.
+ * ```php
+ * $array = ['key' => 'value', 'number' => 53, 'foo', 'bar'];
+ * toPairs($array); // [['key', 'value'], ['number', 53], [0, 'foo'], [1, 'bar']]
+ * ```
+ *
+ * @signature [a => b] -> [(a,b)]
+ * @param  array $array
+ * @return array
+ */
+function toPairs($array) {
+    return map(function($key) use($array) {
+        return [$key, $array[$key]];
+    }, array_keys($array));
+}
+
+/**
+ * Applies a function to items of the array and concatenates the results.
+ * This is also known as `flatMap` in some libraries.
+ * ```php
+ * $words = chain(split(' '));
+ * $words(['Hello World', 'How are you']) // ['Hello', 'World', 'How', 'are', 'you']
+ * ```
+ *
+ * @signature (a -> [b]) -> [a] -> [b]
+ * @param  callable $fn
+ * @param  array $array
+ * @return array
+ */
+function chain() {
+    $chain = function($fn, $array) {
+        return reduce('Tarsana\\Functional\\concat', [], map($fn, $array));
+    };
+    return apply(curry($chain), func_get_args());
+}
