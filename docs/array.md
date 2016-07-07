@@ -2,41 +2,41 @@
 
 ## Table Of Contents
 
-- [value](https://github.com/tarsana/functional/blob/master/docs/array#value)
+- [value](https://github.com/tarsana/functional/blob/master/docs/array.md#value)
 
-- [map](https://github.com/tarsana/functional/blob/master/docs/array#map)
+- [map](https://github.com/tarsana/functional/blob/master/docs/array.md#map)
 
-- [filter](https://github.com/tarsana/functional/blob/master/docs/array#filter)
+- [filter](https://github.com/tarsana/functional/blob/master/docs/array.md#filter)
 
-- [reduce](https://github.com/tarsana/functional/blob/master/docs/array#reduce)
+- [reduce](https://github.com/tarsana/functional/blob/master/docs/array.md#reduce)
 
-- [each](https://github.com/tarsana/functional/blob/master/docs/array#each)
+- [each](https://github.com/tarsana/functional/blob/master/docs/array.md#each)
 
-- [head](https://github.com/tarsana/functional/blob/master/docs/array#head)
+- [head](https://github.com/tarsana/functional/blob/master/docs/array.md#head)
 
-- [last](https://github.com/tarsana/functional/blob/master/docs/array#last)
+- [last](https://github.com/tarsana/functional/blob/master/docs/array.md#last)
 
-- [init](https://github.com/tarsana/functional/blob/master/docs/array#init)
+- [init](https://github.com/tarsana/functional/blob/master/docs/array.md#init)
 
-- [tail](https://github.com/tarsana/functional/blob/master/docs/array#tail)
+- [tail](https://github.com/tarsana/functional/blob/master/docs/array.md#tail)
 
-- [reverse](https://github.com/tarsana/functional/blob/master/docs/array#reverse)
+- [reverse](https://github.com/tarsana/functional/blob/master/docs/array.md#reverse)
 
-- [length](https://github.com/tarsana/functional/blob/master/docs/array#length)
+- [length](https://github.com/tarsana/functional/blob/master/docs/array.md#length)
 
-- [all](https://github.com/tarsana/functional/blob/master/docs/array#all)
+- [all](https://github.com/tarsana/functional/blob/master/docs/array.md#all)
 
-- [any](https://github.com/tarsana/functional/blob/master/docs/array#any)
+- [any](https://github.com/tarsana/functional/blob/master/docs/array.md#any)
 
-- [concat](https://github.com/tarsana/functional/blob/master/docs/array#concat)
+- [concat](https://github.com/tarsana/functional/blob/master/docs/array.md#concat)
 
-- [append](https://github.com/tarsana/functional/blob/master/docs/array#append)
+- [append](https://github.com/tarsana/functional/blob/master/docs/array.md#append)
 
-- [take](https://github.com/tarsana/functional/blob/master/docs/array#take)
+- [take](https://github.com/tarsana/functional/blob/master/docs/array.md#take)
 
-- [toPairs](https://github.com/tarsana/functional/blob/master/docs/array#toPairs)
+- [toPairs](https://github.com/tarsana/functional/blob/master/docs/array.md#toPairs)
 
-- [chain](https://github.com/tarsana/functional/blob/master/docs/array#chain)
+- [chain](https://github.com/tarsana/functional/blob/master/docs/array.md#chain)
 
 ## value
 

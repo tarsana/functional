@@ -2,21 +2,21 @@
 
 ## Table Of Contents
 
-- [plus](https://github.com/tarsana/functional/blob/master/docs/math#plus)
+- [plus](https://github.com/tarsana/functional/blob/master/docs/math.md#plus)
 
-- [minus](https://github.com/tarsana/functional/blob/master/docs/math#minus)
+- [minus](https://github.com/tarsana/functional/blob/master/docs/math.md#minus)
 
-- [negate](https://github.com/tarsana/functional/blob/master/docs/math#negate)
+- [negate](https://github.com/tarsana/functional/blob/master/docs/math.md#negate)
 
-- [multiply](https://github.com/tarsana/functional/blob/master/docs/math#multiply)
+- [multiply](https://github.com/tarsana/functional/blob/master/docs/math.md#multiply)
 
-- [divide](https://github.com/tarsana/functional/blob/master/docs/math#divide)
+- [divide](https://github.com/tarsana/functional/blob/master/docs/math.md#divide)
 
-- [modulo](https://github.com/tarsana/functional/blob/master/docs/math#modulo)
+- [modulo](https://github.com/tarsana/functional/blob/master/docs/math.md#modulo)
 
-- [sum](https://github.com/tarsana/functional/blob/master/docs/math#sum)
+- [sum](https://github.com/tarsana/functional/blob/master/docs/math.md#sum)
 
-- [product](https://github.com/tarsana/functional/blob/master/docs/math#product)
+- [product](https://github.com/tarsana/functional/blob/master/docs/math.md#product)
 
 ## plus
 

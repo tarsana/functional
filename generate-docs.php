@@ -154,9 +154,12 @@ function addContents() {
     $addContents = function($name, $parts) {
         $names = F\filter(F\notEq($name), F\map(F\value('name'), $parts));
         $contents = F\map(function ($partname) use($name) {
-            $link = URL . "/docs/{$name}#{$partname}";
+            $link = URL . "/docs/{$name}.md#{$partname}";
             return "- [{$partname}]($link)";
         }, $names);
+        file_put_contents ("docs/README.md",
+            F\join("\n\n", F\concat(["## {$name}"], $contents)) . "\n\n"
+        , FILE_APPEND);
         return array_merge(['# ' . $name, '## Table Of Contents'], $contents, F\map(F\value('md'), $parts));
     };
     return F\apply(F\curry($addContents), func_get_args());
@@ -216,5 +219,8 @@ function generateClass($name) {
 }
 
 // The entry point
+file_put_contents('docs/README.md', "# Reference Documentation \n\n");
+file_put_contents ("docs/README.md", "# Function Modules\n\n" , FILE_APPEND);
 F\each('Demo\\generateModule', modules());
+file_put_contents ("docs/README.md", "# Containers\n\n" , FILE_APPEND);
 F\each('Demo\\generateClass', ['Stream', 'Error']);

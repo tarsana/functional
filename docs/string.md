@@ -2,31 +2,31 @@
 
 ## Table Of Contents
 
-- [split](https://github.com/tarsana/functional/blob/master/docs/string#split)
+- [split](https://github.com/tarsana/functional/blob/master/docs/string.md#split)
 
-- [join](https://github.com/tarsana/functional/blob/master/docs/string#join)
+- [join](https://github.com/tarsana/functional/blob/master/docs/string.md#join)
 
-- [replace](https://github.com/tarsana/functional/blob/master/docs/string#replace)
+- [replace](https://github.com/tarsana/functional/blob/master/docs/string.md#replace)
 
-- [regReplace](https://github.com/tarsana/functional/blob/master/docs/string#regReplace)
+- [regReplace](https://github.com/tarsana/functional/blob/master/docs/string.md#regReplace)
 
-- [upperCase](https://github.com/tarsana/functional/blob/master/docs/string#upperCase)
+- [upperCase](https://github.com/tarsana/functional/blob/master/docs/string.md#upperCase)
 
-- [lowerCase](https://github.com/tarsana/functional/blob/master/docs/string#lowerCase)
+- [lowerCase](https://github.com/tarsana/functional/blob/master/docs/string.md#lowerCase)
 
-- [camelCase](https://github.com/tarsana/functional/blob/master/docs/string#camelCase)
+- [camelCase](https://github.com/tarsana/functional/blob/master/docs/string.md#camelCase)
 
-- [snakeCase](https://github.com/tarsana/functional/blob/master/docs/string#snakeCase)
+- [snakeCase](https://github.com/tarsana/functional/blob/master/docs/string.md#snakeCase)
 
-- [startsWith](https://github.com/tarsana/functional/blob/master/docs/string#startsWith)
+- [startsWith](https://github.com/tarsana/functional/blob/master/docs/string.md#startsWith)
 
-- [endsWith](https://github.com/tarsana/functional/blob/master/docs/string#endsWith)
+- [endsWith](https://github.com/tarsana/functional/blob/master/docs/string.md#endsWith)
 
-- [test](https://github.com/tarsana/functional/blob/master/docs/string#test)
+- [test](https://github.com/tarsana/functional/blob/master/docs/string.md#test)
 
-- [match](https://github.com/tarsana/functional/blob/master/docs/string#match)
+- [match](https://github.com/tarsana/functional/blob/master/docs/string.md#match)
 
-- [toString](https://github.com/tarsana/functional/blob/master/docs/string#toString)
+- [toString](https://github.com/tarsana/functional/blob/master/docs/string.md#toString)
 
 ## split
 

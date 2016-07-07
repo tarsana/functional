@@ -2,25 +2,25 @@
 
 ## Table Of Contents
 
-- [Stream::of](https://github.com/tarsana/functional/blob/master/docs/Stream#Stream::of)
+- [Stream::of](https://github.com/tarsana/functional/blob/master/docs/Stream.md#Stream::of)
 
-- [__toString](https://github.com/tarsana/functional/blob/master/docs/Stream#__toString)
+- [__toString](https://github.com/tarsana/functional/blob/master/docs/Stream.md#__toString)
 
-- [get](https://github.com/tarsana/functional/blob/master/docs/Stream#get)
+- [get](https://github.com/tarsana/functional/blob/master/docs/Stream.md#get)
 
-- [map](https://github.com/tarsana/functional/blob/master/docs/Stream#map)
+- [map](https://github.com/tarsana/functional/blob/master/docs/Stream.md#map)
 
-- [filter](https://github.com/tarsana/functional/blob/master/docs/Stream#filter)
+- [filter](https://github.com/tarsana/functional/blob/master/docs/Stream.md#filter)
 
-- [reduce](https://github.com/tarsana/functional/blob/master/docs/Stream#reduce)
+- [reduce](https://github.com/tarsana/functional/blob/master/docs/Stream.md#reduce)
 
-- [chain](https://github.com/tarsana/functional/blob/master/docs/Stream#chain)
+- [chain](https://github.com/tarsana/functional/blob/master/docs/Stream.md#chain)
 
-- [length](https://github.com/tarsana/functional/blob/master/docs/Stream#length)
+- [length](https://github.com/tarsana/functional/blob/master/docs/Stream.md#length)
 
-- [take](https://github.com/tarsana/functional/blob/master/docs/Stream#take)
+- [take](https://github.com/tarsana/functional/blob/master/docs/Stream.md#take)
 
-- [then](https://github.com/tarsana/functional/blob/master/docs/Stream#then)
+- [then](https://github.com/tarsana/functional/blob/master/docs/Stream.md#then)
 
 Stream is a lazy data container.
 

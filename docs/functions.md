@@ -2,15 +2,15 @@
 
 ## Table Of Contents
 
-- [curry](https://github.com/tarsana/functional/blob/master/docs/functions#curry)
+- [curry](https://github.com/tarsana/functional/blob/master/docs/functions.md#curry)
 
-- [__](https://github.com/tarsana/functional/blob/master/docs/functions#__)
+- [__](https://github.com/tarsana/functional/blob/master/docs/functions.md#__)
 
-- [apply](https://github.com/tarsana/functional/blob/master/docs/functions#apply)
+- [apply](https://github.com/tarsana/functional/blob/master/docs/functions.md#apply)
 
-- [pipe](https://github.com/tarsana/functional/blob/master/docs/functions#pipe)
+- [pipe](https://github.com/tarsana/functional/blob/master/docs/functions.md#pipe)
 
-- [identity](https://github.com/tarsana/functional/blob/master/docs/functions#identity)
+- [identity](https://github.com/tarsana/functional/blob/master/docs/functions.md#identity)
 
 ## curry
 

@@ -2,11 +2,11 @@
 
 ## Table Of Contents
 
-- [Error::of](https://github.com/tarsana/functional/blob/master/docs/Error#Error::of)
+- [Error::of](https://github.com/tarsana/functional/blob/master/docs/Error.md#Error::of)
 
-- [message](https://github.com/tarsana/functional/blob/master/docs/Error#message)
+- [message](https://github.com/tarsana/functional/blob/master/docs/Error.md#message)
 
-- [__toString](https://github.com/tarsana/functional/blob/master/docs/Error#__toString)
+- [__toString](https://github.com/tarsana/functional/blob/master/docs/Error.md#__toString)
 
 This class represents an error.
 

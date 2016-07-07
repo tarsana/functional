@@ -2,29 +2,29 @@
 
 ## Table Of Contents
 
-- [and_](https://github.com/tarsana/functional/blob/master/docs/operators#and_)
+- [and_](https://github.com/tarsana/functional/blob/master/docs/operators.md#and_)
 
-- [or_](https://github.com/tarsana/functional/blob/master/docs/operators#or_)
+- [or_](https://github.com/tarsana/functional/blob/master/docs/operators.md#or_)
 
-- [not](https://github.com/tarsana/functional/blob/master/docs/operators#not)
+- [not](https://github.com/tarsana/functional/blob/master/docs/operators.md#not)
 
-- [eq](https://github.com/tarsana/functional/blob/master/docs/operators#eq)
+- [eq](https://github.com/tarsana/functional/blob/master/docs/operators.md#eq)
 
-- [notEq](https://github.com/tarsana/functional/blob/master/docs/operators#notEq)
+- [notEq](https://github.com/tarsana/functional/blob/master/docs/operators.md#notEq)
 
-- [eqq](https://github.com/tarsana/functional/blob/master/docs/operators#eqq)
+- [eqq](https://github.com/tarsana/functional/blob/master/docs/operators.md#eqq)
 
-- [notEqq](https://github.com/tarsana/functional/blob/master/docs/operators#notEqq)
+- [notEqq](https://github.com/tarsana/functional/blob/master/docs/operators.md#notEqq)
 
-- [lt](https://github.com/tarsana/functional/blob/master/docs/operators#lt)
+- [lt](https://github.com/tarsana/functional/blob/master/docs/operators.md#lt)
 
-- [lte](https://github.com/tarsana/functional/blob/master/docs/operators#lte)
+- [lte](https://github.com/tarsana/functional/blob/master/docs/operators.md#lte)
 
-- [gt](https://github.com/tarsana/functional/blob/master/docs/operators#gt)
+- [gt](https://github.com/tarsana/functional/blob/master/docs/operators.md#gt)
 
-- [gte](https://github.com/tarsana/functional/blob/master/docs/operators#gte)
+- [gte](https://github.com/tarsana/functional/blob/master/docs/operators.md#gte)
 
-- [type](https://github.com/tarsana/functional/blob/master/docs/operators#type)
+- [type](https://github.com/tarsana/functional/blob/master/docs/operators.md#type)
 
 ## and_
 
