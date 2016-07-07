@@ -238,6 +238,31 @@ function match() {
     return apply(curry($match), func_get_args());
 }
 
+/**
+ * Converts a variable to its string value.
+ * ```php
+ * toString(53)); // '53'
+ * toString(true)); // 'true'
+ * toString(false)); // 'false'
+ * toString(null)); // 'null'
+ * toString('Hello World')); // 'Hello World'
+ * toString([])); // '[]'
+ * toString(new \stdClass)); // '[Object]'
+ * toString(function(){})); // '[Function]'
+ * toString(Error::of('Ooops'))); // '[Error: Ooops]'
+ * toString(fopen('php://temp', 'r'))); // '[Resource]'
+ * toString(['hi', 'hello', 'yo'])); // '[hi, hello, yo]'
+ * toString([
+ *     'object' => Stream::of(null),
+ *     'numbers' => [1, 2, 3],
+ *     'message'
+ * ]); // '[object => Stream(Null), numbers => [1, 2, 3], 0 => message]'
+ * ```
+ *
+ * @signature * -> String
+ * @param  mixed $something
+ * @return string
+ */
 function toString ($something) {
     switch (type($something)) {
         case 'String':

@@ -12,6 +12,8 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Tarsana\Functional as F;
 
+define('URL', 'https://github.com/tarsana/functional/blob/master');
+
 // Reads the list of sources files from 'composer.json'
 // * -> IO [String]
 function modules() {
@@ -115,7 +117,7 @@ function block($data) {
         'signatures' => signaturesOf($data),
         'description' => $data->description->full,
         'is_static' => in_array('static', $keywords),
-        'is_internal' => !in_array('public', $keywords) || (0 < F\length(tags('internal', $data)))
+        'is_internal' => in_array('private', $keywords) || in_array('protected', $keywords) || (0 < F\length(tags('internal', $data)))
     ];
 }
 
@@ -146,6 +148,19 @@ function markdown($fn) {
     }
 }
 
+// Adds title and table of contents
+// String -> [Object] -> [String]
+function addContents() {
+    $addContents = function($name, $parts) {
+        $names = F\filter(F\notEq($name), F\map(F\value('name'), $parts));
+        $contents = F\map(function ($partname) use($name) {
+            $link = URL . "/docs/{$name}#{$partname}";
+            return "- [{$partname}]($link)";
+        }, $names);
+        return array_merge(['# ' . $name, '## Table Of Contents'], $contents, F\map(F\value('md'), $parts));
+    };
+    return F\apply(F\curry($addContents), func_get_args());
+}
 // Generates documentation for a module of functions
 // String -> IO
 function generateModule($file) {
@@ -154,11 +169,13 @@ function generateModule($file) {
         F\filter(function($block){
             return $block->type == 'function' && !$block->is_internal;
         }),
-        F\map('Demo\\markdown'),
-        function($parts) use ($file) {
-            $name = F\replace(['src/', '.php'], '', $file);
-            return array_merge(["# {$name}"], $parts);
-        },
+        F\map(function($block){
+            return [
+                'name' => $block->name,
+                'md' => markdown($block)
+            ];
+        }),
+        addContents(F\replace(['src/', '.php'], '', $file)),
         F\join("\n\n")
     );
 
@@ -182,12 +199,14 @@ function generateClass($name) {
             }
             return $block;
         }),
-        F\map('Demo\\markdown'),
-        function($parts) use ($name) {
-            return array_merge(["# {$name}"], $parts);
-        },
-        F\join("\n\n"),
-        F\regReplace('/\\n+/', "\n")
+        F\map(function($block){
+            return [
+                'name' => $block->name,
+                'md' => markdown($block)
+            ];
+        }),
+        addContents($name),
+        F\join("\n\n")
     );
 
     file_put_contents (
