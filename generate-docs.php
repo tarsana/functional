@@ -115,7 +115,7 @@ function block($data) {
         'signatures' => signaturesOf($data),
         'description' => $data->description->full,
         'is_static' => in_array('static', $keywords),
-        'is_internal' => (0 < F\length(tags('internal', $data))) && !in_array('public', $keywords)
+        'is_internal' => !in_array('public', $keywords) || (0 < F\length(tags('internal', $data)))
     ];
 }
 
@@ -177,8 +177,9 @@ function generateClass($name) {
             return in_array($block->type, ['method', 'class']) && !$block->is_internal;
         }),
         f\map(function($block) use ($name) {
-            if ($block->type == 'method')
-                $block->name = $name . '::' . $block->name;
+            if ($block->type == 'method') {
+                $block->name = ($block->is_static ? $name . '::' : '') . $block->name;
+            }
             return $block;
         }),
         F\map('Demo\\markdown'),

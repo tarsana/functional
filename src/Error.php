@@ -13,7 +13,13 @@ class Error {
 
     /**
      * Creates a new Error.
+     * ```php
+     * $err = Error::of('Ooops !'); // [Error: Ooops !]
+     * $err2 = Error::of('Second error', $err); // [Error: Second error -> Ooops !]
+     * ```
      *
+     * @signature String -> Error
+     * @signature (String, Error) -> Error
      * @param  string     $message
      * @param  Error|null $error
      * @return Error
@@ -26,7 +32,6 @@ class Error {
     /**
      * Creates a new Error.
      *
-     * @internal
      * @param string     $message
      * @param Error|null $error
      */
@@ -39,7 +44,12 @@ class Error {
 
     /**
      * Gets the error's message.
+     * ```php
+     * $err = Error::of('Ooops !');
+     * $err->message(); // 'Ooops !'
+     * ```
      *
+     * @signature Error -> String
      * @return string
      */
     public function message ()
@@ -49,7 +59,12 @@ class Error {
 
     /**
      * Returns the string representation of the error.
+     * ```php
+     * $err = Error::of('Ooops !');
+     * echo $err; // Outputs: [Error: Ooops !]
+     * ```
      *
+     * @signature Error -> String
      * @return string
      */
     public function __toString()

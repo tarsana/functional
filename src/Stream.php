@@ -76,6 +76,7 @@ class Stream {
      * Stream::of(1, 'Hello'); // Stream([1, 'Hello'])
      * Stream::of([1, 2, 3]); // Stream([1, 2, 3])
      * ```
+     *
      * @signature a -> Stream(a)
      * @param  mixed $data
      * @return Stream
@@ -200,6 +201,20 @@ class Stream {
         $this->operations = $operations;
     }
 
+    /**
+     * Returns a string representation of a Stream.
+     * ```php
+     * $s = Stream::of(55);
+     * echo $s; // Outputs: Stream(Number)
+     * $s = Stream::of([1, 2, 3]);
+     * echo $s; // Outputs: Stream(List)
+     * $s = Stream::of(Error::of('Ooops'));
+     * echo $s; // Outputs: Stream(Error)
+     * ```
+     *
+     * @signature Stream(*) -> String
+     * @return string
+     */
     public function __toString()
     {
         return "Stream({$this->type})";
@@ -207,7 +222,14 @@ class Stream {
 
     /**
      * Executes the operations and returns the resulting data.
+     * ```php
+     * $s = Stream::of(55)->then(plus(5));
+     * $s->get(); // 60
+     * $s = Stream::of([1, 2, 3])->length();
+     * $s->get(); // 3
+     * ```
      *
+     * @signature Stream(a) -> a
      * @return mixed
      */
     public function get ()
@@ -219,7 +241,13 @@ class Stream {
 
     /**
      * Applies a function to items of the stream.
+     * ```php
+     * Stream::of([1, 2, 3])->map(function($n){
+     *    return $n * $n;
+     * })->get() // [1, 4, 9]
+     * ```
      *
+     * @signature Stream([a]) -> (a -> b) -> Stream([b])
      * @param  callable $fn
      * @return Stream
      */
@@ -230,7 +258,13 @@ class Stream {
 
     /**
      * Filters items of the stream.
+     * ```php
+     * Stream::of(['1', null, 2, 'hi'])
+     *     ->filter('is_numeric')
+     *     ->get() // ['1', 2]
+     * ```
      *
+     * @signature Stream([a]) -> (a -> Boolean) -> Stream([a])
      * @param  callable $predicate
      * @return Stream
      */
@@ -241,7 +275,13 @@ class Stream {
 
     /**
      * Reduces the content of the stream.
+     * ```php
+     * Stream::of([1, 2, 3, 4])
+     *     ->reduce('Tarsana\\Functional\\plus', 0)
+     *     ->get() // 10
+     * ```
      *
+     * @signature Stream([a]) -> (* -> a -> *) -> * -> Stream(*)
      * @param callable $fn
      * @param mixed $initial
      * @return Stream
@@ -254,7 +294,14 @@ class Stream {
 
     /**
      * Chains a function over the content of the stream.
+     * This is called `flatMap` in other libraries.
+     * ```php
+     * Stream::of(['Hello you', 'How are you'])
+     *     ->chain(split(' '))
+     *     ->get() // ['Hello', 'you', 'How', 'are', 'you']
+     * ```
      *
+     * @signature Stream([a]) -> (a -> [b]) -> Stream([b])
      * @param callable $fn
      * @return Stream
      */
@@ -265,7 +312,17 @@ class Stream {
 
     /**
      * Returns the length of the stream.
+     * ```php
+     * Stream::of(['Hello you', 'How are you'])
+     *     ->length()
+     *     ->get() // 2
+     * Stream::of('Hello you')
+     *     ->length()
+     *     ->get() // 9
+     * ```
      *
+     * @signature Stream([*]) -> Number
+     * @signature Stream(String) -> Number
      * @return Stream
      */
     public function length ()
@@ -275,7 +332,17 @@ class Stream {
 
     /**
      * Takes a number of items from the stream.
+     * ```php
+     * Stream::of([1, 2, 3, 4, 5])
+     *     ->take(3)
+     *     ->get() // [1, 2, 3]
+     * Stream::of('Hello World')
+     *     ->take(5)
+     *     ->get() // 'Hello'
+     * ```
      *
+     * @signature Stream([a]) -> Number -> Stream([a])
+     * @signature Stream(String) -> Number -> Stream(String)
      * @param int $number
      * @return Stream
      */
@@ -286,7 +353,16 @@ class Stream {
 
     /**
      * Applies a custom function on the content of the stream.
+     * ```php
+     * Stream::of('Hello')
+     *     ->then('strtoupper')
+     *     ->get() // 'HELLO'
+     * Stream::of('   Hello ')
+     *     ->then('trim')
+     *     ->get() // 'Hello'
+     * ```
      *
+     * @signature Stream(a) -> (a -> b) -> Stream(b)
      * @param callable $fn
      * @return Stream
      */

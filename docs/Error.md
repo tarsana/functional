@@ -1,17 +1,28 @@
 # Error
-This class represents an error.
 ## Error::of
 ```php
 Error::of(string $message, Error|null $error) : Error
 ```
 Creates a new Error.
-## Error::message
 ```php
-Error::message() : string
+$err = Error::of('Ooops !'); // [Error: Ooops !]
+$err2 = Error::of('Second error', $err); // [Error: Second error -> Ooops !]
+```
+## message
+```php
+message() : string
 ```
 Gets the error's message.
-## Error::__toString
 ```php
-Error::__toString() : string
+$err = Error::of('Ooops !');
+$err->message(); // 'Ooops !'
+```
+## __toString
+```php
+__toString() : string
 ```
 Returns the string representation of the error.
+```php
+$err = Error::of('Ooops !');
+echo $err; // Outputs: [Error: Ooops !]
+```
