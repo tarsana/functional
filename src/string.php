@@ -289,7 +289,7 @@ function toString ($something) {
         case 'Error':
         case 'Stream':
         case 'Object':
-            return method_exists($something, '__toString') ? $something->__toString() : '[Object]';
+            return is_callable([$something, '__toString']) ? $something->__toString() : '[Object]';
         break;
         default:
             return '['.type($something).']';

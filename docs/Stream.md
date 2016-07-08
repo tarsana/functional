@@ -22,6 +22,10 @@
 
 - [then](https://github.com/tarsana/functional/blob/master/docs/Stream.md#then)
 
+- [call](https://github.com/tarsana/functional/blob/master/docs/Stream.md#call)
+
+- [run](https://github.com/tarsana/functional/blob/master/docs/Stream.md#run)
+
 Stream is a lazy data container.
 
 ## Stream::of
@@ -208,4 +212,94 @@ Stream::of('Hello')
 Stream::of('   Hello ')
     ->then('trim')
     ->get() // 'Hello'
+```
+
+## call
+
+```php
+call(string $method, mixed|null $args...) : Stream
+```
+
+```
+Stream(a) -> (String, ...) -> Stream(*)
+```
+
+Calls a method of the contained object and
+returns a stream with the resulting value.
+```php
+class ForStreamTest {
+   protected $value;
+   public function init($value) {$this->value = $value; return $this;}
+   public function add($value) {$this->value += $value; return $this;}
+   public function addTwo($a, $b) {$this->value += $a + $b; return $this;}
+   public function mult($value) { $this->value *= $value; return $this;}
+   public function value() {return $this->value;}
+   protected function reset() {$this->value = 0; return $this;}
+   private function clear() {$this->value = null; return $this;}
+}
+
+Stream::of(new ForStreamTest)
+    ->call('init', 5)
+    ->call('add', 1)
+    ->call('addTwo', 1, 1)
+    ->call('mult', 2)
+    ->call('value')
+    ->get(); // 16
+
+Stream::of(new ForStreamTest)
+    ->call('reset')
+    ->get(); // [Error: Method 'reset' of [Object] is not accessible]
+
+Stream::of(new ForStreamTest)
+    ->call('clear')
+    ->get(); // [Error: Method 'clear' of [Object] is not accessible]
+
+Stream::of(new ForStreamTest)
+    ->call('missing')
+    ->get(); // [Error: Method 'missing' of [Object] is not found]
+```
+
+## run
+
+```php
+run(string $method, mixed|null $args...) : Stream
+```
+
+```
+Stream(a) -> (String, ...) -> Stream(a)
+```
+
+Calls a method of the contained object and returns a stream
+with same object ignoring the result of the method.
+```php
+class ForStreamTest {
+   protected $value;
+   public function init($value) {$this->value = $value;}
+   public function add($value) {$this->value += $value;}
+   public function addTwo($a, $b) {$this->value += $a + $b;}
+   public function mult($value) { $this->value *= $value;}
+   public function value() {return $this->value;}
+   protected function reset() {$this->value = 0;}
+   private function clear() {$this->value = null;}
+}
+
+Stream::of(new ForStreamTest)
+    ->run('init', 5)
+    ->run('add', 1)
+    ->run('addTwo', 1, 1)
+    ->run('mult', 2)
+    ->run('value')
+    ->get(); // 16
+
+Stream::of(new ForStreamTest)
+    ->run('reset')
+    ->get(); // [Error: Method 'reset' of [Object] is not accessible]
+
+Stream::of(new ForStreamTest)
+    ->run('clear')
+    ->get(); // [Error: Method 'clear' of [Object] is not accessible]
+
+Stream::of(new ForStreamTest)
+    ->run('missing')
+    ->get(); // [Error: Method 'missing' of [Object] is not found]
 ```

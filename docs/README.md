@@ -148,6 +148,10 @@
 
 - [then](https://github.com/tarsana/functional/blob/master/docs/Stream.md#then)
 
+- [call](https://github.com/tarsana/functional/blob/master/docs/Stream.md#call)
+
+- [run](https://github.com/tarsana/functional/blob/master/docs/Stream.md#run)
+
 ## Error
 
 - [Error::of](https://github.com/tarsana/functional/blob/master/docs/Error.md#Error::of)
