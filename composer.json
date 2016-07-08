@@ -2,9 +2,6 @@
     "name": "tarsana/functional",
     "description": "functional programming library for Tarsana",
     "type": "library",
-    "require-dev": {
-        "phpunit/phpunit": "~4.0"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -27,10 +24,13 @@
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/webNeat/php-curry"
+            "url": "https://github.com/matteosister/php-curry"
         }
     ],
     "require": {
-        "cypresslab/php-curry": "dev-master"
+        "cypresslab/php-curry": "^0.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
     }
 }
