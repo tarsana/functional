@@ -332,6 +332,28 @@ function append() {
 }
 
 /**
+ * Adds an item to teh first of an array.
+ * ```php
+ * prepend(5, [1, 2, 3]) // [5, 1, 2, 3]
+ * prepend('Hello ', 'World') // 'Hello World'
+ * ```
+ *
+ * @signature * -> [*] -> [*]
+ * @signature String -> String -> String
+ * @param  mixed $item
+ * @param  array $array
+ * @return array
+ */
+function prepend() {
+    $prepend = function ($item, $array) {
+        if (is_string($array))
+            return $item . $array;
+        return array_merge([$item], $array);
+    };
+    return apply(curry($prepend), func_get_args());
+}
+
+/**
  * Takes a number of elements from an array.
  * ```php
  * $items = ['Foo', 'Bar', 'Baz'];

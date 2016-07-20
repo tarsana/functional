@@ -16,6 +16,7 @@
         "files": [
           "src/functions.php",
           "src/operators.php",
+          "src/common.php",
           "src/string.php",
           "src/array.php",
           "src/math.php"

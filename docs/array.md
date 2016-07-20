@@ -32,6 +32,8 @@
 
 - [append](https://github.com/tarsana/functional/blob/master/docs/array.md#append)
 
+- [prepend](https://github.com/tarsana/functional/blob/master/docs/array.md#prepend)
+
 - [take](https://github.com/tarsana/functional/blob/master/docs/array.md#take)
 
 - [toPairs](https://github.com/tarsana/functional/blob/master/docs/array.md#toPairs)
@@ -311,6 +313,23 @@ Appends an item to an array.
 ```php
 append(5, [1, 2, 3]) // [1, 2, 3, 5]
 append(' World', 'Hello') // 'Hello World'
+```
+
+## prepend
+
+```php
+prepend(mixed $item, array $array) : array
+```
+
+```
+* -> [*] -> [*]
+String -> String -> String
+```
+
+Adds an item to teh first of an array.
+```php
+prepend(5, [1, 2, 3]) // [5, 1, 2, 3]
+prepend('Hello ', 'World') // 'Hello World'
 ```
 
 ## take

@@ -26,7 +26,9 @@
 
 - [match](https://github.com/tarsana/functional/blob/master/docs/string.md#match)
 
-- [toString](https://github.com/tarsana/functional/blob/master/docs/string.md#toString)
+- [occurences](https://github.com/tarsana/functional/blob/master/docs/string.md#occurences)
+
+- [chunks](https://github.com/tarsana/functional/blob/master/docs/string.md#chunks)
 
 ## split
 
@@ -226,32 +228,40 @@ $numbers('Hello World'); // []
 $numbers('12 is 4 times 3'); // ['12', '4', '3']
 ```
 
-## toString
+## occurences
 
 ```php
-toString(mixed $something) : string
+occurences(string $token, string $text) : int
 ```
 
 ```
-* -> String
+String -> String -> Number
 ```
 
-Converts a variable to its string value.
+Curried version of `substr_count` with changed order of parameters,
 ```php
-toString(53)); // '53'
-toString(true)); // 'true'
-toString(false)); // 'false'
-toString(null)); // 'null'
-toString('Hello World')); // 'Hello World'
-toString([])); // '[]'
-toString(new \stdClass)); // '[Object]'
-toString(function(){})); // '[Function]'
-toString(Error::of('Ooops'))); // '[Error: Ooops]'
-toString(fopen('php://temp', 'r'))); // '[Resource]'
-toString(['hi', 'hello', 'yo'])); // '[hi, hello, yo]'
-toString([
-    'object' => Stream::of(null),
-    'numbers' => [1, 2, 3],
-    'message'
-]); // '[object => Stream(Null), numbers => [1, 2, 3], 0 => message]'
+$spaces = occurences(' ');
+$spaces('Hello') // 0
+$spaces('12 is 4 times 3'); // 4
+```
+
+## chunks
+
+```php
+chunks(array $surrounders, string $separator, sring $text) : array
+```
+
+```
+[(String,Sring)] -> String -> String -> [String]
+```
+
+Splits a string into chunks without spliting any group surrounded with some
+specified characters. `$surrounders` is an array of pairs, each pair specifies
+the starting and ending characters of a group that should not be splitted.
+```php
+$groups = chunks([['(', ')'], ['{', '}']], ',');
+$groups('1,2,(3,4,5),{6,(7,8)},9'); // ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
+
+$names = chunks([['"', '"'], ['(', ')']], ' ');
+$names('Foo "Bar Baz" (Some other name)'); // ['Foo', 'Bar Baz', 'Some other name']
 ```

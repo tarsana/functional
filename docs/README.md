@@ -38,7 +38,13 @@
 
 - [gte](https://github.com/tarsana/functional/blob/master/docs/operators.md#gte)
 
-- [type](https://github.com/tarsana/functional/blob/master/docs/operators.md#type)
+## common
+
+- [type](https://github.com/tarsana/functional/blob/master/docs/common.md#type)
+
+- [toString](https://github.com/tarsana/functional/blob/master/docs/common.md#toString)
+
+- [s](https://github.com/tarsana/functional/blob/master/docs/common.md#s)
 
 ## string
 
@@ -66,7 +72,9 @@
 
 - [match](https://github.com/tarsana/functional/blob/master/docs/string.md#match)
 
-- [toString](https://github.com/tarsana/functional/blob/master/docs/string.md#toString)
+- [occurences](https://github.com/tarsana/functional/blob/master/docs/string.md#occurences)
+
+- [chunks](https://github.com/tarsana/functional/blob/master/docs/string.md#chunks)
 
 ## array
 
@@ -99,6 +107,8 @@
 - [concat](https://github.com/tarsana/functional/blob/master/docs/array.md#concat)
 
 - [append](https://github.com/tarsana/functional/blob/master/docs/array.md#append)
+
+- [prepend](https://github.com/tarsana/functional/blob/master/docs/array.md#prepend)
 
 - [take](https://github.com/tarsana/functional/blob/master/docs/array.md#take)
 

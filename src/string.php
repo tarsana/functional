@@ -239,59 +239,81 @@ function match() {
 }
 
 /**
- * Converts a variable to its string value.
+ * Curried version of `substr_count` with changed order of parameters,
  * ```php
- * toString(53)); // '53'
- * toString(true)); // 'true'
- * toString(false)); // 'false'
- * toString(null)); // 'null'
- * toString('Hello World')); // 'Hello World'
- * toString([])); // '[]'
- * toString(new \stdClass)); // '[Object]'
- * toString(function(){})); // '[Function]'
- * toString(Error::of('Ooops'))); // '[Error: Ooops]'
- * toString(fopen('php://temp', 'r'))); // '[Resource]'
- * toString(['hi', 'hello', 'yo'])); // '[hi, hello, yo]'
- * toString([
- *     'object' => Stream::of(null),
- *     'numbers' => [1, 2, 3],
- *     'message'
- * ]); // '[object => Stream(Null), numbers => [1, 2, 3], 0 => message]'
+ * $spaces = occurences(' ');
+ * $spaces('Hello') // 0
+ * $spaces('12 is 4 times 3'); // 4
  * ```
  *
- * @signature * -> String
- * @param  mixed $something
- * @return string
+ * @signature String -> String -> Number
+ * @param  string $token
+ * @param  string $text
+ * @return int
  */
-function toString ($something) {
-    switch (type($something)) {
-        case 'String':
-            return $something;
-        break;
-        case 'Boolean':
-            return $something ? 'true' : 'false';
-        break;
-        case 'Null':
-            return 'null';
-        break;
-        case 'Number':
-            return (string) $something;
-        break;
-        case 'List':
-            return '[' . join(', ', map('Tarsana\\Functional\\toString', $something)) . ']';
-        break;
-        case 'ArrayObject':
-        case 'Array':
-            return '[' . join(', ', map(function($pair){
-                return $pair[0].' => '. toString($pair[1]);
-            }, toPairs($something))) . ']';
-        break;
-        case 'Error':
-        case 'Stream':
-        case 'Object':
-            return is_callable([$something, '__toString']) ? $something->__toString() : '[Object]';
-        break;
-        default:
-            return '['.type($something).']';
-    }
+function occurences() {
+    $occurences = function($token, $text) {
+        return substr_count($text, $token);
+    };
+    return apply(curry($occurences), func_get_args());
+}
+
+/**
+ * Splits a string into chunks without spliting any group surrounded with some
+ * specified characters. `$surrounders` is an array of pairs, each pair specifies
+ * the starting and ending characters of a group that should not be splitted.
+ * ```php
+ * $groups = chunks([['(', ')'], ['{', '}']], ',');
+ * $groups('1,2,(3,4,5),{6,(7,8)},9'); // ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
+ *
+ * $names = chunks([['"', '"'], ['(', ')']], ' ');
+ * $names('Foo "Bar Baz" (Some other name)'); // ['Foo', 'Bar Baz', 'Some other name']
+ * ```
+ *
+ * @signature [(String,Sring)] -> String -> String -> [String]
+ * @param  array $surrounders
+ * @param  string $separator
+ * @param  sring $text
+ * @return array
+ */
+function chunks() {
+    $chunks = function($surrounders, $separator, $text) {
+        return s($text)
+            ->then(split($separator))
+            ->reduce(function($result, $item) use ($separator){
+                $count = occurences(__(), $item);
+                $counts = map(function($index) use ($result, $count) {
+                    return ($result->openings[$index] == $result->closings[$index]) ?
+                        ($result->counts[$index] + $count($result->openings[$index])) % 2 :
+                        $result->counts[$index] + $count($result->openings[$index]) - $count($result->closings[$index]);
+                }, range(0, length($result->counts) - 1));
+                if (0 == $result->total) {
+                    return (object) [
+                        'items'    => append($item, $result->items),
+                        'openings' => $result->openings,
+                        'closings' => $result->closings,
+                        'counts'   => $counts,
+                        'total'    => sum($counts)
+                    ];
+                }
+                return (object) [
+                    'items'  => append(last($result->items) . $separator . $item, init($result->items)),
+                    'openings' => $result->openings,
+                    'closings' => $result->closings,
+                    'counts'   => $counts,
+                    'total'    => sum($counts)
+                ];
+            }, (object) [
+                'items'    => [],
+                'openings' => map(value(0), $surrounders),
+                'closings' => map(value(1), $surrounders),
+                'counts'   => array_fill(0, length($surrounders), 0),
+                'total'    => 0
+            ])
+            ->then(function($data){
+                return $data->items;
+            })
+            ->get();
+    };
+    return apply(curry($chunks), func_get_args());
 }
