@@ -248,19 +248,18 @@ $spaces('12 is 4 times 3'); // 4
 ## chunks
 
 ```php
-chunks(array $surrounders, string $separator, sring $text) : array
+chunks(string $surrounders, string $separator, sring $text) : array
 ```
 
 ```
-[(String,Sring)] | String -> String -> String -> [String]
+String -> String -> String -> [String]
 ```
 
 Splits a string into chunks without spliting any group surrounded with some
-specified characters. `$surrounders` is an array of pairs, each pair specifies
-the starting and ending characters of a group that should not be splitted.
-`$surrounders` can also be a string instead of array of pairs.
+specified characters. `$surrounders` is a string where each pair of characters
+specifies the starting and ending characters of a group that should not be splitted.
 ```php
-$groups = chunks([['(', ')'], ['{', '}']], ',');
+$groups = chunks('(){}', ',');
 $groups('1,2,(3,4,5),{6,(7,8)},9'); // ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
 
 $names = chunks('()""', ' ');
