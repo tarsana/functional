@@ -482,3 +482,27 @@ function slices() {
     };
     return apply(curry($slices), func_get_args());
 }
+
+/**
+ * Checks if an array contains an item.
+ * ```php
+ * contains('foo', ['foo', 'bar', 'baz']) // true
+ * contains('hi', ['foo', 'bar', 'baz']) // false
+ * contains('hi', 'Hello World') // false
+ * contains('He', 'Hello World') // true
+ * ```
+ *
+ * @signature a -> [a] -> Boolean
+ * @signature String -> String -> Boolean
+ * @param  mixed $item
+ * @param  array|string $array
+ * @return bool
+ */
+function contains() {
+    $contains = function($item, $array) {
+        if(is_string($array))
+            return false !== strpos($array, $item);
+        return in_array($item, $array);
+    };
+    return apply(curry($contains), func_get_args());
+}

@@ -147,4 +147,11 @@ class ArrayTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals([], F\slices(3, []));
         $this->assertEquals('', F\slices(3, ''));
     }
+
+    public function test_contains(){
+        $this->assertTrue(F\contains('foo', ['foo', 'bar', 'baz']));
+        $this->assertFalse(F\contains('hi', ['foo', 'bar', 'baz']));
+        $this->assertFalse(F\contains('hi', 'Hello World'));
+        $this->assertTrue(F\contains('He', 'Hello World'));
+    }
 }
