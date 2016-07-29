@@ -354,14 +354,15 @@ function prepend() {
 }
 
 /**
- * Takes a number of elements from an array.
+ * Takes a number of elements from an array. If `$count` is negative,
+ * the elements are taken from the end of the array.
  * ```php
  * $items = ['Foo', 'Bar', 'Baz'];
  * take(2, $items) // ['Foo', 'Bar']
  * take(0, $items) // []
- * take(-2, $items) // []
+ * take(-2, $items) // ['Bar', 'Baz']
  * take(5, 'Hello World') // 'Hello'
- * take(-5, 'Hello World') // ''
+ * take(-5, 'Hello World') // 'World'
  * ```
  *
  * @signature Number -> [a] -> [a]
@@ -372,11 +373,49 @@ function prepend() {
  */
 function take() {
     $take = function($count, $array) {
-        if(is_string($array))
-            return ($count > 0) ? substr($array, 0, $count) : '';
-        return ($count > 0) ? array_slice($array, 0, $count) : [];
+        if(is_string($array)) {
+            return ($count >= 0)
+                ? substr($array, 0, $count)
+                : substr($array, $count);
+        }
+        return ($count >= 0)
+            ? array_slice($array, 0, $count)
+            : array_slice($array, $count);
     };
     return apply(curry($take), func_get_args());
+}
+
+/**
+ * Removes a number of elements from an array.
+ * If `$count` is negative, the elements are
+ * removed from the end of the array.
+ * ```php
+ * $items = ['Foo', 'Bar', 'Baz'];
+ * remove(2, $items) // ['Baz']
+ * remove(-1, $items) // ['Foo', 'Bar']
+ * remove(5, $items) // []
+ * remove(6, 'Hello World') // 'World'
+ * remove(-6, 'Hello World') // 'Hello'
+ * ```
+ *
+ * @signature Number -> [a] -> [a]
+ * @signature Number -> String -> String
+ * @param  int $count
+ * @param  array $array
+ * @return array
+ */
+function remove($count, $array) {
+    $remove = function($count, $array) {
+        if(is_string($array)) {
+            return ($count >= 0)
+                ? substr($array, $count)
+                : substr($array, 0, $count);
+        }
+        return ($count >= 0)
+            ? array_slice($array, $count)
+            : array_slice($array, 0, $count);
+    };
+    return apply(curry($remove), func_get_args());
 }
 
 /**
@@ -414,4 +453,32 @@ function chain() {
         return reduce('Tarsana\\Functional\\concat', [], map($fn, $array));
     };
     return apply(curry($chain), func_get_args());
+}
+
+/**
+ * Gets an array of slices of size `$size` from an array.
+ * ```php
+ * $pairs = slices(2);
+ * $pairs([1, 2, 3, 4, 5]); // [[1, 2], [3, 4], [5]]
+ * $pairs("Hello World"); // ['He', 'll', 'o ', 'Wo', 'rl', 'd']
+ * slices(5, [1, 2]); // [[1, 2]]
+ * slices(3, []) // []
+ * slices(3, '') // ''
+ * ```
+ *
+ * @signature Number -> [a] -> [[a]]
+ * @signature Number -> String -> [String]
+ * @param  int $size
+ * @param  array $array
+ * @return array
+ */
+function slices() {
+    $slices = function($size, $array) {
+        if(empty($array))
+            return is_string($array) ? '' : [];
+        if(length($array) <= $size)
+            return [$array];
+        return prepend(take($size, $array), slices($size, remove($size, $array)));
+    };
+    return apply(curry($slices), func_get_args());
 }

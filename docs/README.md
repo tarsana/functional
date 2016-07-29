@@ -112,9 +112,13 @@
 
 - [take](https://github.com/tarsana/functional/blob/master/docs/array.md#take)
 
+- [remove](https://github.com/tarsana/functional/blob/master/docs/array.md#remove)
+
 - [toPairs](https://github.com/tarsana/functional/blob/master/docs/array.md#toPairs)
 
 - [chain](https://github.com/tarsana/functional/blob/master/docs/array.md#chain)
+
+- [slices](https://github.com/tarsana/functional/blob/master/docs/array.md#slices)
 
 ## math
 

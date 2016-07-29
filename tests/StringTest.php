@@ -92,7 +92,7 @@ class StringTest extends PHPUnit_Framework_TestCase {
             ['1', '2', '(3,4,5)', '{6,(7,8)}', '9'],
             $groups('1,2,(3,4,5),{6,(7,8)},9')
         );
-        $names = F\chunks([['"', '"'], ['(', ')']], ' ');
+        $names = F\chunks('""()', ' ');
         $this->assertEquals(
             ['Foo', '"Bar Baz"', '(Some other name)'],
             $names('Foo "Bar Baz" (Some other name)')

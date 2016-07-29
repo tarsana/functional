@@ -36,9 +36,13 @@
 
 - [take](https://github.com/tarsana/functional/blob/master/docs/array.md#take)
 
+- [remove](https://github.com/tarsana/functional/blob/master/docs/array.md#remove)
+
 - [toPairs](https://github.com/tarsana/functional/blob/master/docs/array.md#toPairs)
 
 - [chain](https://github.com/tarsana/functional/blob/master/docs/array.md#chain)
+
+- [slices](https://github.com/tarsana/functional/blob/master/docs/array.md#slices)
 
 ## value
 
@@ -343,14 +347,38 @@ Number -> [a] -> [a]
 Number -> String -> String
 ```
 
-Takes a number of elements from an array.
+Takes a number of elements from an array. If `$count` is negative,
+the elements are taken from the end of the array.
 ```php
 $items = ['Foo', 'Bar', 'Baz'];
 take(2, $items) // ['Foo', 'Bar']
 take(0, $items) // []
-take(-2, $items) // []
+take(-2, $items) // ['Bar', 'Baz']
 take(5, 'Hello World') // 'Hello'
-take(-5, 'Hello World') // ''
+take(-5, 'Hello World') // 'World'
+```
+
+## remove
+
+```php
+remove(int $count, array $array) : array
+```
+
+```
+Number -> [a] -> [a]
+Number -> String -> String
+```
+
+Removes a number of elements from an array.
+If `$count` is negative, the elements are
+removed from the end of the array.
+```php
+$items = ['Foo', 'Bar', 'Baz'];
+remove(2, $items) // ['Baz']
+remove(-1, $items) // ['Foo', 'Bar']
+remove(5, $items) // []
+remove(6, 'Hello World') // 'World'
+remove(-6, 'Hello World') // 'Hello'
 ```
 
 ## toPairs
@@ -384,4 +412,25 @@ This is also known as `flatMap` in some libraries.
 ```php
 $words = chain(split(' '));
 $words(['Hello World', 'How are you']) // ['Hello', 'World', 'How', 'are', 'you']
+```
+
+## slices
+
+```php
+slices(int $size, array $array) : array
+```
+
+```
+Number -> [a] -> [[a]]
+Number -> String -> [String]
+```
+
+Gets an array of slices of size `$size` from an array.
+```php
+$pairs = slices(2);
+$pairs([1, 2, 3, 4, 5]); // [[1, 2], [3, 4], [5]]
+$pairs("Hello World"); // ['He', 'll', 'o ', 'Wo', 'rl', 'd']
+slices(5, [1, 2]); // [[1, 2]]
+slices(3, []) // []
+slices(3, '') // ''
 ```

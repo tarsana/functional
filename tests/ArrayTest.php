@@ -110,11 +110,20 @@ class ArrayTest extends PHPUnit_Framework_TestCase {
 
     public function test_take(){
         $items = ['Foo', 'Bar', 'Baz'];
-        $this->assertEquals(F\take(2, $items), ['Foo', 'Bar']);
-        $this->assertEquals(F\take(0, $items), []);
-        $this->assertEquals(F\take(-2, $items), []);
-        $this->assertEquals(F\take(5, 'Hello World'), 'Hello');
-        $this->assertEquals(F\take(-5, 'Hello World'), '');
+        $this->assertEquals(['Foo', 'Bar'], F\take(2, $items));
+        $this->assertEquals([], F\take(0, $items));
+        $this->assertEquals(['Bar', 'Baz'], F\take(-2, $items));
+        $this->assertEquals('Hello', F\take(5, 'Hello World'));
+        $this->assertEquals('World', F\take(-5, 'Hello World'));
+    }
+
+    public function test_remove(){
+        $items = ['Foo', 'Bar', 'Baz'];
+        $this->assertEquals(['Baz'], F\remove(2, $items));
+        $this->assertEquals(['Foo', 'Bar'], F\remove(-1, $items));
+        $this->assertEquals([], F\remove(5, $items));
+        $this->assertEquals('World', F\remove(6, 'Hello World'));
+        $this->assertEquals('Hello', F\remove(-6, 'Hello World'));
     }
 
     public function test_toPairs(){
@@ -128,5 +137,14 @@ class ArrayTest extends PHPUnit_Framework_TestCase {
             $words(['Hello World', 'How are you']),
             ['Hello', 'World', 'How', 'are', 'you']
         );
+    }
+
+    public function test_slices(){
+        $pairs = F\slices(2);
+        $this->assertEquals([[1, 2], [3, 4], [5]], $pairs([1, 2, 3, 4, 5]));
+        $this->assertEquals(['He', 'll', 'o ', 'Wo', 'rl', 'd'], $pairs("Hello World"));
+        $this->assertEquals([[1, 2]], F\slices(5, [1, 2]));
+        $this->assertEquals([], F\slices(3, []));
+        $this->assertEquals('', F\slices(3, ''));
     }
 }

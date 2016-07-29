@@ -252,16 +252,17 @@ chunks(array $surrounders, string $separator, sring $text) : array
 ```
 
 ```
-[(String,Sring)] -> String -> String -> [String]
+[(String,Sring)] | String -> String -> String -> [String]
 ```
 
 Splits a string into chunks without spliting any group surrounded with some
 specified characters. `$surrounders` is an array of pairs, each pair specifies
 the starting and ending characters of a group that should not be splitted.
+`$surrounders` can also be a string instead of array of pairs.
 ```php
 $groups = chunks([['(', ')'], ['{', '}']], ',');
 $groups('1,2,(3,4,5),{6,(7,8)},9'); // ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
 
-$names = chunks([['"', '"'], ['(', ')']], ' ');
+$names = chunks('()""', ' ');
 $names('Foo "Bar Baz" (Some other name)'); // ['Foo', 'Bar Baz', 'Some other name']
 ```
