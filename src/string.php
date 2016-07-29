@@ -260,27 +260,25 @@ function occurences() {
 
 /**
  * Splits a string into chunks without spliting any group surrounded with some
- * specified characters. `$surrounders` is an array of pairs, each pair specifies
- * the starting and ending characters of a group that should not be splitted.
- * `$surrounders` can also be a string instead of array of pairs.
+ * specified characters. `$surrounders` is a string where each pair of characters
+ * specifies the starting and ending characters of a group that should not be splitted.
  * ```php
- * $groups = chunks([['(', ')'], ['{', '}']], ',');
+ * $groups = chunks('(){}', ',');
  * $groups('1,2,(3,4,5),{6,(7,8)},9'); // ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
  *
  * $names = chunks('()""', ' ');
  * $names('Foo "Bar Baz" (Some other name)'); // ['Foo', 'Bar Baz', 'Some other name']
  * ```
  *
- * @signature [(String,Sring)] | String -> String -> String -> [String]
- * @param  array $surrounders
+ * @signature String -> String -> String -> [String]
+ * @param  string $surrounders
  * @param  string $separator
  * @param  sring $text
  * @return array
  */
 function chunks() {
     $chunks = function($surrounders, $separator, $text) {
-        if (is_string($surrounders))
-            $surrounders = map(slices(1), slices(2, $surrounders));
+        $surrounders = map(slices(1), slices(2, $surrounders));
         return s($text)
             ->then(split($separator))
             ->reduce(function($result, $item) use ($separator){

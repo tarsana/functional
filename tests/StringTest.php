@@ -87,7 +87,7 @@ class StringTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_chunks(){
-        $groups = F\chunks([['(', ')'], ['{', '}']], ',');
+        $groups = F\chunks('(){}', ',');
         $this->assertEquals(
             ['1', '2', '(3,4,5)', '{6,(7,8)}', '9'],
             $groups('1,2,(3,4,5),{6,(7,8)},9')
