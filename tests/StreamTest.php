@@ -43,7 +43,7 @@ class StreamTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_stream_reduce () {
-        $s = Stream::of([1, 2, 1, 4, 5])->reduce('Tarsana\\Functional\\plus', 0);
+        $s = Stream::of([1, 2, 1, 4, 5])->reduce(F\f('plus'), 0);
         $this->assertEquals(13, $s->get());
     }
 
@@ -53,8 +53,16 @@ class StreamTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_stream_then () {
-        $s = Stream::of([1, 2, 1, 4, 5])->then('Tarsana\\Functional\\sum');
+        $s = Stream::of([1, 2, 1, 4, 5])->then(F\f('sum'));
         $this->assertEquals(13, $s->get());
+    }
+
+    public function test_stream_then_multiple_params () {
+        $s = Stream::of('ello ')->then(
+            F\prepend('H'),
+            F\append('World')
+        );
+        $this->assertEquals('Hello World', $s->get());
     }
 
     public function test_chain () {

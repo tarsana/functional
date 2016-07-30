@@ -352,14 +352,15 @@ class Stream {
     }
 
     /**
-     * Applies a custom function on the content of the stream.
+     * Applies a custom functions on the content of the stream.
      * ```php
      * Stream::of('Hello')
      *     ->then('strtoupper')
      *     ->get() // 'HELLO'
-     * Stream::of('   Hello ')
-     *     ->then('trim')
-     *     ->get() // 'Hello'
+     *
+     * Stream::of('   HelLO ')
+     *     ->then('trim', 'strtolower')
+     *     ->get() // 'hello'
      * ```
      *
      * @signature Stream(a) -> (a -> b) -> Stream(b)
@@ -368,7 +369,11 @@ class Stream {
      */
     public function then ($fn)
     {
-        return Stream::apply('apply', $fn, $this);
+        $result = $this;
+        foreach (func_get_args() as $fn) {
+            $result = Stream::apply('apply', $fn, $result);
+        }
+        return $result;
     }
 
     /**

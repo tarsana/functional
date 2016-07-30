@@ -154,6 +154,11 @@ class FunctionsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Hello World', F\identity('Hello World'));
         $this->assertNotEquals(5, F\identity(6));
     }
+
+    public function test_f() {
+        $sum = F\f('sum');
+        $this->assertEquals(10, $sum([1, 2, 3, 4]));
+    }
 }
 
 class ForTest {

@@ -118,3 +118,20 @@ function identity($value) {
     return $value;
 }
 
+/**
+ * Adds the `Tarsana\Functional\` namespace to a function name.
+ * This is useful when you want to pass a function as parameter.
+ * ```php
+ * // Instead of doing
+ * $sumDoubles = pipe(map(multiply(2)), 'Tarsana\Functional\sum');
+ * // You can do
+ * $sumDoubles = pipe(map(multiply(2)), f('sum'));
+ * ```
+ *
+ * @signature String -> Sring
+ * @param  string $name
+ * @return string
+ */
+function f($name) {
+    return "Tarsana\\Functional\\{$name}";
+}
