@@ -12,6 +12,8 @@
 
 - [identity](https://github.com/tarsana/functional/blob/master/docs/functions.md#identity)
 
+- [f](https://github.com/tarsana/functional/blob/master/docs/functions.md#f)
+
 ## curry
 
 ```php
@@ -108,4 +110,23 @@ returns exactly the given argument.
 identity('Hello') // 'Hello'
 identity([1, 2, 3]) // [1, 2, 3]
 identity(null) // null
+```
+
+## f
+
+```php
+f(string $name) : string
+```
+
+```
+String -> Sring
+```
+
+Adds the `Tarsana\Functional\` namespace to a function name.
+This is useful when you want to pass a function as parameter.
+```php
+// Instead of doing
+$sumDoubles = pipe(map(multiply(2)), 'Tarsana\Functional\sum');
+// You can do
+$sumDoubles = pipe(map(multiply(2)), f('sum'));
 ```

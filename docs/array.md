@@ -44,6 +44,8 @@
 
 - [slices](https://github.com/tarsana/functional/blob/master/docs/array.md#slices)
 
+- [contains](https://github.com/tarsana/functional/blob/master/docs/array.md#contains)
+
 ## value
 
 ```php
@@ -433,4 +435,23 @@ $pairs("Hello World"); // ['He', 'll', 'o ', 'Wo', 'rl', 'd']
 slices(5, [1, 2]); // [[1, 2]]
 slices(3, []) // []
 slices(3, '') // ''
+```
+
+## contains
+
+```php
+contains(mixed $item, array|string $array) : bool
+```
+
+```
+a -> [a] -> Boolean
+String -> String -> Boolean
+```
+
+Checks if an array contains an item.
+```php
+contains('foo', ['foo', 'bar', 'baz']) // true
+contains('hi', ['foo', 'bar', 'baz']) // false
+contains('hi', 'Hello World') // false
+contains('He', 'Hello World') // true
 ```

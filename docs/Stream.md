@@ -204,14 +204,15 @@ then(callable $fn) : Stream
 Stream(a) -> (a -> b) -> Stream(b)
 ```
 
-Applies a custom function on the content of the stream.
+Applies a custom functions on the content of the stream.
 ```php
 Stream::of('Hello')
     ->then('strtoupper')
     ->get() // 'HELLO'
-Stream::of('   Hello ')
-    ->then('trim')
-    ->get() // 'Hello'
+
+Stream::of('   HelLO ')
+    ->then('trim', 'strtolower')
+    ->get() // 'hello'
 ```
 
 ## call

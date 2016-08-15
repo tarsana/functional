@@ -14,6 +14,8 @@
 
 - [identity](https://github.com/tarsana/functional/blob/master/docs/functions.md#identity)
 
+- [f](https://github.com/tarsana/functional/blob/master/docs/functions.md#f)
+
 ## operators
 
 - [and_](https://github.com/tarsana/functional/blob/master/docs/operators.md#and_)
@@ -119,6 +121,8 @@
 - [chain](https://github.com/tarsana/functional/blob/master/docs/array.md#chain)
 
 - [slices](https://github.com/tarsana/functional/blob/master/docs/array.md#slices)
+
+- [contains](https://github.com/tarsana/functional/blob/master/docs/array.md#contains)
 
 ## math
 
