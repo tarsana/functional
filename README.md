@@ -1,10 +1,9 @@
 # Tarsana Functional
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f3809eb7-6efa-498d-83b2-598d6e7eb9c6/small.png)](https://insight.sensiolabs.com/projects/f3809eb7-6efa-498d-83b2-598d6e7eb9c6)
-
 [![Build Status](https://travis-ci.org/tarsana/functional.svg?branch=master)](https://travis-ci.org/tarsana/functional)
 [![Coverage Status](https://coveralls.io/repos/github/tarsana/functional/badge.svg?branch=master)](https://coveralls.io/github/tarsana/functional?branch=master)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](http://opensource.org/licenses/MIT)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tarsana/functional/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tarsana/functional/?branch=master)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/tarsana/functional/blob/master/LICENSE)
 
 Functional programming library for Tarsana
 
@@ -14,7 +13,7 @@ Functional programming library for Tarsana
 
 - [Real Use Case](#real-use-case)
 
-- [Streams](#streams) **New in version 1.1.0**
+- [Streams](#streams)
 
 - [Reference Documentation](#reference-documentation)
 
