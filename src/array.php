@@ -404,7 +404,7 @@ function take() {
  * @param  array $array
  * @return array
  */
-function remove($count, $array) {
+function remove() {
     $remove = function($count, $array) {
         if(is_string($array)) {
             return ($count >= 0)
