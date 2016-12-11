@@ -2,7 +2,7 @@
 
 use Tarsana\Functional as F;
 
-class MathTest extends UnitTest {
+class MathTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_plus() {
 		$plusTwo = F\plus(2);

@@ -1,24 +1,24 @@
-# math
+#Math
 
-## Table Of Contents
+Basic Math functions.
 
-- [plus](https://github.com/tarsana/functional/blob/master/docs/math.md#plus)
+- [plus](#plus)
 
-- [minus](https://github.com/tarsana/functional/blob/master/docs/math.md#minus)
+- [minus](#minus)
 
-- [negate](https://github.com/tarsana/functional/blob/master/docs/math.md#negate)
+- [negate](#negate)
 
-- [multiply](https://github.com/tarsana/functional/blob/master/docs/math.md#multiply)
+- [multiply](#multiply)
 
-- [divide](https://github.com/tarsana/functional/blob/master/docs/math.md#divide)
+- [divide](#divide)
 
-- [modulo](https://github.com/tarsana/functional/blob/master/docs/math.md#modulo)
+- [modulo](#modulo)
 
-- [sum](https://github.com/tarsana/functional/blob/master/docs/math.md#sum)
+- [sum](#sum)
 
-- [product](https://github.com/tarsana/functional/blob/master/docs/math.md#product)
+- [product](#product)
 
-## plus
+# plus
 
 ```php
 plus(int|float $x, int|float $y) : int|float
@@ -29,12 +29,13 @@ Number -> Number -> Number
 ```
 
 Computes `$x + $y`.
+
 ```php
-$plusTwo = plus(2);
-$plusTwo(5); // 7
+$plusTwo = F\plus(2);
+$plusTwo(5); //=> 7
 ```
 
-## minus
+# minus
 
 ```php
 minus(int|float $x, int|float $y) : int|float
@@ -45,11 +46,12 @@ Number -> Number -> Number
 ```
 
 Computues `$x - $y`.
+
 ```php
-minus(7, 2); // 5
+F\minus(7, 2); //=> 5
 ```
 
-## negate
+# negate
 
 ```php
 negate(int|float $x) : int|float
@@ -60,12 +62,13 @@ Number -> Number
 ```
 
 Computes `- $x`.
+
 ```php
-negate(5); // -5
-negate(-7); // 7
+F\negate(5); //=> -5
+F\negate(-7); //=> 7
 ```
 
-## multiply
+# multiply
 
 ```php
 multiply(int|float $x, int|float $y) : int|float
@@ -76,12 +79,13 @@ Number -> Number -> Number
 ```
 
 Computes `$x * $y`.
+
 ```php
-$double = multiply(2);
-$double(5); // 10
+$double = F\multiply(2);
+$double(5); //=> 10
 ```
 
-## divide
+# divide
 
 ```php
 divide(int|float $x, int|float $y) : int|float
@@ -92,11 +96,12 @@ Number -> Number -> Number
 ```
 
 Computes `$x / $y`.
+
 ```php
-divide(10, 2); // 5
+F\divide(10, 2); //=> 5
 ```
 
-## modulo
+# modulo
 
 ```php
 modulo(int|float $x, int|float $y) : int|float
@@ -107,11 +112,12 @@ Number -> Number -> Number
 ```
 
 Computes `$x % $y`.
+
 ```php
-modulo(10, 3); // 1
+F\modulo(10, 3); //=> 1
 ```
 
-## sum
+# sum
 
 ```php
 sum(array $numbers) : int|float
@@ -122,12 +128,13 @@ sum(array $numbers) : int|float
 ```
 
 Computes the sum of an array of numbers.
+
 ```php
-sum([1, 2, 3, 4]) // 10
-sum([]) // 0
+F\sum([1, 2, 3, 4]); //=> 10
+F\sum([]); //=> 0
 ```
 
-## product
+# product
 
 ```php
 product(array $numbers) : int|float
@@ -138,7 +145,9 @@ product(array $numbers) : int|float
 ```
 
 Computes the product of an array of numbers.
+
 ```php
-product([1, 2, 3, 4]) // 24
-product([]) // 1
+F\product([1, 2, 3, 4]); //=> 24
+F\product([]); //=> 1
 ```
+

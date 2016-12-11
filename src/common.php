@@ -1,119 +1,139 @@
 <?php namespace Tarsana\Functional;
 
 /**
- * This file contains generic common functions.
+ * Generic common functions.
+ * @file
  */
 
 /**
  * Gets the type of the given argument.
+ *
  * ```php
- * type(null); // 'Null'
- * type(true); // 'Boolean'
- * type(false); // 'Boolean'
- * type('Hello World'); // 'String'
- * type(1234); // 'Number'
- * type('123'); // 'String'
- * type(function($x) {return $x;}); // 'Function'
- * type(new \stdClass); // 'Object'
- * type(['name' => 'Foo', 'age' => 21]); // 'ArrayObject'
- * type(['Hello', 'World', 123, true]); // 'List'
- * type(['name' => 'Foo', 'Hello', 'Mixed']); // 'Array'
- * type(fopen('php://temp')); // 'Resource'
- * type(Error::of('Ooops !')); // 'Error'
+ * F\type(null); //=> 'Null'
+ * F\type(true); //=> 'Boolean'
+ * F\type(false); //=> 'Boolean'
+ * F\type('Hello World'); //=> 'String'
+ * F\type(1234); //=> 'Number'
+ * F\type('123'); //=> 'String'
+ * F\type(function($x) {return $x;}); //=> 'Function'
+ * F\type(new \stdClass); //=> 'Object'
+ * F\type(['name' => 'Foo', 'age' => 21]); //=> 'Array'
+ * F\type(['Hello', 'World', 123, true]); //=> 'List'
+ * F\type(['name' => 'Foo', 'Hello', 'Mixed']); //=> 'Array'
+ * F\type(fopen('php://temp', 'w')); //=> 'Resource'
+ * F\type(F\Error::of('Ooops !')); //=> 'Error'
  * // Anything else is 'Unknown'
  * ```
  *
+ * @signature * -> String
  * @param  mixed $data
  * @return string
  */
-function type($data) {
-    if (null === $data) return 'Null';
-    if (true === $data || false === $data) return 'Boolean';
-    if ($data instanceof Error) return 'Error';
-    if ($data instanceof Stream) return 'Stream';
-    if (is_callable($data)) return 'Function';
-    if (is_resource($data)) return 'Resource';
-    if (is_string($data)) return 'String';
-    if (is_integer($data) || is_float($data)) return 'Number';
-    if (is_array($data)) {
-        if (all('is_numeric', array_keys($data)))
-            return 'List';
-        if (all('is_string', array_keys($data)))
-            return 'ArrayObject';
-        return 'Array';
-    }
-    if (is_object($data)) return 'Object';
-    return 'Unknown';
+function type() {
+    static $type = false;
+    $type = $type ?: curry(function($data) {
+        if ($data instanceof Error) return 'Error';
+        if ($data instanceof Stream) return "Stream";
+        if (is_callable($data)) return 'Function';
+        switch (gettype($data)) {
+            case 'boolean':
+                return 'Boolean';
+            case 'NULL':
+                return 'Null';
+            case 'integer':
+            case 'double':
+                return 'Number';
+            case 'string':
+                return 'String';
+            case 'resource':
+                return 'Resource';
+            case 'array':
+                if (allSatisfies('is_numeric', keys($data)))
+                    return 'List';
+                return 'Array';
+            case 'object':
+                return 'Object';
+            default:
+                return 'Unknown';
+        }
+    });
+    return _apply($type, func_get_args());
 }
+
 
 /**
  * Converts a variable to its string value.
+ *
  * ```php
- * toString(53)); // '53'
- * toString(true)); // 'true'
- * toString(false)); // 'false'
- * toString(null)); // 'null'
- * toString('Hello World')); // 'Hello World'
- * toString([])); // '[]'
- * toString(new \stdClass)); // '[Object]'
- * toString(function(){})); // '[Function]'
- * toString(Error::of('Ooops'))); // '[Error: Ooops]'
- * toString(fopen('php://temp', 'r'))); // '[Resource]'
- * toString(['hi', 'hello', 'yo'])); // '[hi, hello, yo]'
- * toString([
- *     'object' => Stream::of(null),
+ * F\toString(53); //=> '53'
+ * F\toString(true); //=> 'true'
+ * F\toString(false); //=> 'false'
+ * F\toString(null); //=> 'null'
+ * F\toString('Hello World'); //=> '"Hello World"'
+ * F\toString([]); //=> '[]'
+ * F\toString(new \stdClass); //=> '{}'
+ * F\toString(function(){}); //=> '[Function]'
+ * F\toString(F\Error::of('Ooops')); //=> '[Error: Ooops]'
+ * F\toString(fopen('php://temp', 'r')); //=> '[Resource]'
+ * F\toString(['hi', 'hello', 'yo']); //=> '["hi", "hello", "yo"]'
+ * F\toString([
+ *     'object' => null,
  *     'numbers' => [1, 2, 3],
  *     'message'
- * ]); // '[object => Stream(Null), numbers => [1, 2, 3], 0 => message]'
+ * ]); //=> '{object: null, numbers: [1, 2, 3], 0: "message"}'
  * ```
  *
  * @signature * -> String
  * @param  mixed $something
  * @return string
  */
-function toString ($something) {
-    switch (type($something)) {
-        case 'String':
-            return $something;
-        break;
-        case 'Boolean':
-            return $something ? 'true' : 'false';
-        break;
-        case 'Null':
-            return 'null';
-        break;
-        case 'Number':
-            return (string) $something;
-        break;
-        case 'List':
-            return '[' . join(', ', map('Tarsana\\Functional\\toString', $something)) . ']';
-        break;
-        case 'ArrayObject':
-        case 'Array':
-            return '[' . join(', ', map(function($pair){
-                return $pair[0].' => '. toString($pair[1]);
-            }, toPairs($something))) . ']';
-        break;
-        case 'Error':
-        case 'Stream':
-        case 'Object':
-            return is_callable([$something, '__toString']) ? $something->__toString() : '[Object]';
-        break;
-        default:
-            return '['.type($something).']';
-    }
+function toString () {
+    static $toString = false;
+    $toString = $toString ?: curry(function($something) {
+        switch (type($something)) {
+            case 'String':
+                return "\"{$something}\"";
+            break;
+            case 'Boolean':
+                return $something ? 'true' : 'false';
+            break;
+            case 'Null':
+                return 'null';
+            break;
+            case 'Number':
+                return (string) $something;
+            break;
+            case 'List':
+                return '[' . join(', ', map(toString(), $something)) . ']';
+            break;
+            case 'Error':
+                return "[Error: {$something->getMessage()}]";
+            case 'Stream':
+                return $something->__toString();
+            case 'Object':
+            case 'Array':
+                return '{' . join(', ', map(function($pair){
+                    return $pair[0].': '. toString($pair[1]);
+                }, toPairs($something))) . '}';
+            default:
+                return '['.type($something).']';
+        }
+    });
+    return _apply($toString, func_get_args());
 }
 
 /**
  * Creates a `Stream` containing the provided data.
+ *
  * ```php
- * s('! World Hello')
- *     ->then(split(' '))
- *     ->then('array_reverse')
- *     ->then(join(' '))
- *     ->get(); // 'Hello World !'
+ * $s = F\s('! World Hello')
+ *     ->split(' ')
+ *     ->reverse()
+ *     ->join(' ');
+ * $s->get(); //=> 'Hello World !'
  * ```
  *
+ * @ignore
  * @signature a -> Stream(a)
  * @param  mixed $data
  * @return Stream

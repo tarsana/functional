@@ -1,40 +1,41 @@
-# common
+#Common
 
-## Table Of Contents
+Generic common functions.
 
-- [type](https://github.com/tarsana/functional/blob/master/docs/common.md#type)
+- [type](#type)
 
-- [toString](https://github.com/tarsana/functional/blob/master/docs/common.md#toString)
+- [toString](#to-string)
 
-- [s](https://github.com/tarsana/functional/blob/master/docs/common.md#s)
-
-## type
+# type
 
 ```php
 type(mixed $data) : string
 ```
 
-
+```
+* -> String
+```
 
 Gets the type of the given argument.
+
 ```php
-type(null); // 'Null'
-type(true); // 'Boolean'
-type(false); // 'Boolean'
-type('Hello World'); // 'String'
-type(1234); // 'Number'
-type('123'); // 'String'
-type(function($x) {return $x;}); // 'Function'
-type(new \stdClass); // 'Object'
-type(['name' => 'Foo', 'age' => 21]); // 'ArrayObject'
-type(['Hello', 'World', 123, true]); // 'List'
-type(['name' => 'Foo', 'Hello', 'Mixed']); // 'Array'
-type(fopen('php://temp')); // 'Resource'
-type(Error::of('Ooops !')); // 'Error'
+F\type(null); //=> 'Null'
+F\type(true); //=> 'Boolean'
+F\type(false); //=> 'Boolean'
+F\type('Hello World'); //=> 'String'
+F\type(1234); //=> 'Number'
+F\type('123'); //=> 'String'
+F\type(function($x) {return $x;}); //=> 'Function'
+F\type(new \stdClass); //=> 'Object'
+F\type(['name' => 'Foo', 'age' => 21]); //=> 'Array'
+F\type(['Hello', 'World', 123, true]); //=> 'List'
+F\type(['name' => 'Foo', 'Hello', 'Mixed']); //=> 'Array'
+F\type(fopen('php://temp', 'w')); //=> 'Resource'
+F\type(F\Error::of('Ooops !')); //=> 'Error'
 // Anything else is 'Unknown'
 ```
 
-## toString
+# toString
 
 ```php
 toString(mixed $something) : string
@@ -45,40 +46,23 @@ toString(mixed $something) : string
 ```
 
 Converts a variable to its string value.
+
 ```php
-toString(53)); // '53'
-toString(true)); // 'true'
-toString(false)); // 'false'
-toString(null)); // 'null'
-toString('Hello World')); // 'Hello World'
-toString([])); // '[]'
-toString(new \stdClass)); // '[Object]'
-toString(function(){})); // '[Function]'
-toString(Error::of('Ooops'))); // '[Error: Ooops]'
-toString(fopen('php://temp', 'r'))); // '[Resource]'
-toString(['hi', 'hello', 'yo'])); // '[hi, hello, yo]'
-toString([
-    'object' => Stream::of(null),
+F\toString(53); //=> '53'
+F\toString(true); //=> 'true'
+F\toString(false); //=> 'false'
+F\toString(null); //=> 'null'
+F\toString('Hello World'); //=> '"Hello World"'
+F\toString([]); //=> '[]'
+F\toString(new \stdClass); //=> '{}'
+F\toString(function(){}); //=> '[Function]'
+F\toString(F\Error::of('Ooops')); //=> '[Error: Ooops]'
+F\toString(fopen('php://temp', 'r')); //=> '[Resource]'
+F\toString(['hi', 'hello', 'yo']); //=> '["hi", "hello", "yo"]'
+F\toString([
+    'object' => null,
     'numbers' => [1, 2, 3],
     'message'
-]); // '[object => Stream(Null), numbers => [1, 2, 3], 0 => message]'
+]); //=> '{object: null, numbers: [1, 2, 3], 0: "message"}'
 ```
 
-## s
-
-```php
-s(mixed $data) : Stream
-```
-
-```
-a -> Stream(a)
-```
-
-Creates a `Stream` containing the provided data.
-```php
-s('! World Hello')
-    ->then(split(' '))
-    ->then('array_reverse')
-    ->then(join(' '))
-    ->get(); // 'Hello World !'
-```

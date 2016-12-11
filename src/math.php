@@ -1,13 +1,15 @@
 <?php namespace Tarsana\Functional;
 /**
- * This file contains some useful Math functions.
+ * Basic Math functions.
+ * @file
  */
 
 /**
  * Computes `$x + $y`.
+ *
  * ```php
- * $plusTwo = plus(2);
- * $plusTwo(5); // 7
+ * $plusTwo = F\plus(2);
+ * $plusTwo(5); //=> 7
  * ```
  *
  * @signature Number -> Number -> Number
@@ -16,16 +18,18 @@
  * @return int|float
  */
 function plus() {
-    $plus = curry(function($x, $y){
+    static $plus = false;
+    $plus = $plus ?: curry(function($x, $y){
         return $x + $y;
     });
-    return apply($plus, func_get_args());
+    return _apply($plus, func_get_args());
 }
 
 /**
  * Computues `$x - $y`.
+ *
  * ```php
- * minus(7, 2); // 5
+ * F\minus(7, 2); //=> 5
  * ```
  *
  * @signature Number -> Number -> Number
@@ -34,32 +38,39 @@ function plus() {
  * @return int|float
  */
 function minus() {
-    $minus = curry(function($x, $y){
+    static $minus = false;
+    $minus = $minus ?: curry(function($x, $y){
         return $x - $y;
     });
-    return apply($minus, func_get_args());
+    return _apply($minus, func_get_args());
 }
 
 /**
  * Computes `- $x`.
+ *
  * ```php
- * negate(5); // -5
- * negate(-7); // 7
+ * F\negate(5); //=> -5
+ * F\negate(-7); //=> 7
  * ```
  *
  * @signature Number -> Number
  * @param  int|float $x
  * @return int|float
  */
-function negate($x) {
-    return -$x;
+function negate() {
+    static $negate = false;
+    $negate = $negate ?: curry(function($x){
+        return -$x;
+    });
+    return _apply($negate, func_get_args());
 }
 
 /**
  * Computes `$x * $y`.
+ *
  * ```php
- * $double = multiply(2);
- * $double(5); // 10
+ * $double = F\multiply(2);
+ * $double(5); //=> 10
  * ```
  *
  * @signature Number -> Number -> Number
@@ -68,16 +79,18 @@ function negate($x) {
  * @return int|float
  */
 function multiply() {
-    $multiply = curry(function($x, $y){
+    static $multiply = false;
+    $multiply = $multiply ?: curry(function($x, $y){
         return $y * $x;
     });
-    return apply($multiply, func_get_args());
+    return _apply($multiply, func_get_args());
 }
 
 /**
  * Computes `$x / $y`.
+ *
  * ```php
- * divide(10, 2); // 5
+ * F\divide(10, 2); //=> 5
  * ```
  *
  * @signature Number -> Number -> Number
@@ -86,16 +99,18 @@ function multiply() {
  * @return int|float
  */
 function divide() {
-    $divide = curry(function($x, $y){
+    static $divide = false;
+    $divide = $divide ?: curry(function($x, $y){
         return $x / $y;
     });
-    return apply($divide, func_get_args());
+    return _apply($divide, func_get_args());
 }
 
 /**
  * Computes `$x % $y`.
+ *
  * ```php
- * modulo(10, 3); // 1
+ * F\modulo(10, 3); //=> 1
  * ```
  *
  * @signature Number -> Number -> Number
@@ -104,38 +119,49 @@ function divide() {
  * @return int|float
  */
 function modulo() {
-    $modulo = curry(function($x, $y){
+    static $modulo = false;
+    $modulo = $modulo ?: curry(function($x, $y){
         return $x % $y;
     });
-    return apply($modulo, func_get_args());
+    return _apply($modulo, func_get_args());
 }
 
 /**
  * Computes the sum of an array of numbers.
+ *
  * ```php
- * sum([1, 2, 3, 4]) // 10
- * sum([]) // 0
+ * F\sum([1, 2, 3, 4]); //=> 10
+ * F\sum([]); //=> 0
  * ```
  *
  * @signature [Number] -> Number
  * @param  array $numbers
  * @return int|float
  */
-function sum($numbers) {
-    return reduce('Tarsana\\Functional\\plus', 0, $numbers);
+function sum() {
+    static $sum = false;
+    $sum = $sum ?: curry(function($numbers){
+        return reduce(plus(), 0, $numbers);
+    });
+    return _apply($sum, func_get_args());
 }
 
 /**
  * Computes the product of an array of numbers.
+ *
  * ```php
- * product([1, 2, 3, 4]) // 24
- * product([]) // 1
+ * F\product([1, 2, 3, 4]); //=> 24
+ * F\product([]); //=> 1
  * ```
  *
  * @signature [Number] -> Number
  * @param  array $numbers
  * @return int|float
  */
-function product($numbers) {
-    return reduce('Tarsana\\Functional\\multiply', 1, $numbers);
+function product() {
+    static $product = false;
+    $product = $product ?: curry(function($numbers){
+        return reduce(multiply(), 1, $numbers);
+    });
+    return _apply($product, func_get_args());
 }

@@ -2,7 +2,7 @@
 
 use Tarsana\Functional as F;
 
-class CommonTest extends UnitTest {
+class CommonTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_type() {
 		$this->assertEquals('Null', F\type(null));

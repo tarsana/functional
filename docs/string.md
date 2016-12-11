@@ -1,36 +1,36 @@
-# string
+#String
 
-## Table Of Contents
+This file contains some useful String functions.
 
-- [split](https://github.com/tarsana/functional/blob/master/docs/string.md#split)
+- [split](#split)
 
-- [join](https://github.com/tarsana/functional/blob/master/docs/string.md#join)
+- [join](#join)
 
-- [replace](https://github.com/tarsana/functional/blob/master/docs/string.md#replace)
+- [replace](#replace)
 
-- [regReplace](https://github.com/tarsana/functional/blob/master/docs/string.md#regReplace)
+- [regReplace](#reg-replace)
 
-- [upperCase](https://github.com/tarsana/functional/blob/master/docs/string.md#upperCase)
+- [upperCase](#upper-case)
 
-- [lowerCase](https://github.com/tarsana/functional/blob/master/docs/string.md#lowerCase)
+- [lowerCase](#lower-case)
 
-- [camelCase](https://github.com/tarsana/functional/blob/master/docs/string.md#camelCase)
+- [camelCase](#camel-case)
 
-- [snakeCase](https://github.com/tarsana/functional/blob/master/docs/string.md#snakeCase)
+- [snakeCase](#snake-case)
 
-- [startsWith](https://github.com/tarsana/functional/blob/master/docs/string.md#startsWith)
+- [startsWith](#starts-with)
 
-- [endsWith](https://github.com/tarsana/functional/blob/master/docs/string.md#endsWith)
+- [endsWith](#ends-with)
 
-- [test](https://github.com/tarsana/functional/blob/master/docs/string.md#test)
+- [test](#test)
 
-- [match](https://github.com/tarsana/functional/blob/master/docs/string.md#match)
+- [match](#match)
 
-- [occurences](https://github.com/tarsana/functional/blob/master/docs/string.md#occurences)
+- [occurences](#occurences)
 
-- [chunks](https://github.com/tarsana/functional/blob/master/docs/string.md#chunks)
+- [chunks](#chunks)
 
-## split
+# split
 
 ```php
 split(string $delimiter, string $string) : array
@@ -40,13 +40,14 @@ split(string $delimiter, string $string) : array
 String -> String -> [String]
 ```
 
-Curried version of `explode()`.
+Curried version of `explode`.
+
 ```php
-$words = split(' ');
-$words('Hello World'); // ['Hello', 'World']
+$words = F\split(' ');
+$words('Hello World'); //=> ['Hello', 'World']
 ```
 
-## join
+# join
 
 ```php
 join(string $glue, array $pieces) : string
@@ -56,32 +57,34 @@ join(string $glue, array $pieces) : string
 String -> [String] -> String
 ```
 
-Curried version of `implode()`.
+Curried version of `implode`.
+
 ```php
-$sentence = join(' ');
-$sentence(['Hello', 'World']); // 'Hello World'
+$sentence = F\join(' ');
+$sentence(['Hello', 'World']); //=> 'Hello World'
 ```
 
-## replace
+# replace
 
 ```php
 replace(string $search, string $replacement, string $string) : string
 ```
 
 ```
-String|[String] -> String -> String|[String] -> String
+String|[String] -> String|[String] -> String -> String
 ```
 
-Curried version of `str_replace()`.
+Curried version of `str_replace`.
+
 ```php
 $string = 'a b c d e f';
-$noSpace = replace(' ', '');
-$noSpace($string); // 'abcdef'
-replace(['a', 'b', ' '], '', $string) // 'cdef'
-replace(['a', 'e', ' '], ['x', 'y', ''], $string); // 'xbcdyf'
+$noSpace = F\replace(' ', '');
+$noSpace($string); //=> 'abcdef'
+F\replace(['a', 'b', ' '], '', $string); //=> 'cdef'
+F\replace(['a', 'e', ' '], ['x', 'y', ''], $string); //=> 'xbcdyf'
 ```
 
-## regReplace
+# regReplace
 
 ```php
 regReplace(string $pattern, string $replacement, string $string) : string
@@ -91,14 +94,15 @@ regReplace(string $pattern, string $replacement, string $string) : string
 String -> String -> String -> String
 ```
 
-Curried version of `preg_replace()`.
+Curried version of `preg_replace`.
+
 ```php
 $string = 'A12;b_{F}|d';
-$aplha = regReplace('/[^a-z]+/i', '');
-$alpha($string); // 'AbFd'
+$alpha = F\regReplace('/[^a-z]+/i', '');
+$alpha($string); //=> 'AbFd'
 ```
 
-## upperCase
+# upperCase
 
 ```php
 upperCase(string $string) : string
@@ -109,11 +113,12 @@ String -> String
 ```
 
 Alias of `strtoupper`.
+
 ```php
-upperCase('hello') // 'HELLO'
+F\upperCase('hello'); //=> 'HELLO'
 ```
 
-## lowerCase
+# lowerCase
 
 ```php
 lowerCase(string $string) : string
@@ -124,11 +129,12 @@ String -> String
 ```
 
 Alias of `strtolower`.
+
 ```php
-lowerCase('HELLO') // 'hello'
+F\lowerCase('HeLLO'); //=> 'hello'
 ```
 
-## camelCase
+# camelCase
 
 ```php
 camelCase(string $string) : string
@@ -139,11 +145,12 @@ String -> String
 ```
 
 Gets the camlCase version of a string.
+
 ```php
-camelCase('Yes, we can! 123') // 'yesWeCan123'
+F\camelCase('Yes, we can! 123'); //=> 'yesWeCan123'
 ```
 
-## snakeCase
+# snakeCase
 
 ```php
 snakeCase(string $delimiter, string $string) : string
@@ -154,12 +161,13 @@ String -> String -> String
 ```
 
 Gets the snake-case of the string using `$delimiter` as separator.
-```
-$underscoreCase = snakeCase('_');
-$underscoreCase('IAm-Happy'); // i_am_happy
+
+```php
+$underscoreCase = F\snakeCase('_');
+$underscoreCase('IAm-Happy'); //=> 'i_am_happy'
 ```
 
-## startsWith
+# startsWith
 
 ```php
 startsWith(string $token, string $string) : bool
@@ -170,13 +178,14 @@ String -> String -> Boolean
 ```
 
 Checks if `$string` starts with `$token`.
+
 ```php
-$http = startsWith('http://');
-$http('http://gitbub.com'); // true
-$http('gitbub.com'); // false
+$http = F\startsWith('http://');
+$http('http://gitbub.com'); //=> true
+$http('gitbub.com'); //=> false
 ```
 
-## endsWith
+# endsWith
 
 ```php
 endsWith(string $token, string $string) : bool
@@ -187,13 +196,14 @@ String -> String -> Boolean
 ```
 
 Checks if `$string` ends with `$token`.
+
 ```php
-$dotCom = endsWith('.com');
-$dotCom('http://gitbub.com'); // true
-$dotCom('php.net'); // false
+$dotCom = F\endsWith('.com');
+$dotCom('http://gitbub.com'); //=> true
+$dotCom('php.net'); //=> false
 ```
 
-## test
+# test
 
 ```php
 test(string $pattern, string $string) : bool
@@ -204,13 +214,14 @@ String -> String -> Boolean
 ```
 
 Checks if a string matches a regular expression.
+
 ```php
-$numeric = test('/^[0-9.]+$/');
-$numeric('123.43'); // true
-$numeric('12a3.43'); // false
+$numeric = F\test('/^[0-9.]+$/');
+$numeric('123.43'); //=> true
+$numeric('12a3.43'); //=> false
 ```
 
-## match
+# match
 
 ```php
 match(string $pattern, string $string) : array
@@ -222,13 +233,14 @@ String -> String -> [String]
 
 Performs a global regular expression match
 and returns array of results.
+
 ```php
-$numbers = match('/[0-9.]+/');
-$numbers('Hello World'); // []
-$numbers('12 is 4 times 3'); // ['12', '4', '3']
+$numbers = F\match('/[0-9.]+/');
+$numbers('Hello World'); //=> []
+$numbers('12 is 4 times 3'); //=> ['12', '4', '3']
 ```
 
-## occurences
+# occurences
 
 ```php
 occurences(string $token, string $text) : int
@@ -239,13 +251,14 @@ String -> String -> Number
 ```
 
 Curried version of `substr_count` with changed order of parameters,
+
 ```php
-$spaces = occurences(' ');
-$spaces('Hello') // 0
-$spaces('12 is 4 times 3'); // 4
+$spaces = F\occurences(' ');
+$spaces('Hello'); //=> 0
+$spaces('12 is 4 times 3'); //=> 4
 ```
 
-## chunks
+# chunks
 
 ```php
 chunks(string $surrounders, string $separator, sring $text) : array
@@ -255,13 +268,15 @@ chunks(string $surrounders, string $separator, sring $text) : array
 String -> String -> String -> [String]
 ```
 
-Splits a string into chunks without spliting any group surrounded with some
-specified characters. `$surrounders` is a string where each pair of characters
-specifies the starting and ending characters of a group that should not be splitted.
-```php
-$groups = chunks('(){}', ',');
-$groups('1,2,(3,4,5),{6,(7,8)},9'); // ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
+Splits a string into chunks without spliting any group surrounded with some specified characters.
 
-$names = chunks('()""', ' ');
-$names('Foo "Bar Baz" (Some other name)'); // ['Foo', 'Bar Baz', 'Some other name']
+`$surrounders` is a string where each pair of characters specifies
+the starting and ending characters of a group that should not be split.
+```php
+$groups = F\chunks('(){}', ',');
+$groups('1,2,(3,4,5),{6,(7,8)},9'); //=> ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
+
+$names = F\chunks('()""', ' ');
+$names('Foo "Bar Baz" (Some other name)'); //=> ['Foo', '"Bar Baz"', '(Some other name)']
 ```
+

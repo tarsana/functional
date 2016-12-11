@@ -1,13 +1,15 @@
 <?php namespace Tarsana\Functional;
 /**
  * This file contains some useful String functions.
+ * @file
  */
 
 /**
- * Curried version of `explode()`.
+ * Curried version of `explode`.
+ *
  * ```php
- * $words = split(' ');
- * $words('Hello World'); // ['Hello', 'World']
+ * $words = F\split(' ');
+ * $words('Hello World'); //=> ['Hello', 'World']
  * ```
  *
  * @signature String -> String -> [String]
@@ -16,14 +18,17 @@
  * @return array
  */
 function split() {
-    return apply(curry('explode'), func_get_args());
+    static $split = false;
+    $split = $split ?: curry('explode');
+    return _apply($split, func_get_args());
 }
 
 /**
- * Curried version of `implode()`.
+ * Curried version of `implode`.
+ *
  * ```php
- * $sentence = join(' ');
- * $sentence(['Hello', 'World']); // 'Hello World'
+ * $sentence = F\join(' ');
+ * $sentence(['Hello', 'World']); //=> 'Hello World'
  * ```
  *
  * @signature String -> [String] -> String
@@ -32,37 +37,43 @@ function split() {
  * @return string
  */
 function join() {
-    return apply(curry(function($glue, $pieces){
+    static $join = false;
+    $join = $join ?: curry(function($glue, $pieces){
         return implode($glue, $pieces);
-    }), func_get_args());
+    });
+    return _apply($join, func_get_args());
 }
 
 /**
- * Curried version of `str_replace()`.
+ * Curried version of `str_replace`.
+ *
  * ```php
  * $string = 'a b c d e f';
- * $noSpace = replace(' ', '');
- * $noSpace($string); // 'abcdef'
- * replace(['a', 'b', ' '], '', $string) // 'cdef'
- * replace(['a', 'e', ' '], ['x', 'y', ''], $string); // 'xbcdyf'
+ * $noSpace = F\replace(' ', '');
+ * $noSpace($string); //=> 'abcdef'
+ * F\replace(['a', 'b', ' '], '', $string); //=> 'cdef'
+ * F\replace(['a', 'e', ' '], ['x', 'y', ''], $string); //=> 'xbcdyf'
  * ```
  *
- * @signature String|[String] -> String -> String|[String] -> String
+ * @signature String|[String] -> String|[String] -> String -> String
  * @param  string $search
  * @param  string $replacement
  * @param  string $string
  * @return string
  */
 function replace() {
-    return apply(curry('str_replace'), func_get_args());
+    static $replace = false;
+    $replace = $replace ?: curry('str_replace');
+    return _apply($replace, func_get_args());
 }
 
 /**
- * Curried version of `preg_replace()`.
+ * Curried version of `preg_replace`.
+ *
  * ```php
  * $string = 'A12;b_{F}|d';
- * $aplha = regReplace('/[^a-z]+/i', '');
- * $alpha($string); // 'AbFd'
+ * $alpha = F\regReplace('/[^a-z]+/i', '');
+ * $alpha($string); //=> 'AbFd'
  * ```
  *
  * @signature String -> String -> String -> String
@@ -72,62 +83,76 @@ function replace() {
  * @return string
  */
 function regReplace() {
-    return apply(curry('preg_replace'), func_get_args());
+    static $regReplace = false;
+    $regReplace = $regReplace ?: curry('preg_replace');
+    return _apply($regReplace, func_get_args());
 }
 
 /**
  * Alias of `strtoupper`.
+ *
  * ```php
- * upperCase('hello') // 'HELLO'
+ * F\upperCase('hello'); //=> 'HELLO'
  * ```
  *
  * @signature String -> String
  * @param  string $string
  * @return string
  */
-function upperCase($string) {
-    return strtoupper($string);
+function upperCase() {
+    static $upperCase = false;
+    $upperCase = $upperCase ?: curry('strtoupper');
+    return _apply($upperCase, func_get_args());
 }
 
 /**
  * Alias of `strtolower`.
+ *
  * ```php
- * lowerCase('HELLO') // 'hello'
+ * F\lowerCase('HeLLO'); //=> 'hello'
  * ```
  *
  * @signature String -> String
  * @param  string $string
  * @return string
  */
-function lowerCase($string) {
-    return strtolower($string);
+function lowerCase() {
+    static $lowerCase = false;
+    $lowerCase = $lowerCase ?: curry('strtolower');
+    return _apply($lowerCase, func_get_args());
 }
 
 /**
  * Gets the camlCase version of a string.
+ *
  * ```php
- * camelCase('Yes, we can! 123') // 'yesWeCan123'
+ * F\camelCase('Yes, we can! 123'); //=> 'yesWeCan123'
  * ```
  *
  * @signature String -> String
  * @param  string $string
  * @return string
  */
-function camelCase($string) {
-    return apply(pipe(
-        regReplace('/[^a-z0-9]+/i', ' '),
-        'trim',
-        'ucwords',
-        replace(' ', ''),
-        'lcfirst'
-    ), [$string]);
+function camelCase() {
+    static $camelCase = false;
+    $camelCase = $camelCase ?: curry(function($string) {
+        return _apply(pipe(
+            regReplace('/[^a-z0-9]+/i', ' '),
+            'trim',
+            'ucwords',
+            replace(' ', ''),
+            'lcfirst'
+        ), [$string]);
+    });
+    return _apply($camelCase, func_get_args());
 }
 
 /**
  * Gets the snake-case of the string using `$delimiter` as separator.
- * ```
- * $underscoreCase = snakeCase('_');
- * $underscoreCase('IAm-Happy'); // i_am_happy
+ *
+ * ```php
+ * $underscoreCase = F\snakeCase('_');
+ * $underscoreCase('IAm-Happy'); //=> 'i_am_happy'
  * ```
  *
  * @signature String -> String -> String
@@ -136,8 +161,9 @@ function camelCase($string) {
  * @return string
  */
 function snakeCase() {
-    $snackCase = function($delimiter, $string) {
-        return apply(pipe(
+    static $snackCase = false;
+    $snackCase = $snackCase ?: curry(function($delimiter, $string) {
+        return _apply(pipe(
             regReplace('/([A-Z])/', ' \\1'),
             regReplace('/([0-9]+)/', ' \\1'),
             regReplace('/[^a-z0-9]+/i', ' '),
@@ -145,16 +171,17 @@ function snakeCase() {
             'strtolower',
             replace(' ', $delimiter)
         ), [$string]);
-    };
-    return apply(curry($snackCase), func_get_args());
-};
+    });
+    return _apply($snackCase, func_get_args());
+}
 
 /**
  * Checks if `$string` starts with `$token`.
+ *
  * ```php
- * $http = startsWith('http://');
- * $http('http://gitbub.com'); // true
- * $http('gitbub.com'); // false
+ * $http = F\startsWith('http://');
+ * $http('http://gitbub.com'); //=> true
+ * $http('gitbub.com'); //=> false
  * ```
  *
  * @signature String -> String -> Boolean
@@ -163,21 +190,23 @@ function snakeCase() {
  * @return bool
  */
 function startsWith() {
-    $startsWith = function($token, $string) {
+    static $startsWith = false;
+    $startsWith = $startsWith ?: curry(function($token, $string) {
         return (
             strlen($token) <= strlen($string) &&
             substr($string, 0, strlen($token)) === $token
         );
-    };
-    return apply(curry($startsWith), func_get_args());
+    });
+    return _apply($startsWith, func_get_args());
 }
 
 /**
  * Checks if `$string` ends with `$token`.
+ *
  * ```php
- * $dotCom = endsWith('.com');
- * $dotCom('http://gitbub.com'); // true
- * $dotCom('php.net'); // false
+ * $dotCom = F\endsWith('.com');
+ * $dotCom('http://gitbub.com'); //=> true
+ * $dotCom('php.net'); //=> false
  * ```
  *
  * @signature String -> String -> Boolean
@@ -186,21 +215,23 @@ function startsWith() {
  * @return bool
  */
 function endsWith() {
-    $endsWith = function($token, $string) {
+    static $endsWith = false;
+    $endsWith = $endsWith ?: curry(function($token, $string) {
         return (
             strlen($token) <= strlen($string) &&
             substr($string, - strlen($token)) === $token
         );
-    };
-    return apply(curry($endsWith), func_get_args());
+    });
+    return _apply($endsWith, func_get_args());
 }
 
 /**
  * Checks if a string matches a regular expression.
+ *
  * ```php
- * $numeric = test('/^[0-9.]+$/');
- * $numeric('123.43'); // true
- * $numeric('12a3.43'); // false
+ * $numeric = F\test('/^[0-9.]+$/');
+ * $numeric('123.43'); //=> true
+ * $numeric('12a3.43'); //=> false
  * ```
  *
  * @signature String -> String -> Boolean
@@ -209,19 +240,21 @@ function endsWith() {
  * @return bool
  */
 function test() {
-    $test = function($pattern, $string) {
+    static $test = false;
+    $test = $test ?: curry(function($pattern, $string) {
         return 1 === preg_match($pattern, $string);
-    };
-    return apply(curry($test), func_get_args());
+    });
+    return _apply($test, func_get_args());
 }
 
 /**
  * Performs a global regular expression match
  * and returns array of results.
+ *
  * ```php
- * $numbers = match('/[0-9.]+/');
- * $numbers('Hello World'); // []
- * $numbers('12 is 4 times 3'); // ['12', '4', '3']
+ * $numbers = F\match('/[0-9.]+/');
+ * $numbers('Hello World'); //=> []
+ * $numbers('12 is 4 times 3'); //=> ['12', '4', '3']
  * ```
  *
  * @signature String -> String -> [String]
@@ -230,20 +263,22 @@ function test() {
  * @return array
  */
 function match() {
-    $match = function($pattern, $string) {
+    static $match = false;
+    $match = $match ?: curry(function($pattern, $string) {
         $results = [];
         preg_match_all($pattern, $string, $results);
         return $results[0];
-    };
-    return apply(curry($match), func_get_args());
+    });
+    return _apply($match, func_get_args());
 }
 
 /**
  * Curried version of `substr_count` with changed order of parameters,
+ *
  * ```php
- * $spaces = occurences(' ');
- * $spaces('Hello') // 0
- * $spaces('12 is 4 times 3'); // 4
+ * $spaces = F\occurences(' ');
+ * $spaces('Hello'); //=> 0
+ * $spaces('12 is 4 times 3'); //=> 4
  * ```
  *
  * @signature String -> String -> Number
@@ -252,22 +287,24 @@ function match() {
  * @return int
  */
 function occurences() {
-    $occurences = function($token, $text) {
+    static $occurences = false;
+    $occurences = $occurences ?: curry(function($token, $text) {
         return substr_count($text, $token);
-    };
-    return apply(curry($occurences), func_get_args());
+    });
+    return _apply($occurences, func_get_args());
 }
 
 /**
- * Splits a string into chunks without spliting any group surrounded with some
- * specified characters. `$surrounders` is a string where each pair of characters
- * specifies the starting and ending characters of a group that should not be splitted.
- * ```php
- * $groups = chunks('(){}', ',');
- * $groups('1,2,(3,4,5),{6,(7,8)},9'); // ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
+ * Splits a string into chunks without spliting any group surrounded with some specified characters.
  *
- * $names = chunks('()""', ' ');
- * $names('Foo "Bar Baz" (Some other name)'); // ['Foo', 'Bar Baz', 'Some other name']
+ * `$surrounders` is a string where each pair of characters specifies
+ * the starting and ending characters of a group that should not be split.
+ * ```php
+ * $groups = F\chunks('(){}', ',');
+ * $groups('1,2,(3,4,5),{6,(7,8)},9'); //=> ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
+ *
+ * $names = F\chunks('()""', ' ');
+ * $names('Foo "Bar Baz" (Some other name)'); //=> ['Foo', '"Bar Baz"', '(Some other name)']
  * ```
  *
  * @signature String -> String -> String -> [String]
@@ -277,44 +314,58 @@ function occurences() {
  * @return array
  */
 function chunks() {
-    $chunks = function($surrounders, $separator, $text) {
-        $surrounders = map(slices(1), slices(2, $surrounders));
-        return s($text)
-            ->then(split($separator))
-            ->reduce(function($result, $item) use ($separator){
-                $count = occurences(__(), $item);
-                $counts = map(function($index) use ($result, $count) {
-                    return ($result->openings[$index] == $result->closings[$index]) ?
-                        ($result->counts[$index] + $count($result->openings[$index])) % 2 :
-                        $result->counts[$index] + $count($result->openings[$index]) - $count($result->closings[$index]);
-                }, range(0, length($result->counts) - 1));
-                if (0 == $result->total) {
-                    return (object) [
-                        'items'    => append($item, $result->items),
-                        'openings' => $result->openings,
-                        'closings' => $result->closings,
-                        'counts'   => $counts,
-                        'total'    => sum($counts)
-                    ];
-                }
-                return (object) [
-                    'items'  => append(last($result->items) . $separator . $item, init($result->items)),
-                    'openings' => $result->openings,
-                    'closings' => $result->closings,
-                    'counts'   => $counts,
-                    'total'    => sum($counts)
-                ];
-            }, (object) [
-                'items'    => [],
-                'openings' => map(value(0), $surrounders),
-                'closings' => map(value(1), $surrounders),
-                'counts'   => array_fill(0, length($surrounders), 0),
-                'total'    => 0
-            ])
-            ->then(function($data){
-                return $data->items;
-            })
-            ->get();
-    };
-    return apply(curry($chunks), func_get_args());
+    static $chunks = false;
+    $chunks = $chunks ?: curry(function($surrounders, $separator, $text) {
+        // Let's assume some values to understand how this function works
+        // surrounders = '""{}()'
+        // separator = ' '
+        // $text = 'foo ("bar baz" alpha) beta'
+
+        $surrounders = map(slices(1), slices(2, $surrounders)); // [['"'. '"'], ['{'. '}'], ['(', ')']]
+        $openings = map(get(0), $surrounders); // ['"', '{', '(']
+        $closings = map(get(1), $surrounders); // ['"', '}', ')']
+        $numOfSurrounders = length($surrounders); // 3
+        $indexes = keys($surrounders); // [0, 1, 2]
+
+        $items = split($separator, $text); // ['foo', '("bar', 'baz"', 'alpha)', 'beta']
+
+        // The initial state
+        $state = (object) [
+            'chunks'    => [], //: the resulting chunks
+            'counts'   => array_fill(0, $numOfSurrounders, 0), // [0, 0, 0] : count of openings not closed yet
+            'total'    => 0 //: total of not closed openings
+        ];
+        // We will iterate over $items and update the $state while adding them
+        // For each item we need to update counts and chunks
+
+        // Updates count for a single surrender (the surrender at $index)
+        // $item : the item we are adding
+        // $counts : the previous counts
+        $updateCountAt = curry(function($item, $counts, $index) use($openings, $closings) {
+            $count = occurences(__(), $item);
+            return ($openings[$index] == $closings[$index]) ?
+                ($counts[$index] + $count($openings[$index])) % 2 :
+                $counts[$index] + $count($openings[$index]) - $count($closings[$index]);
+        });
+        // Updates counts for all surrenders
+        $updateCounts = curry(function($item, $counts) use($indexes, $updateCountAt) {
+            return map($updateCountAt($item, $counts), $indexes);
+        });
+        // Adds an item to the state and returns a new state
+        $addItem = function($state, $item) use ($separator, $updateCounts){
+            $counts = $updateCounts($item, get('counts', $state));
+            $newChunks = (0 == $state->total) // if all openings are closed
+                ? append($item, $state->chunks) // then add a new chunk
+                // else append the item to the last chunk using the separator as glue
+                : append(last($state->chunks) . $separator . $item, init($state->chunks));
+            return (object) [
+                'chunks' => $newChunks,
+                'counts' => $counts,
+                'total' => sum($counts)
+            ];
+        };
+        // Returns the chunks of the resulting state after adding all items
+        return get('chunks', reduce($addItem, $state, $items));
+    });
+    return _apply($chunks, func_get_args());
 }

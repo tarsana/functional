@@ -27,7 +27,7 @@ composer require tarsana/functional
 
 # Real use case
 
-The script I am using to generate the [Reference Documentation](#reference-documentation) files for this library is a good example of usage: [Check the code here](https://github.com/tarsana/functional/blob/master/generate-docs.php)
+The script I am using to generate the [Reference Documentation](#reference-documentation) and **Unit Tests** files for this library is a good example of usage: [Check the code here](https://github.com/tarsana/functional/blob/master/build.php)
 
 # Streams
 

@@ -1,30 +1,32 @@
-# operators
+#Operators
 
-## Table Of Contents
+This file contains operators as functions.
 
-- [and_](https://github.com/tarsana/functional/blob/master/docs/operators.md#and_)
+- [and_](#and)
 
-- [or_](https://github.com/tarsana/functional/blob/master/docs/operators.md#or_)
+- [or_](#or)
 
-- [not](https://github.com/tarsana/functional/blob/master/docs/operators.md#not)
+- [not](#not)
 
-- [eq](https://github.com/tarsana/functional/blob/master/docs/operators.md#eq)
+- [eq](#eq)
 
-- [notEq](https://github.com/tarsana/functional/blob/master/docs/operators.md#notEq)
+- [notEq](#not-eq)
 
-- [eqq](https://github.com/tarsana/functional/blob/master/docs/operators.md#eqq)
+- [eqq](#eqq)
 
-- [notEqq](https://github.com/tarsana/functional/blob/master/docs/operators.md#notEqq)
+- [notEqq](#not-eqq)
 
-- [lt](https://github.com/tarsana/functional/blob/master/docs/operators.md#lt)
+- [equals](#equals)
 
-- [lte](https://github.com/tarsana/functional/blob/master/docs/operators.md#lte)
+- [lt](#lt)
 
-- [gt](https://github.com/tarsana/functional/blob/master/docs/operators.md#gt)
+- [lte](#lte)
 
-- [gte](https://github.com/tarsana/functional/blob/master/docs/operators.md#gte)
+- [gt](#gt)
 
-## and_
+- [gte](#gte)
+
+# and_
 
 ```php
 and_(bool $a, bool $b) : bool
@@ -36,7 +38,13 @@ Boolean -> Boolean -> Boolean
 
 Returns `$a && $b`.
 
-## or_
+```php
+$isTrue = F\and_(true);
+$isTrue(false); //=> false
+$isTrue(true); //=> true
+```
+
+# or_
 
 ```php
 or_(bool $a, bool $b) : bool
@@ -48,7 +56,13 @@ Boolean -> Boolean -> Boolean
 
 Returns `$a || $b`.
 
-## not
+```php
+$isTrue = F\or_(false);
+$isTrue(false); //=> false
+$isTrue(true); //=> true
+```
+
+# not
 
 ```php
 not(bool $x) : bool
@@ -60,7 +74,11 @@ Boolean -> Boolean
 
 Returns `!$x`.
 
-## eq
+```php
+F\map(F\not(), [true, false, true]); //=> [false, true, false]
+```
+
+# eq
 
 ```php
 eq(mixed $a, mixed $b) : bool
@@ -72,7 +90,11 @@ eq(mixed $a, mixed $b) : bool
 
 Returns `$x == $y`.
 
-## notEq
+```php
+F\eq('10', 10); //=> true
+```
+
+# notEq
 
 ```php
 notEq(mixed $a, mixed $b) : bool
@@ -84,7 +106,11 @@ notEq(mixed $a, mixed $b) : bool
 
 Returns `$x != $y`.
 
-## eqq
+```php
+F\notEq('Hi', 'Hello'); //=> true
+```
+
+# eqq
 
 ```php
 eqq(mixed $a, mixed $b) : bool
@@ -96,7 +122,11 @@ eqq(mixed $a, mixed $b) : bool
 
 Returns `$x === $y`.
 
-## notEqq
+```php
+F\eqq(10, '10'); //=> false
+```
+
+# notEqq
 
 ```php
 notEqq(mixed $a, mixed $b) : bool
@@ -108,7 +138,38 @@ notEqq(mixed $a, mixed $b) : bool
 
 Returns `$x !== $y`.
 
-## lt
+```php
+F\notEqq(10, '10'); //=> true
+```
+
+# equals
+
+```php
+equals(mixed $a, mixed $b) : bool
+```
+
+```
+* -> * -> Boolean
+```
+
+Returns `true` if the two elements have the same type and are deeply equivalent.
+
+```php
+$a = (object) ['a' => 1, 'b' => (object) ['c' => 'Hello'], 'd' => false];
+$b = (object) ['a' => 1, 'b' => (object) ['c' => 'Hi'], 'd' => false];
+$c = (object) ['a' => 1, 'b' => ['c' => 'Hello'], 'd' => false];
+// should have the same type
+F\equals(5, '5'); //=> false
+F\equals([1, 2, 3], [1, 2, 3]); //=> true
+// should have the same order
+F\equals([1, 3, 2], [1, 2, 3]); //=> false
+F\equals($a, $b); //=> false
+F\equals($a, $c); //=> false
+$b->b->c = 'Hello';
+F\equals($a, $b); //=> true
+```
+
+# lt
 
 ```php
 lt(mixed $a, mixed $b) : bool
@@ -118,9 +179,14 @@ lt(mixed $a, mixed $b) : bool
 * -> * -> Boolean
 ```
 
-Returns `$x < $y`.
+Returns `$a < $b`.
 
-## lte
+```php
+F\lt(3, 5); //=> true
+F\lt(5, 5); //=> false
+```
+
+# lte
 
 ```php
 lte(mixed $a, mixed $b) : bool
@@ -130,9 +196,14 @@ lte(mixed $a, mixed $b) : bool
 * -> * -> Boolean
 ```
 
-Returns `$x <= $y`.
+Returns `$a <= $b`.
 
-## gt
+```php
+F\lte(3, 5); //=> true
+F\lte(5, 5); //=> true
+```
+
+# gt
 
 ```php
 gt(mixed $a, mixed $b) : bool
@@ -142,9 +213,14 @@ gt(mixed $a, mixed $b) : bool
 * -> * -> Boolean
 ```
 
-Returns `$x > $y`.
+Returns `$a > $b`.
 
-## gte
+```php
+F\gt(5, 3); //=> true
+F\gt(5, 5); //=> false
+```
+
+# gte
 
 ```php
 gte(mixed $a, mixed $b) : bool
@@ -154,4 +230,10 @@ gte(mixed $a, mixed $b) : bool
 * -> * -> Boolean
 ```
 
-Returns `$x >= $y`.
+Returns `$a >= $b`.
+
+```php
+F\gte(5, 3); //=> true
+F\gte(5, 5); //=> true
+```
+
