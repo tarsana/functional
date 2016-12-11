@@ -2,7 +2,7 @@
 
 use Tarsana\Functional as F;
 
-class ListTest extends UnitTest {
+class ListTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_map() {
 		$doubles = F\map(function($x) { return 2 * $x; });

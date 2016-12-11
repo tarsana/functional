@@ -2,7 +2,7 @@
 
 use Tarsana\Functional as F;
 
-class OperatorsTest extends UnitTest {
+class OperatorsTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_and_() {
 		$isTrue = F\and_(true);

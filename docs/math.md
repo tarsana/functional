@@ -1,4 +1,4 @@
-#Math
+#math
 
 Basic Math functions.
 

@@ -1,4 +1,4 @@
-#String
+#string
 
 This file contains some useful String functions.
 

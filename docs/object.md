@@ -1,4 +1,4 @@
-#Object
+#object
 
 Useful functions to handle objects (associative arrays are considered objects).
 

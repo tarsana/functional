@@ -2,7 +2,7 @@
 
 use Tarsana\Functional as F;
 
-class ObjectTest extends UnitTest {
+class ObjectTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_clone_() {
 		$data = (object) [

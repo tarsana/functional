@@ -2,7 +2,7 @@
 
 use Tarsana\Functional as F;
 
-class StringTest extends UnitTest {
+class StringTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_split() {
 		$words = F\split(' ');

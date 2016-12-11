@@ -13,12 +13,12 @@ matrix:
 
 sudo: false
 
-install: 
+install:
   - travis_retry composer install --no-interaction --prefer-source
   - composer require satooshi/php-coveralls '~1.0'
 
 script:
-  - mkdir -p build/logs 
+  - mkdir -p build/logs
   - vendor/bin/phpunit
 
 after_success: php vendor/bin/coveralls

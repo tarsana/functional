@@ -2,7 +2,7 @@
 
 use Tarsana\Functional as F;
 
-class FunctionsTest extends UnitTest {
+class FunctionsTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_curry() {
 		// A closure

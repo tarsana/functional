@@ -169,7 +169,7 @@ function fill_docs_path($module) {
  */
 function fill_tests_path($module) {
     $name = ucfirst(camelCase($module->name));
-    $dir = replace('src/', 'tests/', dirname($module->path));
+    $dir = 'tests' . remove(3, dirname($module->path));
     $module->testsPath = "{$dir}/{$name}Test.php";
     return $module;
 }
@@ -408,6 +408,8 @@ function generate_tests_contents($module) {
     }, $blocks));
     if (trim($contents) != '')
         $module->tests .= $contents;
+    else
+        $module->tests = '';
     return $module;
 }
 
@@ -484,7 +486,8 @@ function add_assertions($part, $module) {
  * @return object
  */
 function generate_tests_footer($module) {
-    $module->tests .= "}\n\n{$module->testsFooter}";
+    if ($module->tests)
+        $module->tests .= "}\n\n{$module->testsFooter}";
     return $module;
 }
 

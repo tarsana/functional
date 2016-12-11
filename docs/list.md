@@ -1,4 +1,4 @@
-#List
+#list
 
 Useful functions to handle lists (arrays having only numeric keys).
 

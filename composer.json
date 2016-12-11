@@ -17,13 +17,13 @@
         "files": [
           "src/Internal/_functions.php",
           "src/Internal/_stream.php",
-          "src/Functions.php",
-          "src/Operators.php",
-          "src/Common.php",
-          "src/Object.php",
-          "src/String.php",
-          "src/List.php",
-          "src/Math.php"
+          "src/functions.php",
+          "src/operators.php",
+          "src/common.php",
+          "src/object.php",
+          "src/string.php",
+          "src/list.php",
+          "src/math.php"
         ]
     },
     "require-dev": {
