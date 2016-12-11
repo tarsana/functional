@@ -2,9 +2,9 @@
 
 Generic common functions.
 
-- [type](#type)
+- [type](#type) Gets the type of the given argument.
 
-- [toString](#to-string)
+- [toString](#tostring) Converts a variable to its string value.
 
 # type
 

@@ -2,33 +2,34 @@
 
 This file contains some useful String functions.
 
-- [split](#split)
+- [split](#split) Curried version of `explode`.
 
-- [join](#join)
+- [join](#join) Curried version of `implode`.
 
-- [replace](#replace)
+- [replace](#replace) Curried version of `str_replace`.
 
-- [regReplace](#reg-replace)
+- [regReplace](#regreplace) Curried version of `preg_replace`.
 
-- [upperCase](#upper-case)
+- [upperCase](#uppercase) Alias of `strtoupper`.
 
-- [lowerCase](#lower-case)
+- [lowerCase](#lowercase) Alias of `strtolower`.
 
-- [camelCase](#camel-case)
+- [camelCase](#camelcase) Gets the camlCase version of a string.
 
-- [snakeCase](#snake-case)
+- [snakeCase](#snakecase) Gets the snake-case of the string using `$delimiter` as separator.
 
-- [startsWith](#starts-with)
+- [startsWith](#startswith) Checks if `$string` starts with `$token`.
 
-- [endsWith](#ends-with)
+- [endsWith](#endswith) Checks if `$string` ends with `$token`.
 
-- [test](#test)
+- [test](#test) Checks if a string matches a regular expression.
 
-- [match](#match)
+- [match](#match) Performs a global regular expression match
+and returns array of results.
 
-- [occurences](#occurences)
+- [occurences](#occurences) Curried version of `substr_count` with changed order of parameters,
 
-- [chunks](#chunks)
+- [chunks](#chunks) Splits a string into chunks without spliting any group surrounded with some specified characters.
 
 # split
 

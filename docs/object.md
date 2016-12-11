@@ -2,29 +2,31 @@
 
 Useful functions to handle objects (associative arrays are considered objects).
 
-- [clone_](#clone)
+- [clone_](#clone_) Returns a deep copy of the given value.
 
-- [attributes](#attributes)
+- [attributes](#attributes) Converts an object to an associative array containing public non-static attributes.
 
-- [keys](#keys)
+- [keys](#keys) Returns a list of array's keys or object's public attributes names.
 
-- [values](#values)
+- [values](#values) Returns a list of array's values or object's public attributes values.
 
-- [has](#has)
+- [has](#has) Checks if the given array or object has a specific key or public attribute.
 
-- [get](#get)
+- [get](#get) Gets the value of a key from an array or the
+value of an public attribute from an object.
 
-- [getPath](#get-path)
+- [getPath](#getpath) Gets a value from an array/object using a path of keys/attributes.
 
-- [set](#set)
+- [set](#set) Returns a new array or object with the value of a key or a public attribute set
+to a specific value.
 
-- [satisfies](#satisfies)
+- [satisfies](#satisfies) Checks if an attribute/value of an object/array passes the given predicate.
 
-- [satisfiesAll](#satisfies-all)
+- [satisfiesAll](#satisfiesall) Checks if a list of attribute/value of an object/array passes all the given predicates.
 
-- [satisfiesAny](#satisfies-any)
+- [satisfiesAny](#satisfiesany) Checks if a list of attribute/value of an object/array passes any of the given predicates.
 
-- [toPairs](#to-pairs)
+- [toPairs](#topairs) Converts an object or associative array to an array of [key, value] pairs.
 
 # clone_
 

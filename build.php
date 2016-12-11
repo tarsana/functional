@@ -317,8 +317,8 @@ function generate_docs_sommaire($module) {
  */
 function generate_docs_sommaire_item($block) {
     $title = get('name', $block);
-    $link  = snakeCase('-', $title);
-    return "- [{$title}](#{$link})\n\n";
+    $link  = lowerCase($title);
+    return "- [{$title}](#{$link}) {$block->summary}\n\n";
 }
 
 /**

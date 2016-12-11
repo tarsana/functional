@@ -2,87 +2,95 @@
 
 Useful functions to handle lists (arrays having only numeric keys).
 
-- [map](#map)
+- [map](#map) Curried version of `array_map`.
 
-- [chain](#chain)
+- [chain](#chain) Applies a function to items of the array and concatenates the results.
 
-- [filter](#filter)
+- [filter](#filter) Curried version of `array_filter` with modified order of arguments.
 
-- [reduce](#reduce)
+- [reduce](#reduce) Curried version of `array_reduce` with modified order of
+arguments ($callback, $initial, $list).
 
-- [each](#each)
+- [each](#each) Applies the callback to each item and returns the original list.
 
-- [head](#head)
+- [head](#head) Returns the first item of the given array or string.
 
-- [last](#last)
+- [last](#last) Returns the last item of the given array or string.
 
-- [init](#init)
+- [init](#init) Returns all but the last element of the given array or string.
 
-- [tail](#tail)
+- [tail](#tail) Returns all but the first element of the given array or string.
 
-- [reverse](#reverse)
+- [reverse](#reverse) Alias of `array_reverse()` and `strrev()`.
 
-- [length](#length)
+- [length](#length) Alias for `count()` and `strlen()`.
 
-- [allSatisfies](#all-satisfies)
+- [allSatisfies](#allsatisfies) Checks if the `$predicate` is verified by **all** items of the array.
 
-- [anySatisfies](#any-satisfies)
+- [anySatisfies](#anysatisfies) Checks if the `$predicate` is verified by **any** item of the array.
 
-- [concat](#concat)
+- [concat](#concat) Concatenates two arrays or strings.
 
-- [concatAll](#concat-all)
+- [concatAll](#concatall) Concatenates a list of arrays or strings.
 
-- [insert](#insert)
+- [insert](#insert) Inserts an item at some position into an array or a substring into a string.
 
-- [insertAll](#insert-all)
+- [insertAll](#insertall) Same as `insert` but inserts an array instead of a single item.
 
-- [append](#append)
+- [append](#append) Appends an item to an array or a substring to a string.
 
-- [prepend](#prepend)
+- [prepend](#prepend) Inserts an item at the begining of an array or a substring at the begining of a string.
 
-- [take](#take)
+- [take](#take) Takes a number of elements from an array.
 
-- [takeWhile](#take-while)
+- [takeWhile](#takewhile) Takes elements from an array while they match the given predicate.
 
-- [takeLastWhile](#take-last-while)
+- [takeLastWhile](#takelastwhile) Same as `takeWhile` but taking elements from the end of the array.
 
-- [takeUntil](#take-until)
+- [takeUntil](#takeuntil) Takes elements from an array **until** the predicate
+is satisfied, not including the satisfying element.
 
-- [takeLastUntil](#take-last-until)
+- [takeLastUntil](#takelastuntil) Same as `takeUntil` but takes elements from the end of the array.
 
-- [remove](#remove)
+- [remove](#remove) Removes a number of elements from an array.
 
-- [removeWhile](#remove-while)
+- [removeWhile](#removewhile) Removes elements from an array while they match the given predicate.
 
-- [removeLastWhile](#remove-last-while)
+- [removeLastWhile](#removelastwhile) Same as `removeWhile` but removes elements from the end of the array.
 
-- [removeUntil](#remove-until)
+- [removeUntil](#removeuntil) Removes elements from an array **until** the predicate
+is satisfied, not removing the satisfying element.
 
-- [removeLastUntil](#remove-last-until)
+- [removeLastUntil](#removelastuntil) Same as `removeUntil` but removes elements from the end of the array.
 
-- [fromPairs](#from-pairs)
+- [fromPairs](#frompairs) Converts an array of (key, value) pairs to an object (instance of `stdClass`).
 
-- [slices](#slices)
+- [slices](#slices) Gets an array of slices of size `$size` from an array.
 
-- [contains](#contains)
+- [contains](#contains) Checks if an array contains an item.
 
-- [findIndex](#find-index)
+- [findIndex](#findindex) Returns the position/key of the first item satisfying the
+predicate in the array or null if no such element is found.
 
-- [findLastIndex](#find-last-index)
+- [findLastIndex](#findlastindex) Returns the position/key of the last item satisfying the
+predicate in the array or null if no such element is found.
 
-- [find](#find)
+- [find](#find) Returns the first item satisfying the predicate in
+the array or null if no such element is found.
 
-- [findLast](#find-last)
+- [findLast](#findlast) Returns the last item satisfying the predicate in
+the array or null if no such element is found.
 
-- [indexOf](#index-of)
+- [indexOf](#indexof) Returns the index of an item/substring in a list/string.
 
-- [lastIndexOf](#last-index-of)
+- [lastIndexOf](#lastindexof) Same as `indexOf` but returns the key/position/name of the last item/substring/attribute.
 
-- [uniqueBy](#unique-by)
+- [uniqueBy](#uniqueby) Removes duplicates from a list.
 
-- [unique](#unique)
+- [unique](#unique) Alias of `F\uniqueBy(F\equals())`.
 
-- [groupBy](#group-by)
+- [groupBy](#groupby) Converts an array to an associative array, based on the result of calling `$fn`
+on each element, and grouping the results according to values returned.
 
 # map
 

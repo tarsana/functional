@@ -2,21 +2,21 @@
 
 Basic Math functions.
 
-- [plus](#plus)
+- [plus](#plus) Computes `$x + $y`.
 
-- [minus](#minus)
+- [minus](#minus) Computues `$x - $y`.
 
-- [negate](#negate)
+- [negate](#negate) Computes `- $x`.
 
-- [multiply](#multiply)
+- [multiply](#multiply) Computes `$x * $y`.
 
-- [divide](#divide)
+- [divide](#divide) Computes `$x / $y`.
 
-- [modulo](#modulo)
+- [modulo](#modulo) Computes `$x % $y`.
 
-- [sum](#sum)
+- [sum](#sum) Computes the sum of an array of numbers.
 
-- [product](#product)
+- [product](#product) Computes the product of an array of numbers.
 
 # plus
 

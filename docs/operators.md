@@ -2,29 +2,29 @@
 
 This file contains operators as functions.
 
-- [and_](#and)
+- [and_](#and_) Returns `$a && $b`.
 
-- [or_](#or)
+- [or_](#or_) Returns `$a || $b`.
 
-- [not](#not)
+- [not](#not) Returns `!$x`.
 
-- [eq](#eq)
+- [eq](#eq) Returns `$x == $y`.
 
-- [notEq](#not-eq)
+- [notEq](#noteq) Returns `$x != $y`.
 
-- [eqq](#eqq)
+- [eqq](#eqq) Returns `$x === $y`.
 
-- [notEqq](#not-eqq)
+- [notEqq](#noteqq) Returns `$x !== $y`.
 
-- [equals](#equals)
+- [equals](#equals) Returns `true` if the two elements have the same type and are deeply equivalent.
 
-- [lt](#lt)
+- [lt](#lt) Returns `$a < $b`.
 
-- [lte](#lte)
+- [lte](#lte) Returns `$a <= $b`.
 
-- [gt](#gt)
+- [gt](#gt) Returns `$a > $b`.
 
-- [gte](#gte)
+- [gte](#gte) Returns `$a >= $b`.
 
 # and_
 
