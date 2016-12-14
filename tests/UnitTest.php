@@ -1,5 +1,7 @@
 <?php namespace Tarsana\UnitTests\Functional;
 
+use Tarsana\Functional as F;
+
 /**
  * The parent class for unit tests.
  */
@@ -22,7 +24,7 @@ abstract class UnitTest extends \PHPUnit_Framework_TestCase {
      * @return void
      */
     protected function assertError($result, $msg) {
-        $this->assertTrue($result instanceof Error);
+        $this->assertTrue($result instanceof F\Error);
         $this->assertEquals($msg, $result->getMessage());
     }
 
@@ -35,7 +37,7 @@ abstract class UnitTest extends \PHPUnit_Framework_TestCase {
     protected function assertErrorThrown($fn, $msg) {
         try {
             $fn();
-            $this->assertTrue(false); // is executed then no exception was thrown !
+            $this->assertEquals(true, 'No Exception Thrown !'); // is executed then no exception was thrown !
         } catch (\Exception $e) {
             $this->assertError($e, $msg);
         }

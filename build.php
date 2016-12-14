@@ -5,17 +5,6 @@
  */
 require __DIR__ . '/vendor/autoload.php';
 
-// List of function modules source files.
-$modulesFiles = [
-    'src/Math.php',
-    'src/Object.php',
-    'src/Functions.php',
-    'src/Operators.php',
-    'src/String.php',
-    'src/Common.php',
-    'src/List.php'
-];
-
 /**
  * Custom Types:
  *  DoxBlock :: {
@@ -50,12 +39,17 @@ $modulesFiles = [
  *     name: String // DoxBlock.ctx.name
  *     params: [{type: String, name: String}]
  *     return: String
- *     signature: String
+ *     signatures: [String]
  *     description: String
  *     summary: String
  *     internal: Boolean
  *     ignore: Boolean
  *     code: String
+ * }
+ *
+ * Operation :: {
+ *     name: String,
+ *     signature: String
  * }
  *
  * Module :: {
@@ -67,6 +61,8 @@ $modulesFiles = [
  *     docs: String
  *     tests: String
  *     testsFooter: String
+ *     streamOperations: String
+ *     streamMethods: String
  * }
  */
 
@@ -78,7 +74,39 @@ $modulesFiles = [
  * @return void
  */
 function build_main($modules) {
-    each(_f('build_module'), get_modules());
+    build_init_stream_operations();
+    each(_f('build_module'), $modules);
+    build_close_stream_operations();
+}
+
+/**
+ * Writes the header of the stream operations file.
+ *
+ * @signature IO
+ * @return void
+ */
+function build_init_stream_operations() {
+    file_put_contents(
+        'src/Internal/_stream_operations.php',
+        "<?php\n\nuse Tarsana\Functional as F;\n\nreturn F\map(F\apply(F\_f('_stream_operation')), [\n\t['then', 'Function -> Any -> Any', F\_f('_stream_then')],\n"
+    );
+    file_put_contents(
+        'docs/stream-methods.md',
+        "# Stream Methods"
+    );
+}
+
+/**
+ * Writes the footer of the stream operations file.
+ *
+ * @signature IO
+ * @return void
+ */
+function build_close_stream_operations() {
+    file_put_contents(
+        'src/Internal/_stream_operations.php',
+        "\n]);\n", FILE_APPEND
+    );
 }
 
 /**
@@ -104,6 +132,8 @@ function build_module($path) {
         'module_of',
         'generate_docs',
         'generate_tests',
+        'generate_stream_operations',
+        'generate_stream_methods',
         'write_module'
     ]), [$path]);
 }
@@ -127,6 +157,12 @@ function write_module($module) {
         if (!is_dir($testsDir))
             mkdir($testsDir, 0777, true);
         file_put_contents($module->testsPath, $module->tests);
+    }
+    if ($module->streamOperations) {
+        file_put_contents('src/Internal/_stream_operations.php', $module->streamOperations, FILE_APPEND);
+    }
+    if ($module->streamMethods) {
+        file_put_contents('docs/stream-methods.md', $module->streamMethods, FILE_APPEND);
     }
 }
 
@@ -200,6 +236,7 @@ function fill_blocks($module) {
         'shell_exec',         // "[{...}, ...]"
         'json_decode',        // [DoxBlock]
         map(_f('make_block'))
+        // sort()
     ), [$module->path]);
     return $module;
 }
@@ -228,17 +265,20 @@ function make_block($doxBlock) {
     }, get('param', $tags) ?: []);
 
     $return = getPath(['return', 0, 'value'], $tags);
-    $signature = getPath(['signature', 0, 'value'], $tags);
+    $signatures = get('signature', $tags);
+    if ($signatures)
+        $signatures = map(get('value'), $signatures);
     return (object) [
         'type' => $type,
         'name' => getPath(['ctx', 'name'], $doxBlock),
         'params' => $params,
         'return' => $return,
-        'signature' => $signature,
+        'signatures' => $signatures,
         'description' => getPath(['description', 'full'], $doxBlock),
         'summary' => getPath(['description', 'summary'], $doxBlock),
         'internal' => has('internal', $tags),
-        'ignore' => has('ignore', $tags)
+        'ignore' => has('ignore', $tags),
+        'stream' => has('stream', $tags)
         // 'code' => get('code', $doxBlock)
     ];
 }
@@ -251,12 +291,14 @@ function make_block($doxBlock) {
  * @return array
  */
 function tags_of($doxBlock) {
-    return map(function($tag){
-        return (object) [
-            'name'  => $tag->type,
-            'value' => $tag->string
-        ];
-    }, $doxBlock->tags);
+    if ($doxBlock->tags)
+        return map(function($tag){
+            return (object) [
+                'name'  => $tag->type,
+                'value' => $tag->string
+            ];
+        }, $doxBlock->tags);
+    return [];
 }
 
 /**
@@ -318,7 +360,7 @@ function generate_docs_sommaire($module) {
 function generate_docs_sommaire_item($block) {
     $title = get('name', $block);
     $link  = lowerCase($title);
-    return "- [{$title}](#{$link}) {$block->summary}\n\n";
+    return "- [{$title}](#{$link}) - {$block->summary}\n\n";
 }
 
 /**
@@ -352,8 +394,9 @@ function generate_docs_contents_item($block) {
     $return = get('return', $block);
     $prototype = "```php\n{$block->name}({$params}) : {$return}\n```\n\n";
     $signature = '';
-    if ($block->signature)
-        $signature = "```\n{$block->signature}\n```\n\n";
+    $blockSignature = join("\n", $block->signatures);
+    if ($blockSignature)
+        $signature = "```\n{$blockSignature}\n```\n\n";
     return "# {$block->name}\n\n{$prototype}{$signature}{$block->description}\n\n";
 }
 
@@ -469,7 +512,17 @@ function code_from_description($block) {
 function add_assertions($part, $module) {
     if (contains('; //=> ', $part)) {
         $pieces = split('; //=> ', $part);
-        $part = '$this->assertEquals(' . $pieces[1] . ', ' . $pieces[0] . ');';
+        $part = "\$this->assertEquals({$pieces[1]}, {$pieces[0]});";
+    }
+    elseif (contains('; // throws ', $part)) {
+        $pieces = split('; // throws ', $part);
+        $variables = match('/ \$[0-9a-zA-Z_]+/', $pieces[0]);
+        $use = '';
+        if (length($variables)) {
+            $variables = join(', ', map('trim', $variables));
+            $use = "use({$variables}) ";
+        }
+        return "\$this->assertErrorThrown(function() {$use}{\n\t$pieces[0]; \n},\n{$pieces[1]});";
     }
     elseif (startsWith('class ', $part) || startsWith('function ', $part)) {
         $module->testsFooter .= $part . "\n\n";
@@ -489,6 +542,108 @@ function generate_tests_footer($module) {
     if ($module->tests)
         $module->tests .= "}\n\n{$module->testsFooter}";
     return $module;
+}
+
+/**
+ * Generates module's stream operations.
+ *
+ * @signature Module -> Module
+ * @param  array $module
+ * @return array
+ */
+function generate_stream_operations($module) {
+    $blocks = filter (
+        satisfiesAll(['ignore' => equals(false), 'stream' => equals(true)]),
+        $module->blocks
+    );
+    $operations = map(_f('stream_operation_declaration'), chain(_f('stream_operations_of_block'), $blocks));
+    $module->streamOperations = join("", $operations);
+    return $module;
+}
+
+/**
+ * Gets stream operations from a block.
+ *
+ * @signature Block -> [Operation]
+ * @param  object $block
+ * @return string
+ */
+function stream_operations_of_block($block) {
+    return map(function($signature) use($block) {
+        return (object) [
+            'name' => $block->name,
+            'signature' => normalize_signature($signature)
+        ];
+    }, get('signatures', $block));
+}
+
+/**
+ * Converts a formal signature to a stream signature.
+ * [a]       becomes List
+ * {k: v}    becomes Array|Object
+ * (a -> b)  becomes Function
+ *  *        becomes Any
+ *
+ * @signature String -> String
+ * @param  string $signature
+ * @return string
+ */
+function normalize_signature($signature) {
+    // This is not the best way to do it :P
+    return join(' -> ', map(pipe(
+        regReplace('/Maybe\([a-z][^\)]*\)/', 'Any'),
+        regReplace('/Maybe\(([^\)]+)\)/', '$1|Null'),
+        regReplace('/\([^\)]+\)/', 'Function'),
+        regReplace('/\[[^\]]+\]/', 'List'),
+        regReplace('/\{[^\}]+\}/', 'Object|Array'),
+        regReplace('/^.$/', 'Any'),
+        regReplace('/[\(\)\[\]\{\}]/', '')
+    ), chunks('(){}', ' -> ', $signature)));
+}
+
+/**
+ * Converts a stream operation to declaration array.
+ *
+ * @signature Operation -> String
+ * @param  object $operation
+ * @return string
+ */
+function stream_operation_declaration($operation) {
+    $name = rtrim($operation->name, '_');
+    return "\t['{$name}', '{$operation->signature}', F\\{$operation->name}()],\n";
+}
+
+/**
+ * Generates module's stream methods documentation.
+ *
+ * @signature Module -> Module
+ * @param  array $module
+ * @return array
+ */
+function generate_stream_methods($module) {
+    $blocks = filter (
+        satisfiesAll(['ignore' => equals(false), 'stream' => equals(true)]),
+        $module->blocks
+    );
+    $methods = map(stream_method_link($module->name), $blocks);
+    $module->streamMethods = "\n\n## {$module->name}\n\n" . join("\n", $methods);
+    return $module;
+}
+
+/**
+ * Gets an element of the stream methods list.
+ *
+ * @signature String -> Block -> String
+ * @param  string $moduleName
+ * @param  object $block
+ * @return string
+ */
+function stream_method_link() {
+    static $curried = false;
+    $curried = $curried ?: curry(function($moduleName, $block) {
+        return "- [{$block->name}](https://github.com/tarsana/functional/blob/master/docs/{$moduleName}.md#{$block->name}) - {$block->summary}\n";
+    });
+    return _apply($curried, func_get_args());
 }
 
 /**
@@ -518,4 +673,4 @@ function log() {
 }
 
 // Run the build
-build_main($modulesFiles);
+build_main(get_modules());

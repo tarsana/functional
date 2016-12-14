@@ -2,23 +2,23 @@
 
 Functions dealing with functions.
 
-- [curry](#curry) Returns a curried equivalent of the provided function.
+- [curry](#curry) - Returns a curried equivalent of the provided function.
 
-- [__](#__) Argument placeholder to use with curried functions.
+- [__](#__) - Argument placeholder to use with curried functions.
 
-- [apply](#apply) Apply the provided function to the list of arguments.
+- [apply](#apply) - Apply the provided function to the list of arguments.
 
-- [pipe](#pipe) Performs left-to-right function composition.
+- [pipe](#pipe) - Performs left-to-right function composition.
 
-- [identity](#identity) A function that takes one argument and
+- [identity](#identity) - A function that takes one argument and
 returns exactly the given argument.
 
-- [give](#give) Returns a function which whenever called will return the specified value.
+- [give](#give) - Returns a function which whenever called will return the specified value.
 
-- [all](#all) Takes many predicates and returns a new predicate that
+- [all](#all) - Takes many predicates and returns a new predicate that
 returns `true` only if all predicates are satisfied.
 
-- [any](#any) Takes many predicates and returns a new predicate that
+- [any](#any) - Takes many predicates and returns a new predicate that
 returns `true` if any of the predicates is satisfied.
 
 # curry

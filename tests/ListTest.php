@@ -275,5 +275,12 @@ class ListTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		};
 		$this->assertEquals(['child' => [['name' => 'foo', 'age' => 11], ['name' => 'bar', 'age' => 9]], 'teenager' => [['name' => 'baz', 'age' => 16]], 'adult' => [['name' => 'zeta', 'age' => 33], ['name' => 'beta', 'age' => 25]]], F\groupBy($phase, $persons));
 	}
+
+	public function test_pairsFrom() {
+		$this->assertEquals([[1, 'foo'], [2, 'bar'], [3, 'baz']], F\pairsFrom([1, 2, 3], ['foo', 'bar', 'baz']));
+		$this->assertEquals([[1, 'foo'], [2, 'bar']], F\pairsFrom([1, 2, 3], ['foo', 'bar']));
+		$this->assertEquals([[1, 'foo'], [3, 'bar']], F\pairsFrom([1, 3], ['foo', 'bar', 'baz']));
+		$this->assertEquals([], F\pairsFrom([], ['foo', 'bar', 'baz']));
+	}
 }
 

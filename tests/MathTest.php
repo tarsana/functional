@@ -40,5 +40,25 @@ class MathTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals(24, F\product([1, 2, 3, 4]));
 		$this->assertEquals(1, F\product([]));
 	}
+
+	public function test_min() {
+		$this->assertEquals(1, F\min(1, 3));
+		$this->assertEquals(-3, F\min(1, -3));
+	}
+
+	public function test_minBy() {
+		$this->assertEquals('Hi', F\minBy(F\length(), 'Hello', 'Hi'));
+		$this->assertEquals(1, F\minBy('abs', 1, -3));
+	}
+
+	public function test_max() {
+		$this->assertEquals(3, F\max(1, 3));
+		$this->assertEquals(1, F\max(1, -3));
+	}
+
+	public function test_maxBy() {
+		$this->assertEquals('Hello', F\maxBy(F\length(), 'Hello', 'Hi'));
+		$this->assertEquals(-3, F\maxBy('abs', 1, -3));
+	}
 }
 

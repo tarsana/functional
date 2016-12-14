@@ -11,7 +11,6 @@
  * F\_f('foo'); //=> 'Tarsana\Functional\foo'
  * ```
  *
- * @internal
  * @signature String -> Sring
  * @param  string $name
  * @return string
@@ -27,7 +26,6 @@ function _f($name) {
  * F\_number_of_args(function($x, $y){}); //=> 2
  * ```
  *
- * @internal
  * @signature (* -> *) -> Number
  * @param  callable $fn
  * @return int
@@ -46,7 +44,6 @@ function _number_of_args($fn) {
  * F\_is_placeholder('other thing'); //=> false
  * ```
  *
- * @internal
  * @signature * -> Boolean
  * @param  mixed  $a
  * @return boolean
@@ -58,7 +55,6 @@ function _is_placeholder($a) {
 /**
  * Adds new given arguments to the list of bound arguments while filling placeholders.
  *
- * @internal
  * @signature Number -> [a] -> [a] -> [a]
  * @param  int   $fnArgsCount
  * @param  array $boundArgs
@@ -85,7 +81,6 @@ function _merge_args($fnArgsCount, $boundArgs, $givenArgs) {
 /**
  * Returns the curried version of a function with some arguments bound to it.
  *
- * @internal
  * @signature (* -> *) -> Number -> [*] -> (* -> *)
  * @param  callable $fn
  * @param  int $argsCount
@@ -106,7 +101,6 @@ function _curried_function($fn, $argsCount, $boundArgs = []) {
 /**
  * Non curried version of apply for internal use.
  *
- * @internal
  * @param  callable $fn
  * @param  array    $args
  * @return mixed

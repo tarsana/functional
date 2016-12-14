@@ -12,6 +12,7 @@
  * $plusTwo(5); //=> 7
  * ```
  *
+ * @stream
  * @signature Number -> Number -> Number
  * @param  int|float $x
  * @param  int|float $y
@@ -32,6 +33,7 @@ function plus() {
  * F\minus(7, 2); //=> 5
  * ```
  *
+ * @stream
  * @signature Number -> Number -> Number
  * @param  int|float $x
  * @param  int|float $y
@@ -53,6 +55,7 @@ function minus() {
  * F\negate(-7); //=> 7
  * ```
  *
+ * @stream
  * @signature Number -> Number
  * @param  int|float $x
  * @return int|float
@@ -73,6 +76,7 @@ function negate() {
  * $double(5); //=> 10
  * ```
  *
+ * @stream
  * @signature Number -> Number -> Number
  * @param  int|float $x
  * @param  int|float $y
@@ -93,6 +97,7 @@ function multiply() {
  * F\divide(10, 2); //=> 5
  * ```
  *
+ * @stream
  * @signature Number -> Number -> Number
  * @param  int|float $x
  * @param  int|float $y
@@ -113,6 +118,7 @@ function divide() {
  * F\modulo(10, 3); //=> 1
  * ```
  *
+ * @stream
  * @signature Number -> Number -> Number
  * @param  int|float $x
  * @param  int|float $y
@@ -134,6 +140,7 @@ function modulo() {
  * F\sum([]); //=> 0
  * ```
  *
+ * @stream
  * @signature [Number] -> Number
  * @param  array $numbers
  * @return int|float
@@ -154,6 +161,7 @@ function sum() {
  * F\product([]); //=> 1
  * ```
  *
+ * @stream
  * @signature [Number] -> Number
  * @param  array $numbers
  * @return int|float
@@ -164,4 +172,94 @@ function product() {
         return reduce(multiply(), 1, $numbers);
     });
     return _apply($product, func_get_args());
+}
+
+/**
+ * Computes the minimum of two numbers.
+ *
+ * ```php
+ * F\min(1, 3); //=> 1
+ * F\min(1, -3); //=> -3
+ * ```
+ *
+ * @stream
+ * @signature Number -> Number -> Number
+ * @param  number $a
+ * @param  number $b
+ * @return number
+ */
+function min() {
+    static $min = false;
+    $min = $min ?: curry(function($a, $b){
+        return $a < $b ? $a : $b;
+    });
+    return _apply($min, func_get_args());
+}
+
+/**
+ * Computes the minimum of two elements using a function.
+ *
+ * ```php
+ * F\minBy(F\length(), 'Hello', 'Hi'); //=> 'Hi'
+ * F\minBy('abs', 1, -3); //=> 1
+ * ```
+ *
+ * @stream
+ * @signature (a -> Number) -> a -> a -> a
+ * @param  callable $fn
+ * @param  mixed $a
+ * @param  mixed $b
+ * @return mixed
+ */
+function minBy() {
+    static $minBy = false;
+    $minBy = $minBy ?: curry(function($fn, $a, $b){
+        return $fn($a) < $fn($b) ? $a : $b;
+    });
+    return _apply($minBy, func_get_args());
+}
+
+/**
+ * Computes the maximum of two numbers.
+ *
+ * ```php
+ * F\max(1, 3); //=> 3
+ * F\max(1, -3); //=> 1
+ * ```
+ *
+ * @stream
+ * @signature Number -> Number -> Number
+ * @param  number $a
+ * @param  number $b
+ * @return number
+ */
+function max() {
+    static $max = false;
+    $max = $max ?: curry(function($a, $b){
+        return $a > $b ? $a : $b;
+    });
+    return _apply($max, func_get_args());
+}
+
+/**
+ * Computes the maximum of two elements using a function.
+ *
+ * ```php
+ * F\maxBy(F\length(), 'Hello', 'Hi'); //=> 'Hello'
+ * F\maxBy('abs', 1, -3); //=> -3
+ * ```
+ *
+ * @stream
+ * @signature (a -> Number) -> a -> a -> a
+ * @param  callable $fn
+ * @param  mixed $a
+ * @param  mixed $b
+ * @return mixed
+ */
+function maxBy() {
+    static $maxBy = false;
+    $maxBy = $maxBy ?: curry(function($fn, $a, $b){
+        return $fn($a) > $fn($b) ? $a : $b;
+    });
+    return _apply($maxBy, func_get_args());
 }

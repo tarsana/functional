@@ -71,6 +71,7 @@ function clone_() {
  * F\attributes($test); //=> ['b' => 1, 'c' => null]
  * ```
  *
+ * @stream
  * @signature {k: v} -> {k: v}
  * @param  object|array $object
  * @return array
@@ -94,6 +95,7 @@ function attributes() {
  * F\keys((object)['name' => 'foo', 'age' => 11]); //=> ['name', 'age']
  * ```
  *
+ * @stream
  * @signature [*] -> [Number]
  * @signature {k: v} -> [k]
  * @param object|array $object
@@ -116,6 +118,7 @@ function keys() {
  * F\values((object)['name' => 'foo', 'age' => 11]); //=> ['foo', 11]
  * ```
  *
+ * @stream
  * @signature [a] -> [a]
  * @signature {k: v} -> [v]
  * @param object|array $object
@@ -157,6 +160,7 @@ function values() {
  * F\has('b', new HasTestClass); //=> false
  * ```
  *
+ * @stream
  * @signature k -> {k: v} -> Boolean
  * @param  string|int $name
  * @param  mixed $object
@@ -189,6 +193,7 @@ function has() {
  * $nameOf($data[3]); //=> null
  * ```
  *
+ * @stream
  * @signature k -> {k: v} -> Maybe(v)
  * @param  string $name
  * @param  array $object
@@ -217,8 +222,10 @@ function get() {
  * $nameOfFirst = F\getPath([0, 'name']);
  * $nameOfFirst($data); //=> 'foo'
  * F\getPath([2, 'scores', 1], $data); //=> 2
+ * F\getPath([2, 'foo', 1], $data); //=> null
  * ```
  *
+ * @stream
  * @signature [k] -> {k: v} -> v
  * @param  array $path
  * @param  mixed $object
@@ -250,6 +257,7 @@ function getPath() {
  * F\set('description', 'Some text here', $task); //=> ['name' => 'test', 'complete' => false, 'description' => 'Some text here']
  * ```
  *
+ * @stream
  * @signature k -> v -> {k: v} -> {k: v}
  * @param  string|int $name
  * @param  mixed $value
@@ -270,6 +278,36 @@ function set() {
 }
 
 /**
+ * Updates the value of a key or public attribute using a callable.
+ *
+ * ```php
+ * $person = [
+ *     'name' => 'foo',
+ *     'age' => 11
+ * ];
+ * $growUp = F\update('age', F\plus(1));
+ * $growUp($person); //=> ['name' => 'foo', 'age' => 12]
+ * // updating a missing attribute has no effect
+ * F\update('wow', F\plus(1), $person); //=> ['name' => 'foo', 'age' => 11]
+ * ```
+ *
+ * @stream
+ * @signature k -> (v -> v) -> {k: v} -> {k: v}
+ * @param  string|int $name
+ * @param  callable $fn
+ * @param  mixed $object
+ * @return mixed
+ */
+function update() {
+    static $update = false;
+    $update = $update ?: curry(function($name, $fn, $object) {
+        $value = get($name, $object);
+        return (null === $value) ? $object : set($name, $fn($value), $object);
+    });
+    return _apply($update, func_get_args());
+}
+
+/**
  * Checks if an attribute/value of an object/array passes the given predicate.
  *
  * ```php
@@ -281,6 +319,7 @@ function set() {
  * $isAdult($foo); //=> false
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> k -> {k : a} -> Boolean
  * @param  callable $predicate
  * @param  string|int $key
@@ -315,6 +354,7 @@ function satisfies() {
  * F\filter($isValid, $persons); //=> [['name' => 'baz', 'age' => 16], ['name' => 'beta', 'age' => 25]]
  * ```
  *
+ * @stream
  * @signature {String: (a -> Boolean)} -> {k : a} -> Boolean
  * @param  array $predicates
  * @param  mixed $object
@@ -352,6 +392,7 @@ function satisfiesAll() {
  * F\filter($isValid, $persons); //=> [['name' => 'bar', 'age' => 9], ['name' => 'baz', 'age' => 16], ['name' => 'zeta', 'age' => 33], ['name' => 'beta', 'age' => 25]]
  * ```
  *
+ * @stream
  * @signature {String: (a -> Boolean)} -> {k : a} -> Boolean
  * @param  array $predicates
  * @param  mixed $object
@@ -377,6 +418,7 @@ function satisfiesAny() {
  * F\toPairs($list); //=> [['key', 'value'], ['number', 53], [0, 'foo'], [1, 'bar']]
  * ```
  *
+ * @stream
  * @signature {k: v} -> [(k,v)]
  * @param  array $object
  * @return array

@@ -27,7 +27,7 @@ composer require tarsana/functional
 
 # Real use case
 
-The script I am using to generate the [Reference Documentation](#reference-documentation) and **Unit Tests** files for this library is a good example of usage: [Check the code here](https://github.com/tarsana/functional/blob/master/build.php)
+The script I am using to generate the [Reference Documentation](#reference-documentation) and **Unit Tests** files for this library is an example of usage: [Check the code here](https://github.com/tarsana/functional/blob/master/build.php)
 
 # Streams
 
@@ -56,7 +56,7 @@ $s = Stream::of('temp.txt') // initializing the Stream with the filename
 ```
 Till now no operation was really applied, this means that the file is not yet read !
 
-Now when we really need the result on the operations which can have side effects (Reading the file in this case). We call the `get()` method; It will run all the operations and gets the final result.
+Now when we really need the result on the operations which can have side effects (Reading the file in this case). We call the `result()` method; It will run all the operations and gets the final result.
 
 Assuming that the file `temp.txt` contains the following:
 
@@ -64,12 +64,12 @@ Assuming that the file `temp.txt` contains the following:
 Once you have a Stream, you can start applying operations on it.
 Each call returns a new Stream **(Streams are immutable)** and all operation calls are **pure**
 (No side effect !). Because operations are not applying immediately
-but are just saved to be applied when `get()` is called !
+but are just saved to be applied when `result()` is called !
 
 ```
 Doing
 ```php
-print_r($s->get());
+print_r($s->result());
 ```
 Will output
 ```
@@ -111,17 +111,17 @@ Array
     [be] => 1
     [applied] => 1
     [when] => 1
-    [get] => 1
+    [result] => 1
     [is] => 1
     [called] => 1
 )
 ```
 
-[Check documentation for full list of methods available](https://github.com/tarsana/functional/blob/master/docs/Stream.md)
+[Check the full list of available methods](https://github.com/tarsana/functional/blob/master/docs/Stream.md)
 
 # Reference Documentation
 
-[Click here to read the documentation](https://github.com/tarsana/functional/blob/master/docs)
+[Click here to browse the documentation](https://github.com/tarsana/functional/blob/master/docs)
 
 # Feedbacks & Contributions
 
