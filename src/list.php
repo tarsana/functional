@@ -12,6 +12,7 @@
  * $doubles([1, 2, 3, 4]); //=> [2, 4, 6, 8]
  * ```
  *
+ * @stream
  * @signature (a -> b) -> [a] -> [b]
  * @param  callable $fn
  * @param  array $list
@@ -34,6 +35,7 @@ function map() {
  * $words(['Hello World', 'How are you']); //=> ['Hello', 'World', 'How', 'are', 'you']
  * ```
  *
+ * @stream
  * @signature (a -> [b]) -> [a] -> [b]
  * @param  callable $fn
  * @param  array $list
@@ -56,6 +58,7 @@ function chain() {
  * $numeric = F\filter('is_numeric');
  * $numeric($list); //=> [1, 3]
  * ```
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $fn
  * @param  array $list
@@ -79,6 +82,7 @@ function filter() {
  * $sum($list); //=> 10
  * ```
  *
+ * @stream
  * @signature (* -> a -> *) -> * -> [a] -> *
  * @param  callable $fn
  * @param  mixed $initial
@@ -106,6 +110,7 @@ function reduce() {
  * $s; //=> 10
  * ```
  *
+ * @stream
  * @signature (a -> *) -> [a] -> [a]
  * @param  callable $fn
  * @param  array $list
@@ -132,6 +137,7 @@ function each() {
  * F\head(''); //=> ''
  * ```
  *
+ * @stream
  * @signature [a] -> a
  * @signature String -> String
  * @param  array|string $list
@@ -159,6 +165,7 @@ function head() {
  * F\last(''); //=> ''
  * ```
  *
+ * @stream
  * @signature [a] -> a
  * @signature String -> String
  * @param  array|string $list
@@ -187,6 +194,7 @@ function last () {
  * F\init(''); //=> ''
  * ```
  *
+ * @stream
  * @signature [a] -> a
  * @signature String -> String
  * @param  array|string $list
@@ -217,6 +225,7 @@ function init () {
  * F\tail(''); //=> ''
  * ```
  *
+ * @stream
  * @signature [a] -> a
  * @signature String -> String
  * @param  array|string $list
@@ -244,6 +253,7 @@ function tail () {
  * F\reverse('Hello'); //=> 'olleH'
  * ```
  *
+ * @stream
  * @signature [a] -> [a]
  * @signature String -> String
  * @param  array|string $list
@@ -267,6 +277,7 @@ function reverse () {
  * F\length('Hello'); //=> 5
  * ```
  *
+ * @stream
  * @signature [a] -> Number
  * @signature String -> Number
  * @param  array|string $list
@@ -291,6 +302,7 @@ function length() {
  * $allNotNull([9, 3, 0, 4]); //=> false
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> Boolean
  * @param  callable $predicate
  * @param  array $list
@@ -304,7 +316,6 @@ function allSatisfies() {
     return _apply($allSatisfies, func_get_args());
 }
 
-
 /**
  * Checks if the `$predicate` is verified by **any** item of the array.
  *
@@ -314,6 +325,7 @@ function allSatisfies() {
  * $anyNumeric(['Hello', 'Foo']); //=> false
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> Boolean
  * @param  callable $predicate
  * @param  array $list
@@ -335,6 +347,7 @@ function anySatisfies() {
  * F\concat('Hello ', 'World'); //=> 'Hello World'
  * ```
  *
+ * @stream
  * @signature [*] -> [*] -> [*]
  * @signature String -> String -> String
  * @param  array $list1
@@ -361,6 +374,7 @@ function concat() {
  * F\concatAll(['Hello ', 'World', ' !']); //=> 'Hello World !'
  * ```
  *
+ * @stream
  * @signature [[a]] -> [a]
  * @param  array $lists
  * @return array
@@ -387,6 +401,7 @@ function concatAll() {
  * F\insert(3, 'l', 'Helo World'); //=> 'Hello World'
  * ```
  *
+ * @stream
  * @signature Number -> a -> [a] -> [a]
  * @signature Number -> String -> String -> String
  * @param  int $position
@@ -416,6 +431,7 @@ function insert() {
  * F\insertAll(2, 'llo', 'He World'); //=> 'Hello World'
  * ```
  *
+ * @stream
  * @signature Number -> [a] -> [a] -> [a]
  * @signature Number -> String -> String -> String
  * @param  int $position
@@ -446,6 +462,7 @@ function insertAll() {
  * F\append(' World', 'Hello'); //=> 'Hello World'
  * ```
  *
+ * @stream
  * @signature * -> [*] -> [*]
  * @signature String -> String -> String
  * @param  mixed $item
@@ -469,6 +486,7 @@ function append() {
  * F\prepend('Hello ', 'World'); //=> 'Hello World'
  * ```
  *
+ * @stream
  * @signature a -> [a] -> [a]
  * @signature String -> String -> String
  * @param  mixed $item
@@ -492,6 +510,7 @@ function prepend() {
  * F\take(-5, 'Hello World'); //=> 'World'
  * ```
  *
+ * @stream
  * @signature Number -> [a] -> [a]
  * @signature Number -> String -> String
  * @param  int $count
@@ -526,6 +545,7 @@ function take() {
  * F\takeWhile(F\startsWith('D'), $items); //=> []
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $predicate
  * @param  array $list
@@ -552,6 +572,7 @@ function takeWhile() {
  * F\takeLastWhile(F\startsWith('D'), $items); //=> []
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $predicate
  * @param  array $list
@@ -579,6 +600,7 @@ function takeLastWhile() {
  * F\takeUntil(F\startsWith('F'), $items); //=> []
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $predicate
  * @param  array $list
@@ -601,6 +623,7 @@ function takeUntil() {
  * F\takeLastUntil(F\startsWith('B'), $items); //=> []
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $predicate
  * @param  array $list
@@ -628,6 +651,7 @@ function takeLastUntil() {
  * F\remove(-6, 'Hello World'); //=> 'Hello'
  * ```
  *
+ * @stream
  * @signature Number -> [a] -> [a]
  * @signature Number -> String -> String
  * @param  int $count
@@ -657,6 +681,7 @@ function remove() {
  * F\removeWhile(F\startsWith('D'), $items); //=> ['Foo', 'Fun', 'Dev', 'Bar', 'Baz']
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $predicate
  * @param  array $list
@@ -679,6 +704,7 @@ function removeWhile() {
  * F\removeLastWhile(F\startsWith('B'), $items); //=> ['Foo', 'Fun', 'Bye', 'Dev']
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $predicate
  * @param  array $list
@@ -703,6 +729,7 @@ function removeLastWhile() {
  * F\removeUntil(F\startsWith('A'), $items); //=> []
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $predicate
  * @param  array $list
@@ -726,6 +753,7 @@ function removeUntil() {
  * F\removeLastUntil(F\startsWith('A'), $items); //=> []
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> [a]
  * @param  callable $predicate
  * @param  array $list
@@ -746,6 +774,7 @@ function removeLastUntil() {
  * F\fromPairs([['name', 'Foo'], ['age', 11]]); //=> (object) ['name' => 'Foo', 'age' => 11]
  * ```
  *
+ * @stream
  * @signature [(k, v)] -> {k: v}
  * @param  array $pairs
  * @return stdClass
@@ -773,6 +802,7 @@ function fromPairs() {
  * F\slices(3, ''); //=> ''
  * ```
  *
+ * @stream
  * @signature Number -> [a] -> [[a]]
  * @signature Number -> String -> [String]
  * @param  int $size
@@ -801,6 +831,7 @@ function slices() {
  * F\contains('He', 'Hello World'); //=> true
  * ```
  *
+ * @stream
  * @signature a -> [a] -> Boolean
  * @signature String -> String -> Boolean
  * @param  mixed $item
@@ -825,6 +856,7 @@ function contains() {
  * F\findIndex(F\startsWith('c'), ['foo', 'bar', 'baz']); //=> null
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> Maybe(Number)
  * @signature (v -> Boolean) -> {k: v} -> Maybe(k)
  * @param  callable $predicate
@@ -853,6 +885,7 @@ function findIndex() {
  * F\findLastIndex(F\startsWith('c'), ['foo', 'bar', 'baz']); //=> null
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> Maybe(Number)
  * @signature (v -> Boolean) -> {k: v} -> Maybe(k)
  * @param  callable $predicate
@@ -880,6 +913,7 @@ function findLastIndex() {
  * F\find(F\startsWith('c'), ['foo', 'bar', 'baz']); //=> null
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> Maybe(a)
  * @param  callable $predicate
  * @param  array $list
@@ -902,6 +936,7 @@ function find() {
  * F\findLast(F\startsWith('c'), ['foo', 'bar', 'baz']); //=> null
  * ```
  *
+ * @stream
  * @signature (a -> Boolean) -> [a] -> Maybe(a)
  * @param  callable $predicate
  * @param  array $list
@@ -931,6 +966,7 @@ function findLast() {
  * F\indexOf('foo', (object) ['name' => 'foo', 'age' => 11]); //=> 'name'
  * ```
  *
+ * @stream
  * @signature a -> [a] -> Number
  * @signature v -> {k: v} -> Maybe(k)
  * @signature String -> String -> Number
@@ -964,6 +1000,7 @@ function indexOf() {
  * F\lastIndexOf('foo', (object) ['name' => 'foo', 'age' => 11]); //=> 'name'
  * ```
  *
+ * @stream
  * @signature a -> [a] -> Number
  * @signature String -> String -> Number
  * @param  mixed $item
@@ -994,6 +1031,7 @@ function lastIndexOf() {
  * F\uniqueBy(F\eq(), [1, '2', '1', 3, '3', 2, 2]); //=> [1, '2', 3]
  * ```
  *
+ * @stream
  * @signature (a -> a -> Boolean) -> [a] -> [a]
  * @param  callable $areEqual
  * @param  array $list
@@ -1025,12 +1063,15 @@ function uniqueBy() {
  * F\unique([1, '1', [1, 2], 1, ['1', 2], [1, 2]]); //=> [1, '1', [1, 2], ['1', 2]]
  * ```
  *
+ * @stream
  * @signature [a] -> [a]
  * @param  array $list
  * @return array
  */
 function unique() {
-    return _apply(uniqueBy(equals()), func_get_args());
+    static $unique = false;
+    $unique = $unique ?: uniqueBy(equals());
+    return _apply($unique, func_get_args());
 }
 
 /**
@@ -1055,6 +1096,7 @@ function unique() {
  * F\groupBy($phase, $persons); //=> ['child' => [['name' => 'foo', 'age' => 11], ['name' => 'bar', 'age' => 9]], 'teenager' => [['name' => 'baz', 'age' => 16]], 'adult' => [['name' => 'zeta', 'age' => 33], ['name' => 'beta', 'age' => 25]]]
  * ```
  *
+ * @stream
  * @signature (a -> String) -> [a] -> {String: a}
  * @param  callable $fn
  * @param  array $list
@@ -1072,4 +1114,36 @@ function groupBy() {
         }, [], $list);
     });
     return _apply($groupBy, func_get_args());
+}
+
+/**
+ * Makes list of pairs from two lists.
+ *
+ * ```php
+ * F\pairsFrom([1, 2, 3], ['foo', 'bar', 'baz']); //=> [[1, 'foo'], [2, 'bar'], [3, 'baz']]
+ * F\pairsFrom([1, 2, 3], ['foo', 'bar']); //=> [[1, 'foo'], [2, 'bar']]
+ * F\pairsFrom([1, 3], ['foo', 'bar', 'baz']); //=> [[1, 'foo'], [3, 'bar']]
+ * F\pairsFrom([], ['foo', 'bar', 'baz']); //=> []
+ * ```
+ *
+ * @stream
+ * @signature [a] -> [b] -> [[a,b]]
+ * @param  array $list1
+ * @param  array $list2
+ * @return array
+ */
+function pairsFrom() {
+    static $pairsFrom = false;
+    $pairsFrom = $pairsFrom ?: curry(function($list1, $list2) {
+        $length1 = length($list1);
+        $length2 = length($list2);
+        if (0 == $length1 || 0 == $length2)
+            return [];
+        $list1 = values($list1);
+        $list2 = values($list2);
+        return map(function($index) use($list1, $list2) {
+            return [$list1[$index], $list2[$index]];
+        }, range(0, -1 + min($length1, $length2)));
+    });
+    return _apply($pairsFrom, func_get_args());
 }

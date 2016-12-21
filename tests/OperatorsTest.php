@@ -51,6 +51,18 @@ class OperatorsTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals(true, F\equals($a, $b));
 	}
 
+	public function test_equalBy() {
+		$headEquals = F\equalBy(F\head());
+		$this->assertEquals(true, $headEquals([1, 2], [1, 3]));
+		$this->assertEquals(false, $headEquals([3, 2], [1, 3]));
+		$sameAge = F\equalBy(F\get('age'));
+		$foo = ['name' => 'foo', 'age' => 11];
+		$bar = ['name' => 'bar', 'age' => 13];
+		$baz = ['name' => 'baz', 'age' => 11];
+		$this->assertEquals(false, $sameAge($foo, $bar));
+		$this->assertEquals(true, $sameAge($foo, $baz));
+	}
+
 	public function test_lt() {
 		$this->assertEquals(true, F\lt(3, 5));
 		$this->assertEquals(false, F\lt(5, 5));

@@ -2,29 +2,31 @@
 
 This file contains operators as functions.
 
-- [and_](#and_) Returns `$a && $b`.
+- [and_](#and_) - Returns `$a && $b`.
 
-- [or_](#or_) Returns `$a || $b`.
+- [or_](#or_) - Returns `$a || $b`.
 
-- [not](#not) Returns `!$x`.
+- [not](#not) - Returns `!$x`.
 
-- [eq](#eq) Returns `$x == $y`.
+- [eq](#eq) - Returns `$x == $y`.
 
-- [notEq](#noteq) Returns `$x != $y`.
+- [notEq](#noteq) - Returns `$x != $y`.
 
-- [eqq](#eqq) Returns `$x === $y`.
+- [eqq](#eqq) - Returns `$x === $y`.
 
-- [notEqq](#noteqq) Returns `$x !== $y`.
+- [notEqq](#noteqq) - Returns `$x !== $y`.
 
-- [equals](#equals) Returns `true` if the two elements have the same type and are deeply equivalent.
+- [equals](#equals) - Returns `true` if the two elements have the same type and are deeply equivalent.
 
-- [lt](#lt) Returns `$a < $b`.
+- [equalBy](#equalby) - Returns `true` if the results of applying `$fn` to `$a` and `$b` are deeply equal.
 
-- [lte](#lte) Returns `$a <= $b`.
+- [lt](#lt) - Returns `$a < $b`.
 
-- [gt](#gt) Returns `$a > $b`.
+- [lte](#lte) - Returns `$a <= $b`.
 
-- [gte](#gte) Returns `$a >= $b`.
+- [gt](#gt) - Returns `$a > $b`.
+
+- [gte](#gte) - Returns `$a >= $b`.
 
 # and_
 
@@ -167,6 +169,31 @@ F\equals($a, $b); //=> false
 F\equals($a, $c); //=> false
 $b->b->c = 'Hello';
 F\equals($a, $b); //=> true
+```
+
+# equalBy
+
+```php
+equalBy() : [type] [description]
+```
+
+```
+(a -> b) -> a -> a -> Boolean
+```
+
+Returns `true` if the results of applying `$fn` to `$a` and `$b` are deeply equal.
+
+```php
+$headEquals = F\equalBy(F\head());
+$headEquals([1, 2], [1, 3]); //=> true
+$headEquals([3, 2], [1, 3]); //=> false
+
+$sameAge = F\equalBy(F\get('age'));
+$foo = ['name' => 'foo', 'age' => 11];
+$bar = ['name' => 'bar', 'age' => 13];
+$baz = ['name' => 'baz', 'age' => 11];
+$sameAge($foo, $bar); //=> false
+$sameAge($foo, $baz); //=> true
 ```
 
 # lt

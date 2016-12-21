@@ -2,31 +2,33 @@
 
 Useful functions to handle objects (associative arrays are considered objects).
 
-- [clone_](#clone_) Returns a deep copy of the given value.
+- [clone_](#clone_) - Returns a deep copy of the given value.
 
-- [attributes](#attributes) Converts an object to an associative array containing public non-static attributes.
+- [attributes](#attributes) - Converts an object to an associative array containing public non-static attributes.
 
-- [keys](#keys) Returns a list of array's keys or object's public attributes names.
+- [keys](#keys) - Returns a list of array's keys or object's public attributes names.
 
-- [values](#values) Returns a list of array's values or object's public attributes values.
+- [values](#values) - Returns a list of array's values or object's public attributes values.
 
-- [has](#has) Checks if the given array or object has a specific key or public attribute.
+- [has](#has) - Checks if the given array or object has a specific key or public attribute.
 
-- [get](#get) Gets the value of a key from an array or the
+- [get](#get) - Gets the value of a key from an array or the
 value of an public attribute from an object.
 
-- [getPath](#getpath) Gets a value from an array/object using a path of keys/attributes.
+- [getPath](#getpath) - Gets a value from an array/object using a path of keys/attributes.
 
-- [set](#set) Returns a new array or object with the value of a key or a public attribute set
+- [set](#set) - Returns a new array or object with the value of a key or a public attribute set
 to a specific value.
 
-- [satisfies](#satisfies) Checks if an attribute/value of an object/array passes the given predicate.
+- [update](#update) - Updates the value of a key or public attribute using a callable.
 
-- [satisfiesAll](#satisfiesall) Checks if a list of attribute/value of an object/array passes all the given predicates.
+- [satisfies](#satisfies) - Checks if an attribute/value of an object/array passes the given predicate.
 
-- [satisfiesAny](#satisfiesany) Checks if a list of attribute/value of an object/array passes any of the given predicates.
+- [satisfiesAll](#satisfiesall) - Checks if a list of attribute/value of an object/array passes all the given predicates.
 
-- [toPairs](#topairs) Converts an object or associative array to an array of [key, value] pairs.
+- [satisfiesAny](#satisfiesany) - Checks if a list of attribute/value of an object/array passes any of the given predicates.
+
+- [toPairs](#topairs) - Converts an object or associative array to an array of [key, value] pairs.
 
 # clone_
 
@@ -88,6 +90,7 @@ keys(object|array $object) : array
 
 ```
 [*] -> [Number]
+{k: v} -> [k]
 ```
 
 Returns a list of array's keys or object's public attributes names.
@@ -106,6 +109,7 @@ values(object|array $object) : array
 
 ```
 [a] -> [a]
+{k: v} -> [v]
 ```
 
 Returns a list of array's values or object's public attributes values.
@@ -202,6 +206,7 @@ $data = [
 $nameOfFirst = F\getPath([0, 'name']);
 $nameOfFirst($data); //=> 'foo'
 F\getPath([2, 'scores', 1], $data); //=> 2
+F\getPath([2, 'foo', 1], $data); //=> null
 ```
 
 # set
@@ -225,6 +230,29 @@ $done = F\set('complete', true);
 $done($task); //=> ['name' => 'test', 'complete' => true]
 $done((object) $task); //=> (object) ['name' => 'test', 'complete' => true]
 F\set('description', 'Some text here', $task); //=> ['name' => 'test', 'complete' => false, 'description' => 'Some text here']
+```
+
+# update
+
+```php
+update(string|int $name, callable $fn, mixed $object) : mixed
+```
+
+```
+k -> (v -> v) -> {k: v} -> {k: v}
+```
+
+Updates the value of a key or public attribute using a callable.
+
+```php
+$person = [
+    'name' => 'foo',
+    'age' => 11
+];
+$growUp = F\update('age', F\plus(1));
+$growUp($person); //=> ['name' => 'foo', 'age' => 12]
+// updating a missing attribute has no effect
+F\update('wow', F\plus(1), $person); //=> ['name' => 'foo', 'age' => 11]
 ```
 
 # satisfies

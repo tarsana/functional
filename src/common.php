@@ -60,6 +60,30 @@ function type() {
     return _apply($type, func_get_args());
 }
 
+/**
+ * Checks if a variable has a specific type.
+ *
+ * ```php
+ * $isNumber = F\is('Number');
+ * $isNumber(5); //=> true
+ * $isNumber('5'); //=> false
+ * F\is('Any', '5'); //=> true
+ * F\is('Any', [1, 2, 3]); //=> true
+ * ```
+ *
+ * @stream
+ * @signature String -> * -> Boolean
+ * @param  string $type
+ * @param  mixed $data
+ * @return boolean
+ */
+function is() {
+    static $is = false;
+    $is = $is ?: curry(function($type, $data) {
+        return 'Any' == $type || type($data) == $type;
+    });
+    return _apply($is, func_get_args());
+}
 
 /**
  * Converts a variable to its string value.
@@ -83,6 +107,7 @@ function type() {
  * ]); //=> '{object: null, numbers: [1, 2, 3], 0: "message"}'
  * ```
  *
+ * @stream
  * @signature * -> String
  * @param  mixed $something
  * @return string

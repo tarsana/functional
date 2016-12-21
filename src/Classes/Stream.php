@@ -5,339 +5,128 @@
  */
 class Stream {
 
-    protected static $types = [
-        'null',
-        'boolean',
-        'number',
-        'string',
-        'resource',
-        'function',
-        'list', // array of which all keys are integers
-        'array',
-        'object',
-        'any'
-    ];
-
     /**
-     * Defined operations.
-     * [
-     *   'name' => [
-     *     'callable' => Function,
-     *     'signatures' => [
-     *       ['Type1', 'Type2', ...],
-     *       ['Type1', 'Type2', ...],
-     *       ...
-     *     ]
-     *   ],
-     *   ...
-     * ]
+     * The list of predefined operations.
+     *
      * @var array
      */
-    protected static $operations = [];
+    protected static $operations = null;
 
     /**
-     * The internal data of the stream.
+     * The internal Stream structure described here: src/Internal/_stream.php
      *
-     * @var mixed
-     */
-    protected $data;
-
-    /**
-     * Type of the data after applying transformations.
-     *
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * Does the stream throws exception instead of returning Error ?
-     *
-     * @var bool
-     */
-    protected $throwsException;
-
-    /**
-     * Transformations to apply to data.
-     * [
-     *   [
-     *     'callable' => Function,
-     *     'args' => [...]
-     *   ],
-     *   ...
-     * ]
      * @var array
      */
-    protected $transformations;
+    protected $stream;
 
     /**
-     * Creates a new Stream with the provided $data.
-     * ```php
-     * Stream::of(1); // Stream(Number)
-     * Stream::of([1, 2, 3]); // Stream(List)
-     * ```
+     * Loads the stream operations from the file src/Internal/_stream_operations.php
+     * Executed when the first Stream instance is created.
      *
-     * @signature a -> Stream(a)
-     * @param  mixed $data
-     * @return Stream
-     */
-    public static function of ($data)
-    {
-        return new Stream($data);
-    }
-
-    /**
-     * Define a new operation which can be used in all Streams.
-     * ```php
-     * Stream::operation('length', 'List -> Number', 'count');
-     * Stream::of([1, 2, 4])->length()->get(); // 3
-     * ```
-     *
-     * @param  string $name
-     * @param  string|array $signatures
-     * @param  callable $fn
      * @return void
      */
-    public static function operation($name, $signatures, $fn = null)
+    public static function init()
     {
-        if (static::hasOperation($name)) {
-            static::throwError('duplicated-operation', $name);
+        if (null === self::$operations) {
+            self::$operations = require __DIR__ . '/../Internal/_stream_operations.php';
         }
-
-        $signatures = is_string($signatures) ? [$signatures] : $signatures;
-        $fn = $fn ?: $name;
-
-        if (! is_callable($fn)) {
-            static::throwError('unknown-callable', $fn);
-        }
-
-        self::$operations[$name] = [
-            'callable' => $fn,
-            'signatures' => chain(_f('Stream::makeSignature'), $signatures)
-        ];
-    }
-
-    public static function removeOperations($name)
-    {
-        foreach (func_get_args() as $operationName) {
-            if (static::hasOperation($operationName)) {
-                unset(static::$operations[$operationName]);
-            }
-        }
-    }
-
-    public static function hasOperation($name)
-    {
-        return array_key_exists($name, static::$operations);
-    }
-
-    public static function makeSignature($text)
-    {
-        $ensureType = function($str) use($text) {
-            if (! contains($str, static::$types)) {
-                static::throwError('invalid-signature', $text);
-            }
-            return $str;
-        };
-
-        $parts = map(pipe(lowerCase(), split('|'), map(pipe('trim', $ensureType))), split('->', $text));
-        // $text  = 'Number|List -> Number -> String|Array -> Number'
-        // $parts = [['number', 'list'], ['number'], ['string', 'array'], ['number']]
-
-        if (length($parts) < 2) {
-            static::throwError('invalid-signature', $text);
-        }
-
-        $parts = reduce(function($result, $part){
-            return chain(function($item) use($result){
-                return map(append($item), $result);
-            }, $part);
-        }, [[]], $parts);
-        // 0: $result = [[]]
-        // 1: $part = ['number', 'list']  => $result = [['number'], ['list']]
-        // 2: $part = ['number']          => $result = [['number', 'number'], ['list', 'number']]
-        // 2: $part = ['string', 'array'] => $result = [['number', 'number', 'string'], ['list', 'number', 'string'],
-        //                                              ['number', 'number', 'array'], ['list', 'number', 'array']]
-        // 3: $part = ['number']          => $result = [['number', 'number', 'string', 'number'],
-        //                                              ['list', 'number', 'string', 'number'],
-        //                                              ['number', 'number', 'array', 'number'],
-        //                                              ['list', 'number', 'array', 'number']]
-
-        return $parts;
-    }
-
-    protected static function makeCallable($fn)
-    {
-        if (! is_callable($fn)) {
-            static::throwError('unknown-callable', $fn);
-        }
-        return $fn;
-    }
-
-    protected function returnTypeOf($name, $types)
-    {
-        $signatures = static::$operations[$name]['signatures'];
-        $applicable = find(pipe(init(), equals($types)), $signatures);
-
-        if (null === $applicable) {
-            static::throwError('invalid-args', $name, $types, $signatures);
-        }
-
-        return last($applicable);
-    }
-
-    protected static function throwError($type = 'unknown')
-    {
-        $params = tail(func_get_args());
-        $msg = 'Stream: unknown error happened';
-        switch ($type) {
-            case 'unknown-callable':
-                $fn = is_string($params[0]) ? $params[0] : toString($params[0]);
-                $msg = "Stream: unknown callable '{$fn}'";
-            break;
-            case 'invalid-signature':
-                $msg = "Stream: invalid signature '{$params[0]}' it should follow the syntax 'TypeArg1 -> TypeArg2 -> ... -> ReturnType' and types to use are Boolean, Number, String, Resource, Function, List, Array, Object";
-            break;
-            case 'unknown-operation':
-                $msg = "Stream: Call to unknown operation '{$params[0]}'";
-            break;
-            case 'invalid-args':
-                $types = join(', ', map('ucfirst', $params[1]));
-                $signatures = toString(map(pipe(map('ucfirst'), join(' -> ')), $params[2]));
-                $msg = "Stream: Call to operation '{$params[0]}' with arguments '{$types}' does not match any signature of this operation which are {$signatures}";
-            break;
-            case 'duplicated-operation':
-                $msg = "Stream: operation '{$params[0]}' already exists";
-            break;
-        }
-        throw Error::of($msg);
     }
 
     /**
      * Creates a new Stream.
      *
+     * @param  mixed $data
+     * @return Tarsana\Functional\Stream
+     */
+    public static function of($data)
+    {
+        return new Stream(_stream(self::$operations, $data));
+    }
+
+    /**
+     * Adds a new operation to the Stream class.
+     *
+     * @param  string $name
+     * @param  string $signature
+     * @param  callable $fn
+     * @return void
+     */
+    public static function operation($name, $signatures, $fn = null)
+    {
+        if (! is_array($signatures)) {
+            $signatures = [$signatures];
+        }
+        foreach ($signatures as $signature) {
+            self::$operations[] = _stream_operation($name, $signature, $fn);
+        }
+    }
+
+    /**
+     * Checks if the Stream class has an operation with the given name.
+     *
+     * @param  string  $name
+     * @return boolean
+     */
+    public static function hasOperation($name)
+    {
+        return contains($name, map(get('name'), self::$operations));
+    }
+
+    /**
+     * Removes one or many operation from the Stream class.
+     *
+     * @param  string $name
+     * @return void
+     */
+    public static function removeOperations($name)
+    {
+        $names = func_get_args();
+        self::$operations = filter(pipe(get('name'), contains(__(), $names), not()), self::$operations);
+    }
+
+    /**
+     * Creates a new Stream with some data.
+     *
      * @param mixed $data
      */
-    protected function __construct ($data, $transformations = [], $type = null, $throwsException = false)
+    protected function __construct($stream)
     {
-        $this->data = $data;
-        $this->type = $type ?: lowerCase(type($data));
-        $this->transformations = $transformations;
-        $this->throwsException = $throwsException;
+        $this->stream = $stream;
     }
 
     /**
-     * Returns a string representation of a Stream.
-     * ```php
-     * $s = Stream::of(55);
-     * echo $s; // Outputs: Stream(Number)
-     * $s = Stream::of([1, 2, 3]);
-     * echo $s; // Outputs: Stream(List)
-     * $s = Stream::of(Error::of('Ooops'));
-     * echo $s; // Outputs: Stream(Error)
-     * ```
+     * Returns the type of contained data in the stream.
      *
-     * @signature Stream(*) -> String
-     * @return string
-     */
-    public function __toString()
-    {
-        return "Stream({$this->type()})";
-    }
-
-    /**
-     * Returns the type of the contained data after applying operations.
-     * ```php
-     * Stream::of(null))->type(); // 'Null'
-     * Stream::of(true))->type(); // 'Boolean'
-     * Stream::of(5.2))->type(); // 'Number'
-     * Stream::of('Foo'))->type(); // 'String'
-     * Stream::of(fopen('php://memory', "r")))->type(); // 'Resource'
-     * Stream::of(F\map()))->type(); // 'Function'
-     * Stream::of([1, 2, 3]))->type(); // 'List'
-     * Stream::of(['foo' => 'bar']))->type(); // 'Array'
-     * Stream::of((object)['foo' => 'bar']))->type(); // 'Object'
-     * ```
-     *
-     * @signature Stream(a) -> String
      * @return string
      */
     public function type()
     {
-        return ucfirst($this->type);
+        return get('type', $this->stream);
     }
 
     /**
-     * Applies operations and returns the resulting data.
-     * ```php
-     * Stream::of('Hello')->get(); // 'Hello'
+     * Apply all the transformations in the stream and returns the result.
      *
-     * ```
-     *
-     * @signature Stream(a) -> a
      * @return mixed
+     * @throws Tarsana\Functional\Error
      */
-    public function get ()
+    public function result()
     {
-        $data = $this->data;
-
-        foreach ($this->transformations as $transformation) {
-            $callable = static::$operations[$transformation['operation']]['callable'];
-            $args = append($data, $transformation['args']);
-            $data = apply($callable, $args);
-            if ($data instanceof Error) {
-                $name = $transformation['operation'];
-                $args = toString($args);
-                $msg  = $data->getMessage();
-                $data = Error::of(
-                    "Stream: Operation '{$name}' called with arguments {$args} and returned error with message \"{$msg}\"",
-                    0,
-                    $data
-                );
-                break;
-            }
-        }
-
-        if ($this->throwsException && $data instanceof Error) {
-            throw $data;
-        }
-
-        return $data;
+        return get('result', _stream_resolve($this->stream));
     }
 
+    /**
+     * Adds a new transformation to the stream.
+     *
+     * @param  string $name The name of the operation
+     * @param  array  $args
+     * @return Tarsana\Functional\Stream
+     */
     public function __call($name, $args)
     {
-        if (! static::hasOperation($name)) {
-            $this->throwError('unknown-operation', $name);
-        }
-
-        $transformation = [
-            'operation' => $name,
-            'args' => $args
-        ];
-
-        $types = append($this->type, map(pipe(type(), 'trim', lowerCase()),  $args));
-
-        return new Stream(
-            $this->data,
-            append($transformation, $this->transformations),
-            static::returnTypeOf($name, $types),
-            $this->throwsException
-        );
-    }
-
-    public function throwExceptionWhenError()
-    {
-        return new Stream(
-            $this->data,
-            $this->transformations,
-            $this->type,
-            true
-        );
-    }
-
-    public function then($callable)
-    {
-        // ...
+        return new Stream(_stream_apply_operation($name, $args, $this->stream));
     }
 
 }
+
+Stream::init();

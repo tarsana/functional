@@ -72,6 +72,7 @@ class ObjectTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$nameOfFirst = F\getPath([0, 'name']);
 		$this->assertEquals('foo', $nameOfFirst($data));
 		$this->assertEquals(2, F\getPath([2, 'scores', 1], $data));
+		$this->assertEquals(null, F\getPath([2, 'foo', 1], $data));
 	}
 
 	public function test_set() {
@@ -80,6 +81,17 @@ class ObjectTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals(['name' => 'test', 'complete' => true], $done($task));
 		$this->assertEquals((object) ['name' => 'test', 'complete' => true], $done((object) $task));
 		$this->assertEquals(['name' => 'test', 'complete' => false, 'description' => 'Some text here'], F\set('description', 'Some text here', $task));
+	}
+
+	public function test_update() {
+		$person = [
+		    'name' => 'foo',
+		    'age' => 11
+		];
+		$growUp = F\update('age', F\plus(1));
+		$this->assertEquals(['name' => 'foo', 'age' => 12], $growUp($person));
+		// updating a missing attribute has no effect
+		$this->assertEquals(['name' => 'foo', 'age' => 11], F\update('wow', F\plus(1), $person));
 	}
 
 	public function test_satisfies() {

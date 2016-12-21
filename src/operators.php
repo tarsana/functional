@@ -14,6 +14,7 @@
  * $isTrue(true); //=> true
  * ```
  *
+ * @stream
  * @signature Boolean -> Boolean -> Boolean
  * @param  bool $a
  * @param  bool $b
@@ -36,6 +37,7 @@ function and_() {
  * $isTrue(true); //=> true
  * ```
  *
+ * @stream
  * @signature Boolean -> Boolean -> Boolean
  * @param  bool $a
  * @param  bool $b
@@ -56,6 +58,7 @@ function or_() {
  * F\map(F\not(), [true, false, true]); //=> [false, true, false]
  * ```
  *
+ * @stream
  * @signature Boolean -> Boolean
  * @param  bool $x
  * @return bool
@@ -75,6 +78,7 @@ function not() {
  * F\eq('10', 10); //=> true
  * ```
  *
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -94,6 +98,7 @@ function eq() {
  * F\notEq('Hi', 'Hello'); //=> true
  * ```
  *
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -113,6 +118,7 @@ function notEq() {
  * ```php
  * F\eqq(10, '10'); //=> false
  * ```
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -133,6 +139,7 @@ function eqq() {
  * F\notEqq(10, '10'); //=> true
  * ```
  *
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -164,6 +171,7 @@ function notEqq() {
  * F\equals($a, $b); //=> true
  * ```
  *
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -200,6 +208,33 @@ function equals() {
     return _apply($equals, func_get_args());
 }
 
+/**
+ * Returns `true` if the results of applying `$fn` to `$a` and `$b` are deeply equal.
+ *
+ * ```php
+ * $headEquals = F\equalBy(F\head());
+ * $headEquals([1, 2], [1, 3]); //=> true
+ * $headEquals([3, 2], [1, 3]); //=> false
+ *
+ * $sameAge = F\equalBy(F\get('age'));
+ * $foo = ['name' => 'foo', 'age' => 11];
+ * $bar = ['name' => 'bar', 'age' => 13];
+ * $baz = ['name' => 'baz', 'age' => 11];
+ * $sameAge($foo, $bar); //=> false
+ * $sameAge($foo, $baz); //=> true
+ * ```
+ *
+ * @stream
+ * @signature (a -> b) -> a -> a -> Boolean
+ * @return [type] [description]
+ */
+function equalBy() {
+    static $equalBy = false;
+    $equalBy = $equalBy ?: curry(function($fn, $a, $b) {
+        return equals($fn($a), $fn($b));
+    });
+    return _apply($equalBy, func_get_args());
+}
 
 /**
  * Returns `$a < $b`.
@@ -209,6 +244,7 @@ function equals() {
  * F\lt(5, 5); //=> false
  * ```
  *
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -230,6 +266,7 @@ function lt() {
  * F\lte(5, 5); //=> true
  * ```
  *
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -251,6 +288,7 @@ function lte() {
  * F\gt(5, 5); //=> false
  * ```
  *
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -272,6 +310,7 @@ function gt() {
  * F\gte(5, 5); //=> true
  * ```
  *
+ * @stream
  * @signature * -> * -> Boolean
  * @param  mixed $a
  * @param  mixed $b
@@ -284,3 +323,4 @@ function gte() {
     });
     return _apply($gte, func_get_args());
 }
+

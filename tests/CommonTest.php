@@ -21,6 +21,14 @@ class CommonTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		// Anything else is 'Unknown'
 	}
 
+	public function test_is() {
+		$isNumber = F\is('Number');
+		$this->assertEquals(true, $isNumber(5));
+		$this->assertEquals(false, $isNumber('5'));
+		$this->assertEquals(true, F\is('Any', '5'));
+		$this->assertEquals(true, F\is('Any', [1, 2, 3]));
+	}
+
 	public function test_toString() {
 		$this->assertEquals('53', F\toString(53));
 		$this->assertEquals('true', F\toString(true));

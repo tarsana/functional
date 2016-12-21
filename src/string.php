@@ -12,6 +12,7 @@
  * $words('Hello World'); //=> ['Hello', 'World']
  * ```
  *
+ * @stream
  * @signature String -> String -> [String]
  * @param string $delimiter
  * @param string $string
@@ -31,6 +32,7 @@ function split() {
  * $sentence(['Hello', 'World']); //=> 'Hello World'
  * ```
  *
+ * @stream
  * @signature String -> [String] -> String
  * @param string $glue
  * @param array $pieces
@@ -55,6 +57,7 @@ function join() {
  * F\replace(['a', 'e', ' '], ['x', 'y', ''], $string); //=> 'xbcdyf'
  * ```
  *
+ * @stream
  * @signature String|[String] -> String|[String] -> String -> String
  * @param  string $search
  * @param  string $replacement
@@ -76,6 +79,7 @@ function replace() {
  * $alpha($string); //=> 'AbFd'
  * ```
  *
+ * @stream
  * @signature String -> String -> String -> String
  * @param  string $pattern
  * @param  string $replacement
@@ -95,6 +99,7 @@ function regReplace() {
  * F\upperCase('hello'); //=> 'HELLO'
  * ```
  *
+ * @stream
  * @signature String -> String
  * @param  string $string
  * @return string
@@ -112,6 +117,7 @@ function upperCase() {
  * F\lowerCase('HeLLO'); //=> 'hello'
  * ```
  *
+ * @stream
  * @signature String -> String
  * @param  string $string
  * @return string
@@ -129,6 +135,7 @@ function lowerCase() {
  * F\camelCase('Yes, we can! 123'); //=> 'yesWeCan123'
  * ```
  *
+ * @stream
  * @signature String -> String
  * @param  string $string
  * @return string
@@ -155,6 +162,7 @@ function camelCase() {
  * $underscoreCase('IAm-Happy'); //=> 'i_am_happy'
  * ```
  *
+ * @stream
  * @signature String -> String -> String
  * @param  string $delimiter
  * @param  string $string
@@ -184,6 +192,7 @@ function snakeCase() {
  * $http('gitbub.com'); //=> false
  * ```
  *
+ * @stream
  * @signature String -> String -> Boolean
  * @param  string $token
  * @param  string $string
@@ -209,6 +218,7 @@ function startsWith() {
  * $dotCom('php.net'); //=> false
  * ```
  *
+ * @stream
  * @signature String -> String -> Boolean
  * @param  string $token
  * @param  string $string
@@ -234,6 +244,7 @@ function endsWith() {
  * $numeric('12a3.43'); //=> false
  * ```
  *
+ * @stream
  * @signature String -> String -> Boolean
  * @param  string $pattern
  * @param  string $string
@@ -257,6 +268,7 @@ function test() {
  * $numbers('12 is 4 times 3'); //=> ['12', '4', '3']
  * ```
  *
+ * @stream
  * @signature String -> String -> [String]
  * @param  string $pattern
  * @param  string $string
@@ -281,6 +293,7 @@ function match() {
  * $spaces('12 is 4 times 3'); //=> 4
  * ```
  *
+ * @stream
  * @signature String -> String -> Number
  * @param  string $token
  * @param  string $text
@@ -307,6 +320,7 @@ function occurences() {
  * $names('Foo "Bar Baz" (Some other name)'); //=> ['Foo', '"Bar Baz"', '(Some other name)']
  * ```
  *
+ * @stream
  * @signature String -> String -> String -> [String]
  * @param  string $surrounders
  * @param  string $separator

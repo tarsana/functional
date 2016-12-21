@@ -2,9 +2,11 @@
 
 Generic common functions.
 
-- [type](#type) Gets the type of the given argument.
+- [type](#type) - Gets the type of the given argument.
 
-- [toString](#tostring) Converts a variable to its string value.
+- [is](#is) - Checks if a variable has a specific type.
+
+- [toString](#tostring) - Converts a variable to its string value.
 
 # type
 
@@ -33,6 +35,26 @@ F\type(['name' => 'Foo', 'Hello', 'Mixed']); //=> 'Array'
 F\type(fopen('php://temp', 'w')); //=> 'Resource'
 F\type(F\Error::of('Ooops !')); //=> 'Error'
 // Anything else is 'Unknown'
+```
+
+# is
+
+```php
+is(string $type, mixed $data) : boolean
+```
+
+```
+String -> * -> Boolean
+```
+
+Checks if a variable has a specific type.
+
+```php
+$isNumber = F\is('Number');
+$isNumber(5); //=> true
+$isNumber('5'); //=> false
+F\is('Any', '5'); //=> true
+F\is('Any', [1, 2, 3]); //=> true
 ```
 
 # toString
