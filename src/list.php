@@ -357,8 +357,6 @@ function anySatisfies() {
 function concat() {
     static $concat = false;
     $concat = $concat ?: curry(function($list1, $list2) {
-        $t1 = toString($list1);
-        $t2 = toString($list2);
         if (is_string($list1) && is_string($list2))
             return $list1 . $list2;
         return array_merge($list1, $list2);
