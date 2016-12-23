@@ -1169,6 +1169,7 @@ function pairsFrom() {
  * F\sort(F\gt(), $numbers); //=> [5, 5, 4, 3, 2, 1, 1]
  * ```
  *
+ * @stream
  * @signature (a -> a -> Boolean) -> [a] -> [a]
  * @param  callable $compare
  * @param  array $list

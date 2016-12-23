@@ -1,15 +1,3 @@
-# Stream Methods
-
-## _functions
-
-
-
-## _stream
-
-
-
-## functions
-
 
 
 ## operators
@@ -202,6 +190,8 @@ the array or null if no such element is found.
 on each element, and grouping the results according to values returned.
 
 - [pairsFrom](https://github.com/tarsana/functional/blob/master/docs/list.md#pairsFrom) - Makes list of pairs from two lists.
+
+- [sort](https://github.com/tarsana/functional/blob/master/docs/list.md#sort) - Returns a copy of the given list, ordered using the given comparaison function.
 
 
 ## math

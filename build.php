@@ -91,8 +91,8 @@ function build_init_stream_operations() {
         "<?php\n\nuse Tarsana\Functional as F;\n\nreturn F\map(F\apply(F\_f('_stream_operation')), [\n\t['then', 'Function -> Any -> Any', F\_f('_stream_then')],\n"
     );
     file_put_contents(
-        'docs/stream-methods.md',
-        "# Stream Methods"
+        'docs/stream-operations.md',
+        "# Stream Operations"
     );
 }
 
@@ -626,7 +626,9 @@ function generate_stream_methods($module) {
         $module->blocks
     );
     $methods = map(stream_method_link($module->name), $blocks);
-    $module->streamMethods = "\n\n## {$module->name}\n\n" . join("\n", $methods);
+    $module->streamMethods = (length($methods) > 0)
+        ? "\n\n## {$module->name}\n\n" . join("\n", $methods)
+        : '';
     return $module;
 }
 
@@ -666,7 +668,7 @@ function process_of($fns) {
  */
 function log() {
     $log = function($something) {
-        var_dump($something);
+        echo toString($something);
         return $something;
     };
     return apply(curry($log), func_get_args());

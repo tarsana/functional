@@ -21,8 +21,6 @@ Functional programming library for Tarsana
 
 - [Tests](#tests)
 
-- [Contribution Guide](#contribution-guide)
-
 - [Changes Log](#changes-log)
 
 
@@ -65,13 +63,15 @@ The main features of this library are:
 
 - [Ramda](http://ramdajs.com/) like functional API with [curry()](https://github.com/tarsana/functional/blob/master/docs/functions.md#curry) and [__()](https://github.com/tarsana/functional/blob/master/docs/functions.md#__).
 
+- **100+** Functions covered with **140+** Tests Cases containing **390+** assertions.
+
 - All functions are **cuuried** out of the box.
 
 - No dependencies !
 
 - Supporting PHP versions since **5.4**
 
-- Flexible [Stream](https://github.com/tarsana/functional/blob/master/docs/Stream.md) class.
+- Flexible [Stream](https://github.com/tarsana/functional/blob/master/docs/stream.md) class.
 
 # Functions
 
@@ -97,7 +97,7 @@ Functions are grouped into modules
 
 We can use classes to define Types and Containers as long as they are **immutable** and have **pure methods**. Defining a container as a class gives us a fluent API and elegant code.
 
-The main class defined in this library is `Stream`. It's a data container with lazy evaluation and type errors detection. It will allow you to write code like the following:
+The main class defined in this library is `Stream`. It's an immutable data container with lazy evaluation and type errors detection. It will allow you to write code like the following:
 
 ```php
 <?php
@@ -165,17 +165,13 @@ Array
 )
 ```
 
-[Click here to learn more about Stream](https://github.com/tarsana/functional/blob/master/docs/Stream.md)
+[Click here to learn more about Stream](https://github.com/tarsana/functional/blob/master/docs/stream.md)
 
 There is also the `Tarsana\Functional\Error` class which is just extending the default `Exception` class and providing a static method `Error::of('msg')` to create new errors without using the `new` operator.
 
 # Tests
 
 All tests are under the `tests` directory. they can be run using `phpunit`.
-
-# Contribution Guide
-
-Please consider taking a look at the [Contribution Guide](https://github.com/tarsana/functional/blob/master/Contribution.md) before doing a Pull Request.
 
 # Changes Log
 
@@ -189,7 +185,7 @@ Please consider taking a look at the [Contribution Guide](https://github.com/tar
 
 - New build script to generate docs and some unit tests.
 
-- Stream class rewritten to support custom operations.
+- Stream class rewritten to support custom operations. `get()` is now called `result()` to avoid conflict with [get()](https://github.com/tarsana/functional/blob/master/docs/object.md#get).
 
 **Version 1.1.0**
 
