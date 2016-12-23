@@ -75,5 +75,26 @@ class FunctionsTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals(false, $alwaysFlase(1));
 		$this->assertEquals(false, $alwaysFlase(null));
 	}
+
+	public function test_complement() {
+		$isOdd = function($number) {
+		    return 1 == $number % 2;
+		};
+		$isEven = F\complement($isOdd);
+		$this->assertEquals(false, $isEven(5));
+		$this->assertEquals(true, $isEven(8));
+	}
+
+	public function test_comparator() {
+		$users = [
+		    ['name' => 'foo', 'age' => 21],
+		    ['name' => 'bar', 'age' => 11],
+		    ['name' => 'baz', 'age' => 15]
+		];
+		usort($users, F\comparator(function($a, $b){
+		    return $a['age'] < $b['age'];
+		}));
+		$this->assertEquals(['bar', 'baz', 'foo'], F\map(F\get('name'), $users));
+	}
 }
 

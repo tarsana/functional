@@ -210,4 +210,66 @@ function any() {
     };
 }
 
-// TODO: complement :: (a -> Boolean) -> (a -> Boolean)
+/**
+ * Takes a function `f` and returns a function `g` so that if `f` returns
+ * `x` for some arguments; `g` will return `! x` for the same arguments.
+ *
+ * Note that `complement($fn) == pipe($fn, not())`.
+ * ```php
+ * $isOdd = function($number) {
+ *     return 1 == $number % 2;
+ * };
+ *
+ * $isEven = F\complement($isOdd);
+ *
+ * $isEven(5); //=> false
+ * $isEven(8); //=> true
+ * ```
+ *
+ * @signature (* -> ... -> *) -> (* -> ... -> Boolean)
+ * @param  callable $fn
+ * @return callable
+ */
+function complement() {
+    static $complement = false;
+    $complement = $complement ?: curry(function($fn) {
+        return pipe($fn, not());
+    });
+    return _apply($complement, func_get_args());
+}
+
+/**
+ * Takes a function telling if the first argument is less then the second, and return a compare function.
+ *
+ * A compare function returns `-1`, `0`, or `1` if the first argument is considered
+ * to be respectively less than, equal to, or greater than the second.
+ * ```php
+ * $users = [
+ *     ['name' => 'foo', 'age' => 21],
+ *     ['name' => 'bar', 'age' => 11],
+ *     ['name' => 'baz', 'age' => 15]
+ * ];
+ *
+ * usort($users, F\comparator(function($a, $b){
+ *     return $a['age'] < $b['age'];
+ * }));
+ *
+ * F\map(F\get('name'), $users); //=> ['bar', 'baz', 'foo']
+ * ```
+ *
+ * @signature (a -> a -> Boolean) -> (a -> a -> Number)
+ * @param  callable $fn
+ * @return callable
+ */
+function comparator() {
+    static $comparator = false;
+    $comparator = $comparator ?: curry(function($fn) {
+        return function($a, $b) use($fn) {
+            if ($fn($a, $b)) return -1;
+            if ($fn($b, $a)) return 1;
+            return 0;
+        };
+    });
+    return _apply($comparator, func_get_args());
+}
+

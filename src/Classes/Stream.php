@@ -127,6 +127,16 @@ class Stream {
         return new Stream(_stream_apply_operation($name, $args, $this->stream));
     }
 
+    /**
+     * Returns the string representation of the stream.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return "[Stream of {$this->type()}]";
+    }
+
 }
 
 Stream::init();

@@ -185,7 +185,7 @@ Please consider taking a look at the [Contribution Guide](https://github.com/tar
 
 - New modules: Object and Common.
 
-- Total of **106** Functions
+- **108** Functions, **143** Tests with **393** assertions.
 
 - New build script to generate docs and some unit tests.
 
