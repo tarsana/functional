@@ -130,9 +130,7 @@ function toString () {
             break;
             case 'List':
                 return '[' . join(', ', map(toString(), $something)) . ']';
-            break;
             case 'Error':
-                return "[Error: {$something->getMessage()}]";
             case 'Stream':
                 return $something->__toString();
             case 'Object':
@@ -155,10 +153,9 @@ function toString () {
  *     ->split(' ')
  *     ->reverse()
  *     ->join(' ');
- * $s->get(); //=> 'Hello World !'
+ * $s->result(); //=> 'Hello World !'
  * ```
  *
- * @ignore
  * @signature a -> Stream(a)
  * @param  mixed $data
  * @return Stream

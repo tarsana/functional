@@ -1147,3 +1147,7 @@ function pairsFrom() {
     });
     return _apply($pairsFrom, func_get_args());
 }
+
+// TODO: sort :: [a] -> [a]
+// TODO: sortUsing :: (a -> Number) -> [a] -> [a]
+// TODO: sortBy :: k -> [{k : v}] -> [[{k : v}]]

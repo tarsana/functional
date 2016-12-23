@@ -209,3 +209,5 @@ function any() {
         }, false, $predicates);
     };
 }
+
+// TODO: complement :: (a -> Boolean) -> (a -> Boolean)

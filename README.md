@@ -9,120 +9,193 @@ Functional programming library for Tarsana
 
 # Table of Contents
 
-- [Installation](#installation)
+- [Introduction](#introduction)
 
-- [Real Use Case](#real-use-case)
+- [Get Started](#get-started)
 
-- [Streams](#streams)
+- [Features](#features)
 
-- [Reference Documentation](#reference-documentation)
+- [Functions](#functions)
 
-# Installation
+- [Classes](#classes)
 
-Please use **composer** to install this library:
+- [Tests](#tests)
+
+- [Contribution Guide](#contribution-guide)
+
+- [Changes Log](#changes-log)
+
+
+# Introduction
+
+**What is that ?**
+
+This is a [Functional Programming](https://en.wikipedia.org/wiki/Functional_programming) library for PHP.
+
+**Why Functional Programming ? Isn't Object Oriented good enough ?**
+
+Well, it dependes on your needs. FP and OOP are very different. Personally I like FP because the code is easier to write, test and maintain; even if it runs generally slower then the equivalent procedural or OOP code.
+
+**Just Googled and found many FP libraries for PHP. Why are you writing a new one ?**
+
+This library is inspired by [Ramda](http://ramdajs.com/) which is a FP library for Javascript. Ramda was created after [underscore](http://underscorejs.org/) and [lodash](https://lodash.com/) and it has a better Functional API then others. [This talk explains how](https://www.youtube.com/watch?v=m3svKOdZijA&app=desktop). So I wanted a library with the same philisophy as Ramda supporting old versions of PHP (from version 5.4).
+
+# Get Started
+
+You can install this library using [composer](https://getcomposer.org/)
 
 ```
 composer require tarsana/functional
 ```
 
-# Real use case
+Then you can use it by importing the `Tarsana\Functional` namespace.
 
-The script I am using to generate the [Reference Documentation](#reference-documentation) and **Unit Tests** files for this library is an example of usage: [Check the code here](https://github.com/tarsana/functional/blob/master/build.php)
-
-# Streams
-
-A **Stream** is a container of data that allow applying serie of operations on the data in a lazy way. You start by creating the stream by giving the initial data:
 ```php
-$s = Stream::of('Hello World'); // Stream('Hello World')
-$s = Stream::of('Hello World', 'Foo', 58); // Stream(['Hello World', 'Foo', 58])
-```
-Once you have a Stream, you can start applying operations on it. Each call returns a new Stream **(Streams are immutable)** and all operation calls are **pure** (No side effect !). Because operations are not applying immediately but are just saved to be applied when `get()` is called !
-```php
-use Tarsana\Functional\Stream;
 use Tarsana\Functional as F;
+// all functions are defined in this namespace
+
+$incrementAll = F\map(F\plus(1));
+
+$incrementAll([1, 2, 3]); //=> [2, 3, 4]
+```
+
+# Features
+
+The main features of this library are:
+
+- [Ramda](http://ramdajs.com/) like functional API with [curry()](https://github.com/tarsana/functional/blob/master/docs/functions.md#curry) and [__()](https://github.com/tarsana/functional/blob/master/docs/functions.md#__).
+
+- All functions are **cuuried** out of the box.
+
+- No dependencies !
+
+- Supporting PHP versions since **5.4**
+
+- Flexible [Stream](https://github.com/tarsana/functional/blob/master/docs/Stream.md) class.
+
+# Functions
+
+Functions are grouped into modules
+
+- [Functions](https://github.com/tarsana/functional/blob/master/docs/functions.md)
+
+- [List](https://github.com/tarsana/functional/blob/master/docs/list.md)
+
+- [Object](https://github.com/tarsana/functional/blob/master/docs/object.md)
+
+- [String](https://github.com/tarsana/functional/blob/master/docs/string.md)
+
+- [Math](https://github.com/tarsana/functional/blob/master/docs/math.md)
+
+- [Operators](https://github.com/tarsana/functional/blob/master/docs/operators.md)
+
+- [Common](https://github.com/tarsana/functional/blob/master/docs/common.md)
+
+# Classes
+
+**Why classes ? Isn't that a FUNCTIONAL library ?**
+
+We can use classes to define Types and Containers as long as they are **immutable** and have **pure methods**. Defining a container as a class gives us a fluent API and elegant code.
+
+The main class defined in this library is `Stream`. It's a data container with lazy evaluation and type errors detection. It will allow you to write code like the following:
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use Tarsana\Functional as F;
+use Tarsana\Functional\Stream;
+
+// Define new Stream operations
+Stream::operation('contents', 'String -> String', 'file_get_contents');
 
 $s = Stream::of('temp.txt') // initializing the Stream with the filename
-    ->then('file_get_contents') // Reading the content of the file
-    ->then(F\regReplace('/[^a-zA-Z0-9 ]/', ' ')) // removing non-alphanumeric chars
-    ->then(F\split(' ')) // Splitting each line into words and concatenating results
+    ->contents() // Reading the content of the file using the operation we defined
+    ->regReplace('/[^a-zA-Z0-9 ]/', ' ') // removing non-alphanumeric chars
+    ->split(' ') // Splitting text into words
     ->filter(F\notEq('')) // removing empty words
-    ->reduce(function($words, $w){
-        if (!isset($words[$w]))
-            $words[$w] = 0;
-        $words[$w] ++;
-        return $words;
+    ->map(F\lowerCase()) // makes all words in lower case
+    ->reduce(function($words, $w) {
+        return F\has($w, $words)
+            ? F\update($w, F\plus(1), $words)
+            : F\set($w, 1, $words);
     }, []); // transform the content to an array associating each word to occurences
 
-```
-Till now no operation was really applied, this means that the file is not yet read !
-
-Now when we really need the result on the operations which can have side effects (Reading the file in this case). We call the `result()` method; It will run all the operations and gets the final result.
-
-Assuming that the file `temp.txt` contains the following:
-
-```
-Once you have a Stream, you can start applying operations on it.
-Each call returns a new Stream **(Streams are immutable)** and all operation calls are **pure**
-(No side effect !). Because operations are not applying immediately
-but are just saved to be applied when `result()` is called !
-
-```
-Doing
-```php
 print_r($s->result());
 ```
-Will output
+
+Then if the file `temp.txt` contains:
+
+```
+We can use classes to define Types and Containers as long as they are **immutable** and have **pure methods**. Defining a container as a class gives us a fluent API and elegant code.
+```
+
+The code above will output:
+
 ```
 Array
 (
-    [Once] => 1
-    [you] => 2
-    [have] => 1
-    [a] => 2
-    [Stream] => 2
+    [we] => 1
     [can] => 1
-    [start] => 1
-    [applying] => 2
-    [operations] => 2
-    [on] => 1
-    [it] => 1
-    [Each] => 1
-    [call] => 1
-    [returns] => 1
-    [new] => 1
-    [Streams] => 1
-    [are] => 4
-    [immutable] => 1
-    [and] => 1
-    [all] => 1
-    [operation] => 1
-    [calls] => 1
-    [pure] => 1
-    [No] => 1
-    [side] => 1
-    [effect] => 1
-    [Because] => 1
-    [not] => 1
-    [immediately] => 1
-    [but] => 1
-    [just] => 1
-    [saved] => 1
+    [use] => 1
+    [classes] => 1
     [to] => 1
-    [be] => 1
-    [applied] => 1
-    [when] => 1
-    [result] => 1
-    [is] => 1
-    [called] => 1
+    [define] => 1
+    [types] => 1
+    [and] => 3
+    [containers] => 1
+    [as] => 3
+    [long] => 1
+    [they] => 1
+    [are] => 1
+    [immutable] => 1
+    [have] => 1
+    [pure] => 1
+    [methods] => 1
+    [defining] => 1
+    [a] => 3
+    [container] => 1
+    [class] => 1
+    [gives] => 1
+    [us] => 1
+    [fluent] => 1
+    [api] => 1
+    [elegant] => 1
+    [code] => 1
 )
 ```
 
-[Check the full list of available methods](https://github.com/tarsana/functional/blob/master/docs/Stream.md)
+[Click here to learn more about Stream](https://github.com/tarsana/functional/blob/master/docs/Stream.md)
 
-# Reference Documentation
+There is also the `Tarsana\Functional\Error` class which is just extending the default `Exception` class and providing a static method `Error::of('msg')` to create new errors without using the `new` operator.
 
-[Click here to browse the documentation](https://github.com/tarsana/functional/blob/master/docs)
+# Tests
 
-# Feedbacks & Contributions
+All tests are under the `tests` directory. they can be run using `phpunit`.
 
-Any feedback or contribution is welcome. Enjoy !
+# Contribution Guide
+
+Please consider taking a look at the [Contribution Guide](https://github.com/tarsana/functional/blob/master/Contribution.md) before doing a Pull Request.
+
+# Changes Log
+
+**Version 2.0.0**
+
+- `cypresslab/php-curry` dependency removed.
+
+- New modules: Object and Common.
+
+- Total of **106** Functions
+
+- New build script to generate docs and some unit tests.
+
+- Stream class rewritten to support custom operations.
+
+**Version 1.1.0**
+
+- Fix `remove` bug: made it curried.
+
+**Version 1.0.0**
+
+- 5 modules (Functions, Operators, String, List, Math) containing **64 functions**.
+- Stream: a lazy data container
