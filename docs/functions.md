@@ -21,6 +21,11 @@ returns `true` only if all predicates are satisfied.
 - [any](#any) - Takes many predicates and returns a new predicate that
 returns `true` if any of the predicates is satisfied.
 
+- [complement](#complement) - Takes a function `f` and returns a function `g` so that if `f` returns
+`x` for some arguments; `g` will return `! x` for the same arguments.
+
+- [comparator](#comparator) - Takes a function telling if the first argument is less then the second, and return a compare function.
+
 # curry
 
 ```php
@@ -202,5 +207,58 @@ $test('foo'); //=> false
 $alwaysFlase = F\any();
 $alwaysFlase(1); //=> false
 $alwaysFlase(null); //=> false
+```
+
+# complement
+
+```php
+complement(callable $fn) : callable
+```
+
+```
+(* -> ... -> *) -> (* -> ... -> Boolean)
+```
+
+Takes a function `f` and returns a function `g` so that if `f` returns
+`x` for some arguments; `g` will return `! x` for the same arguments.
+
+Note that `complement($fn) == pipe($fn, not())`.
+```php
+$isOdd = function($number) {
+    return 1 == $number % 2;
+};
+
+$isEven = F\complement($isOdd);
+
+$isEven(5); //=> false
+$isEven(8); //=> true
+```
+
+# comparator
+
+```php
+comparator(callable $fn) : callable
+```
+
+```
+(a -> a -> Boolean) -> (a -> a -> Number)
+```
+
+Takes a function telling if the first argument is less then the second, and return a compare function.
+
+A compare function returns `-1`, `0`, or `1` if the first argument is considered
+to be respectively less than, equal to, or greater than the second.
+```php
+$users = [
+    ['name' => 'foo', 'age' => 21],
+    ['name' => 'bar', 'age' => 11],
+    ['name' => 'baz', 'age' => 15]
+];
+
+usort($users, F\comparator(function($a, $b){
+    return $a['age'] < $b['age'];
+}));
+
+F\map(F\get('name'), $users); //=> ['bar', 'baz', 'foo']
 ```
 

@@ -18,6 +18,7 @@ class CommonTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals('Array', F\type(['name' => 'Foo', 'Hello', 'Mixed']));
 		$this->assertEquals('Resource', F\type(fopen('php://temp', 'w')));
 		$this->assertEquals('Error', F\type(F\Error::of('Ooops !')));
+		$this->assertEquals('Stream', F\type(F\Stream::of('Hello')));
 		// Anything else is 'Unknown'
 	}
 
@@ -39,6 +40,7 @@ class CommonTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals('{}', F\toString(new \stdClass));
 		$this->assertEquals('[Function]', F\toString(function(){}));
 		$this->assertEquals('[Error: Ooops]', F\toString(F\Error::of('Ooops')));
+		$this->assertEquals('[Stream of String]', F\toString(F\Stream::of('Hello')));
 		$this->assertEquals('[Resource]', F\toString(fopen('php://temp', 'r')));
 		$this->assertEquals('["hi", "hello", "yo"]', F\toString(['hi', 'hello', 'yo']));
 		$this->assertEquals('{object: null, numbers: [1, 2, 3], 0: "message"}', F\toString([
@@ -46,6 +48,14 @@ class CommonTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		    'numbers' => [1, 2, 3],
 		    'message'
 		]));
+	}
+
+	public function test_s() {
+		$s = F\s('! World Hello')
+		    ->split(' ')
+		    ->reverse()
+		    ->join(' ');
+		$this->assertEquals('Hello World !', $s->result());
 	}
 }
 

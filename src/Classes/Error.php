@@ -22,4 +22,14 @@ class Error extends \Exception {
     {
         return new Error($message, $code, $error);
     }
+
+    /**
+     * Returns a string representation of the error.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return "[Error: {$this->getMessage()}]";
+    }
 }

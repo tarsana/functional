@@ -282,5 +282,11 @@ class ListTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals([[1, 'foo'], [3, 'bar']], F\pairsFrom([1, 3], ['foo', 'bar', 'baz']));
 		$this->assertEquals([], F\pairsFrom([], ['foo', 'bar', 'baz']));
 	}
+
+	public function test_sort() {
+		$numbers = [4, 5, 1, 3, 1, 2, 5];
+		$this->assertEquals([1, 1, 2, 3, 4, 5, 5], F\sort(F\lt(), $numbers));
+		$this->assertEquals([5, 5, 4, 3, 2, 1, 1], F\sort(F\gt(), $numbers));
+	}
 }
 

@@ -109,6 +109,7 @@ return F\map(F\apply(F\_f('_stream_operation')), [
 	['unique', 'List -> List', F\unique()],
 	['groupBy', 'Function -> List -> Object|Array', F\groupBy()],
 	['pairsFrom', 'List -> List -> List', F\pairsFrom()],
+	['sort', 'Function -> List -> List', F\sort()],
 	['plus', 'Number -> Number -> Number', F\plus()],
 	['minus', 'Number -> Number -> Number', F\minus()],
 	['negate', 'Number -> Number', F\negate()],

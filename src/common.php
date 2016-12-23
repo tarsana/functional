@@ -22,6 +22,7 @@
  * F\type(['name' => 'Foo', 'Hello', 'Mixed']); //=> 'Array'
  * F\type(fopen('php://temp', 'w')); //=> 'Resource'
  * F\type(F\Error::of('Ooops !')); //=> 'Error'
+ * F\type(F\Stream::of('Hello')); //=> 'Stream'
  * // Anything else is 'Unknown'
  * ```
  *
@@ -33,7 +34,7 @@ function type() {
     static $type = false;
     $type = $type ?: curry(function($data) {
         if ($data instanceof Error) return 'Error';
-        if ($data instanceof Stream) return "Stream";
+        if ($data instanceof Stream) return 'Stream';
         if (is_callable($data)) return 'Function';
         switch (gettype($data)) {
             case 'boolean':
@@ -98,6 +99,7 @@ function is() {
  * F\toString(new \stdClass); //=> '{}'
  * F\toString(function(){}); //=> '[Function]'
  * F\toString(F\Error::of('Ooops')); //=> '[Error: Ooops]'
+ * F\toString(F\Stream::of('Hello')); //=> '[Stream of String]'
  * F\toString(fopen('php://temp', 'r')); //=> '[Resource]'
  * F\toString(['hi', 'hello', 'yo']); //=> '["hi", "hello", "yo"]'
  * F\toString([
@@ -130,9 +132,7 @@ function toString () {
             break;
             case 'List':
                 return '[' . join(', ', map(toString(), $something)) . ']';
-            break;
             case 'Error':
-                return "[Error: {$something->getMessage()}]";
             case 'Stream':
                 return $something->__toString();
             case 'Object':
@@ -155,10 +155,9 @@ function toString () {
  *     ->split(' ')
  *     ->reverse()
  *     ->join(' ');
- * $s->get(); //=> 'Hello World !'
+ * $s->result(); //=> 'Hello World !'
  * ```
  *
- * @ignore
  * @signature a -> Stream(a)
  * @param  mixed $data
  * @return Stream

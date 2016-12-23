@@ -8,6 +8,8 @@ Generic common functions.
 
 - [toString](#tostring) - Converts a variable to its string value.
 
+- [s](#s) - Creates a `Stream` containing the provided data.
+
 # type
 
 ```php
@@ -34,6 +36,7 @@ F\type(['Hello', 'World', 123, true]); //=> 'List'
 F\type(['name' => 'Foo', 'Hello', 'Mixed']); //=> 'Array'
 F\type(fopen('php://temp', 'w')); //=> 'Resource'
 F\type(F\Error::of('Ooops !')); //=> 'Error'
+F\type(F\Stream::of('Hello')); //=> 'Stream'
 // Anything else is 'Unknown'
 ```
 
@@ -79,6 +82,7 @@ F\toString([]); //=> '[]'
 F\toString(new \stdClass); //=> '{}'
 F\toString(function(){}); //=> '[Function]'
 F\toString(F\Error::of('Ooops')); //=> '[Error: Ooops]'
+F\toString(F\Stream::of('Hello')); //=> '[Stream of String]'
 F\toString(fopen('php://temp', 'r')); //=> '[Resource]'
 F\toString(['hi', 'hello', 'yo']); //=> '["hi", "hello", "yo"]'
 F\toString([
@@ -86,5 +90,25 @@ F\toString([
     'numbers' => [1, 2, 3],
     'message'
 ]); //=> '{object: null, numbers: [1, 2, 3], 0: "message"}'
+```
+
+# s
+
+```php
+s(mixed $data) : Stream
+```
+
+```
+a -> Stream(a)
+```
+
+Creates a `Stream` containing the provided data.
+
+```php
+$s = F\s('! World Hello')
+    ->split(' ')
+    ->reverse()
+    ->join(' ');
+$s->result(); //=> 'Hello World !'
 ```
 

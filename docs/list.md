@@ -94,6 +94,8 @@ on each element, and grouping the results according to values returned.
 
 - [pairsFrom](#pairsfrom) - Makes list of pairs from two lists.
 
+- [sort](#sort) - Returns a copy of the given list, ordered using the given comparaison function.
+
 # map
 
 ```php
@@ -921,5 +923,35 @@ F\pairsFrom([1, 2, 3], ['foo', 'bar', 'baz']); //=> [[1, 'foo'], [2, 'bar'], [3,
 F\pairsFrom([1, 2, 3], ['foo', 'bar']); //=> [[1, 'foo'], [2, 'bar']]
 F\pairsFrom([1, 3], ['foo', 'bar', 'baz']); //=> [[1, 'foo'], [3, 'bar']]
 F\pairsFrom([], ['foo', 'bar', 'baz']); //=> []
+```
+
+# sort
+
+```php
+sort(callable $compare, array $list) : array
+```
+
+```
+(a -> a -> Boolean) -> [a] -> [a]
+```
+
+Returns a copy of the given list, ordered using the given comparaison function.
+
+The `$compare` function should take two elements from the list and return `true`
+if the first element should be placed before the second element in the sorted
+list; and return `false` otherwise.
+
+**Note** This function is calling `usort` to sort elements, so:
+
+- if two elements `$a` and `$b` of the list are considered equal
+(ie `$compare($a, $b) == false` and `$compare($b, $a) == false`) then their
+order in the resulting array is undefined.
+
+- This function assigns new keys to the elements in array. It will remove any
+existing keys that may have been assigned, rather than just reordering the keys.
+```php
+$numbers = [4, 5, 1, 3, 1, 2, 5];
+F\sort(F\lt(), $numbers); //=> [1, 1, 2, 3, 4, 5, 5]
+F\sort(F\gt(), $numbers); //=> [5, 5, 4, 3, 2, 1, 1]
 ```
 
