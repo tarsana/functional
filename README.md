@@ -32,7 +32,7 @@ This is a [Functional Programming](https://en.wikipedia.org/wiki/Functional_prog
 
 **Why Functional Programming ? Isn't Object Oriented good enough ?**
 
-Well, it dependes on your needs. FP and OOP are very different. Personally I like FP because the code is easier to write, test and maintain; even if it runs generally slower then the equivalent procedural or OOP code.
+Well, it dependes on your needs. FP and OOP are very different. Personally I like FP because the code is easier to write, test and maintain; even if it runs generally slower than the equivalent procedural or OOP code.
 
 **Just Googled and found many FP libraries for PHP. Why are you writing a new one ?**
 

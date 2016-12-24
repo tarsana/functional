@@ -14,7 +14,7 @@
 
 ## Basic Usage
 
-1. Creating the Stream some initial data of any type:
+Creating the Stream some initial data of any type:
 
 ```php
 $s = Stream::of('Hello World');
@@ -22,7 +22,7 @@ $s = Stream::of('Hello World');
 
 **A Stream is a container:** it contains some data
 
-2. Adding operations to be applied to data:
+Adding operations to be applied to data:
 
 ```php
 $s = $s->lowerCase()
@@ -33,7 +33,7 @@ $s = $s->lowerCase()
 
 **Stream is lazy:** it doesn't apply operations immediately, it simply saves them
 
-3. Applying the operations and getting the result:
+Applying the operations and getting the result:
 
 ```php
 $result = $s->result();
