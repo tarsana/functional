@@ -79,9 +79,7 @@ Note that the returned types are the same returned by the function [type()](http
 
 `Stream` has defined operations such as `map`, `head`, `plus`, ... which are all based on functions defined in `Tarsana\Functional`.
 
-if the function accepts one argument like `lowerCase` or ``
-
-[Click here to see the full list of operations](https://github.com/tarsana/functional/blob/master/docs/stream-operations.md#type)
+[Click here to see the full list of operations](https://github.com/tarsana/functional/blob/master/docs/stream-operations.md)
 
 In addition to that list, you can use the `then()` method to apply custom functions to data
 

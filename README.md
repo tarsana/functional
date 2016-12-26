@@ -65,7 +65,7 @@ The main features of this library are:
 
 - **100+** Functions covered with **140+** Tests Cases containing **390+** assertions.
 
-- All functions are **cuuried** out of the box.
+- All functions are **curried** out of the box.
 
 - No dependencies !
 

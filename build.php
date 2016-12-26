@@ -162,7 +162,7 @@ function write_module($module) {
         file_put_contents('src/Internal/_stream_operations.php', $module->streamOperations, FILE_APPEND);
     }
     if ($module->streamMethods) {
-        file_put_contents('docs/stream-methods.md', $module->streamMethods, FILE_APPEND);
+        file_put_contents('docs/stream-operations.md', $module->streamMethods, FILE_APPEND);
     }
 }
 
