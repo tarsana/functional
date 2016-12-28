@@ -274,6 +274,26 @@ class StreamTest extends UnitTest {
         Stream::removeOperations('work', 'doIt');
     }
 
+    public function test_it_accepts_any_as_return_type() {
+        Stream::operation('stuff', 'Number -> Any', function($n) {
+            if ($n < 10)
+                return 1.2; // Number
+            if ($n < 50)
+                return 'Hello'; // String
+            return [1, 2, 3]; // List
+        });
+        Stream::operation('otherStuff', 'Number|List -> String', F\toString());
+
+        $this->assertEquals('1.2', Stream::of(1)->stuff()->otherStuff()->result());
+        $this->assertEquals('[1, 2, 3]', Stream::of(100)->stuff()->otherStuff()->result());
+
+        $s = Stream::of(33)->stuff()->otherStuff();
+
+        $this->assertErrorThrown(function() use($s) {
+            $s->result();
+        }, "Stream: operation 'otherStuff' could not be called with arguments types (String); expected types are (Number) or (List)");
+    }
+
     public function test_it_throws_exception_if_arguments_or_operation_are_invalid() {
         $increment = function($x) {
             return $x + 1;

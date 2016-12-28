@@ -172,11 +172,11 @@ class StreamTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		    ],
 		    'transformations' => [
 		        [
-		            'operation' => [
+		            'operations' => [[
 		                'name' => 'length',
 		                'signatures' => [['List', 'Number']],
 		                'fn' => 'count'
-		            ],
+		            ]],
 		            'args' => []
 		        ]
 		    ]
@@ -242,6 +242,24 @@ class StreamTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		    ['Any', 'String'],
 		    F\_stream_operation('fill', 'Number -> Any -> List', function(){})
 		));
+	}
+
+	public function test__stream_return_type_of_operation() {
+		$this->assertEquals('Number', F\_stream_return_type_of_operation(F\_stream_operation(
+		    'count', 'List -> Number'
+		)));
+		$this->assertEquals('String', F\_stream_return_type_of_operation(F\_stream_operation(
+		    'count', 'List ->Function -> String'
+		)));
+		$this->assertEquals('Any', F\_stream_return_type_of_operation(F\_stream_operation(
+		    'count', 'List ->Function -> Any'
+		)));
+	}
+
+	public function test__stream_merge_types() {
+		$this->assertEquals('Number', F\_stream_merge_types('Number', 'Number'));
+		$this->assertEquals('Any', F\_stream_merge_types('Number', 'String'));
+		$this->assertEquals('Any', F\_stream_merge_types('Any', 'String'));
 	}
 
 	public function test__stream_resolve() {

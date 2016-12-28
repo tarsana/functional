@@ -16,7 +16,7 @@
 
 /**
  * Transformation :: {
- *     operation: Operation,
+ *     operations: [Operation],
  *     args: [Any]
  * }
  *
@@ -95,8 +95,9 @@ function _stream_throw_error($type) {
         break;
         case 'wrong-transformation-args':
             $args = join(', ', $params[1]);
-            $types = join(', ', $params[2]);
-            $msg = "Stream: operation '{$params[0]}' could not be called with arguments types ({$args}); expected types are ({$types})";
+            $types = join(' or ', map(pipe(join(', '), prepend('('), append(')')), $params[2]));
+
+            $msg = "Stream: operation '{$params[0]}' could not be called with arguments types ({$args}); expected types are {$types}";
         break;
     }
     throw Error::of($msg);
@@ -374,11 +375,11 @@ function _stream_validate_operations($operations) {
  *     ],
  *     'transformations' => [
  *         [
- *             'operation' => [
+ *             'operations' => [[
  *                 'name' => 'length',
  *                 'signatures' => [['List', 'Number']],
  *                 'fn' => 'count'
- *             ],
+ *             ]],
  *             'args' => []
  *         ]
  *     ]
@@ -404,18 +405,19 @@ function _stream_apply_operation($name, $args, $stream) {
     }
 
     $argsTypes = append(get('type', $stream), map(type(), $args));
-    $operation = head(filter(_stream_operation_is_applicable($argsTypes),
-        chain(_f('_stream_split_operation_signatures'), $operations)));
-    if (null == $operation) {
+    $validOperations = filter(_stream_operation_is_applicable($argsTypes),
+        chain(_f('_stream_split_operation_signatures'), $operations));
+    if (0 == length($validOperations)) {
         _stream_throw_error('wrong-operation-args', $argsTypes, $name);
     }
 
-    $returnType = last(head(get('signatures', $operation)));
+    $returnTypes = map(_f('_stream_return_type_of_operation'), $validOperations);
+    $returnType = reduce(_f('_stream_merge_types'), head($returnTypes), $returnTypes);
     return _stream_make(
         get('operations', $stream), // operations
         get('data', $stream), // data
         append([
-            'operation' => $operation,
+            'operations' => $validOperations,
             'args' => $args
         ], get('transformations', $stream)), // transformations
         $returnType, // type
@@ -512,6 +514,49 @@ function _stream_operation_is_applicable() {
 }
 
 /**
+ * Gets the return type of an operation having a single signature.
+ *
+ * ```php
+ * F\_stream_return_type_of_operation(F\_stream_operation(
+ *     'count', 'List -> Number'
+ * )); //=> 'Number'
+ * F\_stream_return_type_of_operation(F\_stream_operation(
+ *     'count', 'List ->Function -> String'
+ * )); //=> 'String'
+ * F\_stream_return_type_of_operation(F\_stream_operation(
+ *     'count', 'List ->Function -> Any'
+ * )); //=> 'Any'
+ * ```
+ *
+ * @signature Operation -> String
+ * @param  array $operation
+ * @return string
+ */
+function _stream_return_type_of_operation($operation) {
+    return last(getPath(['signatures', 0], $operation));
+}
+
+/**
+ * Returns `$type1` if types are equal and `Any` if not.
+ *
+ * ```php
+ * F\_stream_merge_types('Number', 'Number'); //=> 'Number'
+ * F\_stream_merge_types('Number', 'String'); //=> 'Any'
+ * F\_stream_merge_types('Any', 'String'); //=> 'Any'
+ * ```
+ *
+ * @signature String -> String -> String
+ * @param  string $type1
+ * @param  string $type2
+ * @return string
+ */
+function _stream_merge_types($type1, $type2) {
+    return ($type1 == $type2)
+        ? $type1
+        : 'Any';
+}
+
+/**
  * Computes the result of a stream.
  *
  * ```php
@@ -570,14 +615,16 @@ function _stream_resolve($stream) {
 
     $args = append(get('data', $stream), get('args', $transformation));
     $argsTypes = map(type(), $args);
-    $operation = get('operation', $transformation);
-    if (! _stream_operation_is_applicable($argsTypes, $operation)) {
-        _stream_throw_error('wrong-transformation-args', $operation['name'], $argsTypes, init(head(get('signatures', $operation))));
+    $operations = get('operations', $transformation);
+    $applicableOperations = filter(_stream_operation_is_applicable($argsTypes), $operations);
+    if (empty($applicableOperations)) {
+        $types = map(pipe(get('signatures'), head(), init()), $operations);
+        _stream_throw_error('wrong-transformation-args', getPath([0, 'name'], $operations), $argsTypes, $types);
     }
 
     return _stream_resolve(_stream_make(
         get('operations', $stream), // operations
-        _apply(get('fn', $operation), $args), // data
+        _apply(getPath([0, 'fn'], $applicableOperations), $args), // data
         tail($transformations), // transformations
         get('type', $stream), // type
         null, // result

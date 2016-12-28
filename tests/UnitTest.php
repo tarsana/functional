@@ -24,6 +24,8 @@ abstract class UnitTest extends \PHPUnit_Framework_TestCase {
      * @return void
      */
     protected function assertError($result, $msg) {
+        if (! ($result instanceof F\Error))
+            throw $result;
         $this->assertTrue($result instanceof F\Error);
         $this->assertEquals($msg, $result->getMessage());
     }
