@@ -5,6 +5,12 @@
  */
 
 /**
+ * Some functions are not written in a clean way for efficiency;
+ * I hope code is not that much durty
+ * @ignore
+ */
+
+/**
  * Curried version of `explode`.
  *
  * ```php
@@ -143,13 +149,7 @@ function lowerCase() {
 function camelCase() {
     static $camelCase = false;
     $camelCase = $camelCase ?: curry(function($string) {
-        return _apply(pipe(
-            regReplace('/[^a-z0-9]+/i', ' '),
-            'trim',
-            'ucwords',
-            replace(' ', ''),
-            'lcfirst'
-        ), [$string]);
+        return lcfirst(str_replace(' ', '', ucwords(trim(preg_replace('/[^a-z0-9]+/i', ' ', $string)))));
     });
     return _apply($camelCase, func_get_args());
 }
@@ -171,14 +171,10 @@ function camelCase() {
 function snakeCase() {
     static $snackCase = false;
     $snackCase = $snackCase ?: curry(function($delimiter, $string) {
-        return _apply(pipe(
-            regReplace('/([A-Z])/', ' \\1'),
-            regReplace('/([0-9]+)/', ' \\1'),
-            regReplace('/[^a-z0-9]+/i', ' '),
-            'trim',
-            'strtolower',
-            replace(' ', $delimiter)
-        ), [$string]);
+        return str_replace(' ', $delimiter, trim(strtolower(
+            preg_replace('/[^a-z0-9]+/i', ' ',
+            preg_replace('/([0-9]+)/', ' \\1',
+            preg_replace('/([A-Z])/', ' \\1', $string))))));
     });
     return _apply($snackCase, func_get_args());
 }
@@ -312,12 +308,15 @@ function occurences() {
  *
  * `$surrounders` is a string where each pair of characters specifies
  * the starting and ending characters of a group that should not be split.
- * ```php
- * $groups = F\chunks('(){}', ',');
- * $groups('1,2,(3,4,5),{6,(7,8)},9'); //=> ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
  *
+ * **Note that this function assumes that the given `$text` is well formatted**
+ *
+ * ```php
  * $names = F\chunks('()""', ' ');
  * $names('Foo "Bar Baz" (Some other name)'); //=> ['Foo', '"Bar Baz"', '(Some other name)']
+ *
+ * $groups = F\chunks('(){}', '->');
+ * $groups('1->2->(3->4->5)->{6->(7->8)}->9'); //=> ['1', '2', '(3->4->5)', '{6->(7->8)}', '9']
  * ```
  *
  * @stream
@@ -329,57 +328,76 @@ function occurences() {
  */
 function chunks() {
     static $chunks = false;
+    // This is by far the most complicated string function
     $chunks = $chunks ?: curry(function($surrounders, $separator, $text) {
         // Let's assume some values to understand how this function works
         // surrounders = '""{}()'
         // separator = ' '
         // $text = 'foo ("bar baz" alpha) beta'
-
-        $surrounders = map(slices(1), slices(2, $surrounders)); // [['"'. '"'], ['{'. '}'], ['(', ')']]
-        $openings = map(get(0), $surrounders); // ['"', '{', '(']
-        $closings = map(get(1), $surrounders); // ['"', '}', ')']
-        $numOfSurrounders = length($surrounders); // 3
-        $indexes = keys($surrounders); // [0, 1, 2]
-
-        $items = split($separator, $text); // ['foo', '("bar', 'baz"', 'alpha)', 'beta']
-
-        // The initial state
-        $state = (object) [
-            'chunks'    => [], //: the resulting chunks
-            'counts'   => array_fill(0, $numOfSurrounders, 0), // [0, 0, 0] : count of openings not closed yet
-            'total'    => 0 //: total of not closed openings
+        $counters = [
+            'values'   => [], // each item of this array refers to the number
+                              // of closings needed for an opening
+            'openings' => [], // an associative array where the key is an opening
+                              // and the value is the index of corresponding cell
+                              // in the 'values' field
+            'closings' => [], // associative array for closings like the previous one
+            'total'    => 0   // the total number of needed closings
         ];
-        // We will iterate over $items and update the $state while adding them
-        // For each item we need to update counts and chunks
+        foreach (str_split($surrounders) as $key => $char) {
+            $counters['values'][$key / 2] = 0;
+            if ($key % 2 == 0)
+                $counters['openings'][$char] = $key / 2;
+            else
+                $counters['closings'][$char] = $key / 2;
+        }
+        // $counters = [
+        //   'values'   => [0, 0, 0],
+        //   'openings' => ['"' => 0, '{' => 1, '(' => 2],
+        //   'openings' => ['"' => 0, '}' => 1, ')' => 2],
+        //   'total'    => 0
+        // ]
+        $result = [];
+        $length = strlen($text);
+        $separatorLength = strlen($separator);
+        $characters = str_split($text);
+        $index = 0;
+        $buffer = '';
+        while ($index < $length) {
+            if (substr($text, $index, $separatorLength) == $separator && $counters['total'] == 0) {
+                $result[] = $buffer;
+                $buffer = '';
+                $index += $separatorLength;
+            } else {
+                $c = $characters[$index];
+                $isOpening = array_key_exists($c, $counters['openings']);
+                $isClosing = array_key_exists($c, $counters['closings']);
+                if ($isOpening && $isClosing) { // when $c == '"' for example
+                    $value = $counters['values'][$counters['openings'][$c]];
+                    if ($value == 0) {
+                        $counters['values'][$counters['openings'][$c]] = 1;
+                        $counters['total'] ++;
+                    } else {
+                        $counters['values'][$counters['openings'][$c]] = 0;
+                        $counters['total'] --;
+                    }
+                } else {
+                    if ($isOpening) {
+                        $counters['values'][$counters['openings'][$c]] ++;
+                        $counters['total'] ++;
+                    }
+                    if ($isClosing) {
+                        $counters['values'][$counters['closings'][$c]] --;
+                        $counters['total'] --;
+                    }
+                }
+                $buffer .= $c;
+                $index ++;
+            }
+        }
+        if ($buffer != '')
+            $result[] = $buffer;
 
-        // Updates count for a single surrender (the surrender at $index)
-        // $item : the item we are adding
-        // $counts : the previous counts
-        $updateCountAt = curry(function($item, $counts, $index) use($openings, $closings) {
-            $count = occurences(__(), $item);
-            return ($openings[$index] == $closings[$index]) ?
-                ($counts[$index] + $count($openings[$index])) % 2 :
-                $counts[$index] + $count($openings[$index]) - $count($closings[$index]);
-        });
-        // Updates counts for all surrenders
-        $updateCounts = curry(function($item, $counts) use($indexes, $updateCountAt) {
-            return map($updateCountAt($item, $counts), $indexes);
-        });
-        // Adds an item to the state and returns a new state
-        $addItem = function($state, $item) use ($separator, $updateCounts){
-            $counts = $updateCounts($item, get('counts', $state));
-            $newChunks = (0 == $state->total) // if all openings are closed
-                ? append($item, $state->chunks) // then add a new chunk
-                // else append the item to the last chunk using the separator as glue
-                : append(last($state->chunks) . $separator . $item, init($state->chunks));
-            return (object) [
-                'chunks' => $newChunks,
-                'counts' => $counts,
-                'total' => sum($counts)
-            ];
-        };
-        // Returns the chunks of the resulting state after adding all items
-        return get('chunks', reduce($addItem, $state, $items));
+        return $result;
     });
     return _apply($chunks, func_get_args());
 }

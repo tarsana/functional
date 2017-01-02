@@ -179,33 +179,45 @@ function notEqq() {
  */
 function equals() {
     static $equals = false;
-    $equals = $equals ?: curry(function($a, $b) {
-            $type = type($a);
-            if ($type != type($b))
-                return false;
-            switch ($type) {
-                case 'Null':
-                case 'Boolean':
-                case 'String':
-                case 'Number':
-                case 'Unknown':
-                case 'Function':
-                case 'Resource':
-                case 'Error':
-                case 'Stream':
-                    return $a == $b;
-                case 'List':
-                    $length = length($a);
-                    return length($b) != $length ? false :
-                           0 == $length ? true :
-                           equals(head($a), head($b)) && equals(tail($a), tail($b));
-                case 'Array':
-                case 'ArrayObject':
-                case 'Object':
-                    return equals(keys($a), keys($b)) && equals(values($a), values($b));
-            }
-    });
+    $equals = $equals ?: curry(_f('_equals'));
     return _apply($equals, func_get_args());
+}
+function _equals($a, $b) {
+    $type = type($a);
+    if ($type != type($b))
+        return false;
+    switch ($type) {
+        case 'List':
+            $length = count($a);
+            if (count($b) != $length)
+                return false;
+            $index = 0;
+            while ($index < $length) {
+                if (!_equals($a[$index], $b[$index]))
+                    return false;
+                $index ++;
+            }
+            return true;
+        case 'Array':
+        case 'ArrayObject':
+        case 'Object':
+            $keysA = keys($a);
+            $keysB = keys($b);
+            $length = count($keysA);
+            if (count($keysB) != $length)
+                return false;
+            $index = 0;
+            while ($index < $length) {
+                if (!_equals($keysA[$index], $keysB[$index]))
+                    return false;
+                if (!_equals(get($keysA[$index], $a), get($keysB[$index], $b)))
+                    return false;
+                $index ++;
+            }
+            return true;
+        default:
+            return $a == $b;
+    }
 }
 
 /**
@@ -231,7 +243,7 @@ function equals() {
 function equalBy() {
     static $equalBy = false;
     $equalBy = $equalBy ?: curry(function($fn, $a, $b) {
-        return equals($fn($a), $fn($b));
+        return _equals($fn($a), $fn($b));
     });
     return _apply($equalBy, func_get_args());
 }

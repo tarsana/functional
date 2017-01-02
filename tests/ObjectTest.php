@@ -96,7 +96,7 @@ class ObjectTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_satisfies() {
 		$foo = ['name' => 'foo', 'age' => 11];
-		$isAdult = F\satisfies(F\gt(F\__(), 18), 'age');
+		$isAdult = F\satisfies(F\lte(18), 'age');
 		$this->assertEquals(true, F\satisfies(F\startsWith('f'), 'name', $foo));
 		$this->assertEquals(false, F\satisfies(F\startsWith('g'), 'name', $foo));
 		$this->assertEquals(false, F\satisfies(F\startsWith('g'), 'friends', $foo));
@@ -113,7 +113,7 @@ class ObjectTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		];
 		$isValid = F\satisfiesAll([
 		    'name' => F\startsWith('b'),
-		    'age' => F\gt(F\__(), 15)
+		    'age' => F\lte(15)
 		]);
 		$this->assertEquals([['name' => 'baz', 'age' => 16], ['name' => 'beta', 'age' => 25]], F\filter($isValid, $persons));
 	}
@@ -128,7 +128,7 @@ class ObjectTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		];
 		$isValid = F\satisfiesAny([
 		    'name' => F\startsWith('b'),
-		    'age' => F\gt(F\__(), 15)
+		    'age' => F\lte(15)
 		]);
 		$this->assertEquals([['name' => 'bar', 'age' => 9], ['name' => 'baz', 'age' => 16], ['name' => 'zeta', 'age' => 33], ['name' => 'beta', 'age' => 25]], F\filter($isValid, $persons));
 	}

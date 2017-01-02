@@ -273,11 +273,14 @@ Splits a string into chunks without spliting any group surrounded with some spec
 
 `$surrounders` is a string where each pair of characters specifies
 the starting and ending characters of a group that should not be split.
-```php
-$groups = F\chunks('(){}', ',');
-$groups('1,2,(3,4,5),{6,(7,8)},9'); //=> ['1', '2', '(3,4,5)', '{6,(7,8)}', '9']
 
+**Note that this function assumes that the given `$text` is well formatted**
+
+```php
 $names = F\chunks('()""', ' ');
 $names('Foo "Bar Baz" (Some other name)'); //=> ['Foo', '"Bar Baz"', '(Some other name)']
+
+$groups = F\chunks('(){}', '->');
+$groups('1->2->(3->4->5)->{6->(7->8)}->9'); //=> ['1', '2', '(3->4->5)', '{6->(7->8)}', '9']
 ```
 

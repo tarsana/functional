@@ -138,7 +138,7 @@ arguments ($callback, $initial, $list).
 
 - [prepend](https://github.com/tarsana/functional/blob/master/docs/list.md#prepend) - Inserts an item at the begining of an array or a substring at the begining of a string.
 
-- [take](https://github.com/tarsana/functional/blob/master/docs/list.md#take) - Takes a number of elements from an array.
+- [take](https://github.com/tarsana/functional/blob/master/docs/list.md#take) - Takes a number of elements from an array or a number of characters from a string.
 
 - [takeWhile](https://github.com/tarsana/functional/blob/master/docs/list.md#takeWhile) - Takes elements from an array while they match the given predicate.
 

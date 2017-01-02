@@ -9,7 +9,6 @@
  * Returns a curried equivalent of the provided function.
  *
  * ```php
- * // A closure
  * $add = F\curry(function($x, $y) {
  *     return $x + $y;
  * });
@@ -18,13 +17,18 @@
  * $addFive = $add(5); // this is a function
  * $addFive(1); //=> 6
  *
- * $sum = F\curry(function() use($add) {
- *     $numbers = func_get_args();
- *     return F\reduce($add, 0, $numbers);
- * });
+ * $data = [1, 2, 3, 4, 5];
+ * $slice = F\curry('array_slice');
+ * $itemsFrom = $slice($data);
+ * $itemsFrom(2); //=> [3, 4, 5]
+ * $itemsFrom(1, 2); //=> [2, 3, 4, 5]
+ * // Notice that optional arguments are ignored !
  *
- * $sum(); //=> 0
- * $sum(1, 2, 3, 4); //=> 10
+ * $polynomial = F\curry(function($a, $b, $c, $x) {
+ *     return $a * $x * $x + $b * $x + $c;
+ * });
+ * $f = $polynomial(0, 2, 1); // 2 * $x + 1
+ * $f(5); //=> 11
  * ```
  *
  * @signature (* -> a) -> (* -> a)
@@ -32,20 +36,33 @@
  * @return callable
  */
 function curry($fn) {
-    return _curried_function($fn, _number_of_args($fn));
+    $n = _number_of_args($fn);
+    switch($n) {
+        case 0: return $fn;
+        case 1: return _curry_one($fn);
+        case 2: return _curry_two($fn);
+        case 3: return _curry_three($fn);
+    }
+    return _curry_n($fn, $n);
 }
 
 /**
  * Argument placeholder to use with curried functions.
  *
  * ```php
- * $minus = F\curry(function ($x, $y) { return $x - $y; });
- * $decrement = $minus(F\__(), 1);
- * $decrement(10); //=> 9
- *
  * $reduce = F\curry('array_reduce');
  * $sum = $reduce(F\__(), F\plus());
  * $sum([1, 2, 3, 4], 0); //=> 10
+ *
+ * $polynomial = F\curry(function($a, $b, $c, $x) {
+ *     return $a * $x * $x + $b * $x + $c;
+ * });
+ *
+ * $multiplier = $polynomial(0, F\__(), 0, F\__());
+ * $triple = $multiplier(3);
+ * $triple(5); //=> 15
+ * $multipleOfThree = $multiplier(F\__(), 3);
+ * $multipleOfThree(4); //=> 12
  * ```
  *
  * @signature * -> Placeholder
@@ -80,8 +97,9 @@ function apply() {
  *
  * The leftmost function may have any arity;
  * the remaining functions must be unary.
- * The result of pipe is curried.
- * **Calling pipe() without any argument returns the `identity` function**
+ * The result of pipe is **not curried**.
+ * **Calling pipe() without any argument returns the `identity` function**.
+ *
  * ```php
  * $double = function($x) { return 2 * $x; };
  * $addThenDouble = F\pipe(F\plus(), $double);
@@ -96,13 +114,13 @@ function pipe() {
     $fns = func_get_args();
     if(count($fns) < 1)
         return identity();
-    return curry(function () use ($fns) {
+    return function () use ($fns) {
         $result = _apply(array_shift($fns), func_get_args());
         foreach ($fns as $fn) {
             $result = $fn($result);
         }
         return $result;
-    });
+    };
 }
 
 /**
@@ -157,7 +175,7 @@ function give() {
  * If no predicate is given as argument, this function
  * will return an always passing predicate.
  * ```php
- * $betweenOneAndTen = F\all(F\gte(F\__(), 1), F\lte(F\__(), 10));
+ * $betweenOneAndTen = F\all(F\lt(1), F\gt(10));
  * $betweenOneAndTen(5); //=> true
  * $betweenOneAndTen(0); //=> false
  * $alwaysTrue = F\all();
@@ -171,11 +189,13 @@ function give() {
  */
 function all() {
     $predicates = func_get_args();
-    return function($value) use($predicates) {
-        return reduce(function($result, $predicate) use($value) {
-            return $result && $predicate($value);
-        }, true, $predicates);
-    };
+    return _curry_one(function($value) use(&$predicates) {
+        foreach ($predicates as $predicate) {
+            if (! $predicate($value))
+                return false;
+        }
+        return true;
+    });
 }
 
 /**
@@ -203,18 +223,20 @@ function all() {
  */
 function any() {
     $predicates = func_get_args();
-    return function($value) use($predicates) {
-        return reduce(function($result, $predicate) use($value) {
-            return $result || $predicate($value);
-        }, false, $predicates);
-    };
+    return _curry_one(function($value) use(&$predicates) {
+        foreach ($predicates as $predicate) {
+            if ($predicate($value))
+                return true;
+        }
+        return false;
+    });
 }
 
 /**
  * Takes a function `f` and returns a function `g` so that if `f` returns
  * `x` for some arguments; `g` will return `! x` for the same arguments.
  *
- * Note that `complement($fn) == pipe($fn, not())`.
+ * Note that `complement($fn) == pipe($fn, not())`, So the resulting function is not curried !.
  * ```php
  * $isOdd = function($number) {
  *     return 1 == $number % 2;
@@ -233,7 +255,9 @@ function any() {
 function complement() {
     static $complement = false;
     $complement = $complement ?: curry(function($fn) {
-        return pipe($fn, not());
+        return function() use($fn) {
+            return !_apply($fn, func_get_args());
+        };
     });
     return _apply($complement, func_get_args());
 }
@@ -272,4 +296,3 @@ function comparator() {
     });
     return _apply($comparator, func_get_args());
 }
-

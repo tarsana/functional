@@ -5,28 +5,37 @@ use Tarsana\Functional as F;
 class FunctionsTest extends \Tarsana\UnitTests\Functional\UnitTest {
 
 	public function test_curry() {
-		// A closure
 		$add = F\curry(function($x, $y) {
 		    return $x + $y;
 		});
 		$this->assertEquals(3, $add(1, 2));
 		$addFive = $add(5); // this is a function
 		$this->assertEquals(6, $addFive(1));
-		$sum = F\curry(function() use($add) {
-		    $numbers = func_get_args();
-		    return F\reduce($add, 0, $numbers);
+		$data = [1, 2, 3, 4, 5];
+		$slice = F\curry('array_slice');
+		$itemsFrom = $slice($data);
+		$this->assertEquals([3, 4, 5], $itemsFrom(2));
+		$this->assertEquals([2, 3, 4, 5], $itemsFrom(1, 2));
+		// Notice that optional arguments are ignored !
+		$polynomial = F\curry(function($a, $b, $c, $x) {
+		    return $a * $x * $x + $b * $x + $c;
 		});
-		$this->assertEquals(0, $sum());
-		$this->assertEquals(10, $sum(1, 2, 3, 4));
+		$f = $polynomial(0, 2, 1); // 2 * $x + 1
+		$this->assertEquals(11, $f(5));
 	}
 
 	public function test___() {
-		$minus = F\curry(function ($x, $y) { return $x - $y; });
-		$decrement = $minus(F\__(), 1);
-		$this->assertEquals(9, $decrement(10));
 		$reduce = F\curry('array_reduce');
 		$sum = $reduce(F\__(), F\plus());
 		$this->assertEquals(10, $sum([1, 2, 3, 4], 0));
+		$polynomial = F\curry(function($a, $b, $c, $x) {
+		    return $a * $x * $x + $b * $x + $c;
+		});
+		$multiplier = $polynomial(0, F\__(), 0, F\__());
+		$triple = $multiplier(3);
+		$this->assertEquals(15, $triple(5));
+		$multipleOfThree = $multiplier(F\__(), 3);
+		$this->assertEquals(12, $multipleOfThree(4));
 	}
 
 	public function test_apply() {
@@ -55,7 +64,7 @@ class FunctionsTest extends \Tarsana\UnitTests\Functional\UnitTest {
 	}
 
 	public function test_all() {
-		$betweenOneAndTen = F\all(F\gte(F\__(), 1), F\lte(F\__(), 10));
+		$betweenOneAndTen = F\all(F\lt(1), F\gt(10));
 		$this->assertEquals(true, $betweenOneAndTen(5));
 		$this->assertEquals(false, $betweenOneAndTen(0));
 		$alwaysTrue = F\all();

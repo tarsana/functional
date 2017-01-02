@@ -32,7 +32,7 @@
  */
 function type() {
     static $type = false;
-    $type = $type ?: curry(function($data) {
+    $type = $type ?: _curry_one(function($data) {
         if ($data instanceof Error) return 'Error';
         if ($data instanceof Stream) return 'Stream';
         if (is_callable($data)) return 'Function';

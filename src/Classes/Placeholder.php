@@ -15,7 +15,4 @@ class Placeholder {
             static::$instance = new Placeholder;
         return static::$instance;
     }
-    public function __toString(){
-        return '__';
-    }
 }

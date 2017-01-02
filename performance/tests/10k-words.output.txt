@@ -1,0 +1,71 @@
+1550: et
+1380: vitae
+1330: nec, sed
+1320: non, ut
+1300: ac
+1270: eget
+1260: in
+1200: at, id, quis
+1160: eu
+1150: a
+1140: amet, sit
+1110: vel
+960: ipsum
+930: Sed
+780: tincidunt
+770: nibh
+760: augue
+750: Donec
+740: faucibus
+730: elit, ex, felis
+720: purus, sapien
+710: erat
+700: eros, ligula
+690: turpis
+680: arcu, nisi, sem
+670: Pellentesque, velit
+660: diam, massa, vehicula
+650: ante, neque, nisl, orci
+640: Nulla, egestas, leo, lorem, urna
+630: Vestibulum, lacus
+620: luctus, volutpat
+610: mi
+600: lectus, malesuada, ultrices
+590: consectetur, est, pharetra, quam
+580: dolor
+570: tellus
+560: metus
+550: In, accumsan
+540: convallis, elementum, facilisis, mauris
+530: dui, libero, risus, sodales, tortor, tristique
+520: feugiat, interdum
+510: Vivamus, condimentum, nulla, scelerisque
+500: Fusce, Suspendisse, mollis, nunc, pellentesque, semper, venenatis
+490: bibendum, tempor
+480: congue, cursus, imperdiet, odio, rhoncus, varius
+470: Duis, auctor, enim, magna, mattis, suscipit
+460: Nam, aliquam, aliquet, justo, pulvinar, ultricies
+450: Nullam, efficitur, hendrerit, tempus
+440: blandit, dictum, fermentum, lobortis, posuere, sagittis
+430: Curabitur, Mauris, commodo, iaculis, lacinia, placerat, rutrum, ullamcorper
+420: Quisque, consequat, eleifend, sollicitudin, vestibulum, vulputate
+410: Aenean, viverra
+390: Maecenas, dapibus, ornare
+380: Aliquam, Etiam, Phasellus, fringilla, laoreet, maximus, porttitor
+370: Proin, Ut, gravida
+360: dignissim
+350: Nunc, pretium
+340: Morbi, Praesent, porta
+310: finibus, molestie
+300: Cras
+290: euismod
+250: Integer
+200: per
+190: fames
+180: primis
+120: habitant, morbi, netus, senectus
+110: Curae, cubilia, potenti
+100: Class, Cum, ad, aptent, conubia, dis, himenaeos, inceptos, litora, magnis, montes, mus, nascetur, natoque, nostra, parturient, penatibus, ridiculus, sociis, sociosqu, taciti, torquent
+90: facilisi
+80: Lorem, adipiscing, dictumst, habitasse, hac, platea
+70: Interdum

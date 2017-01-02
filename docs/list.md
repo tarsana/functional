@@ -41,7 +41,7 @@ arguments ($callback, $initial, $list).
 
 - [prepend](#prepend) - Inserts an item at the begining of an array or a substring at the begining of a string.
 
-- [take](#take) - Takes a number of elements from an array.
+- [take](#take) - Takes a number of elements from an array or a number of characters from a string.
 
 - [takeWhile](#takewhile) - Takes elements from an array while they match the given predicate.
 
@@ -104,6 +104,7 @@ map(callable $fn, array $list) : array
 
 ```
 (a -> b) -> [a] -> [b]
+(a -> b) -> {k: a} -> {k: b}
 ```
 
 Curried version of `array_map`.
@@ -400,7 +401,11 @@ F\insert(-1,  'x', [1, 2, 3, 4]); //=> [1, 2, 3, 'x', 4]
 F\insert(11, 'x', [1, 2, 3, 4]); //=> [1, 2, 3, 4, 'x']
 F\insert(0, 'x', [1, 2, 3, 4]); //=> ['x', 1, 2, 3, 4]
 F\insert(-11, 'x', [1, 2, 3, 4]); //=> ['x', 1, 2, 3, 4]
+F\insert(32, 'd', 'Hello Worl'); //=> 'Hello World'
 F\insert(3, 'l', 'Helo World'); //=> 'Hello World'
+F\insert(-7, 'l', 'Helo World'); //=> 'Hello World'
+F\insert(0, 'H', 'ello World'); //=> 'Hello World'
+F\insert(-70, 'H', 'ello World'); //=> 'Hello World'
 ```
 
 # insertAll
@@ -473,13 +478,14 @@ Number -> [a] -> [a]
 Number -> String -> String
 ```
 
-Takes a number of elements from an array.
+Takes a number of elements from an array or a number of characters from a string.
 
-If `$count` is negative, the elements are taken from the end of the array.
+If `$count` is negative, the elements are taken from the end of the array/string.
 ```php
 $items = ['Foo', 'Bar', 'Baz'];
 F\take(2, $items); //=> ['Foo', 'Bar']
 F\take(0, $items); //=> []
+F\take(7, $items); //=> ['Foo', 'Bar', 'Baz']
 F\take(-2, $items); //=> ['Bar', 'Baz']
 F\take(5, 'Hello World'); //=> 'Hello'
 F\take(-5, 'Hello World'); //=> 'World'
@@ -694,7 +700,7 @@ $pairs([1, 2, 3, 4, 5]); //=> [[1, 2], [3, 4], [5]]
 $pairs("Hello World"); //=> ['He', 'll', 'o ', 'Wo', 'rl', 'd']
 F\slices(5, [1, 2]); //=> [[1, 2]]
 F\slices(3, []); //=> []
-F\slices(3, ''); //=> ''
+F\slices(3, ''); //=> ['']
 ```
 
 # contains
@@ -828,6 +834,7 @@ lastIndexOf(mixed $item, array $list) : int
 
 ```
 a -> [a] -> Number
+v -> {k: v} -> Maybe(k)
 String -> String -> Number
 ```
 

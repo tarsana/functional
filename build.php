@@ -674,5 +674,12 @@ function log() {
     return apply(curry($log), func_get_args());
 }
 
+// Convert Warnings to Exceptions
+set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
+    if (0 === error_reporting())
+        return false;
+    throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+});
+
 // Run the build
 build_main(get_modules());

@@ -175,6 +175,10 @@ All tests are under the `tests` directory. they can be run using `phpunit`.
 
 # Changes Log
 
+**Version 2.1.0 (In Progress ...)**
+
+- Improving efficiency of the library.
+
 **Version 2.0.0**
 
 - `cypresslab/php-curry` dependency removed.
