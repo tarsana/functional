@@ -14,15 +14,14 @@
  *
  * @stream
  * @signature (a -> b) -> [a] -> [b]
+ * @signature (a -> b) -> {k: a} -> {k: b}
  * @param  callable $fn
  * @param  array $list
  * @return array
  */
 function map() {
     static $map = false;
-    $map = $map ?: curry(function($fn, $list) {
-        return array_map($fn, $list);
-    });
+    $map = $map ?: curry('array_map');
     return _apply($map, func_get_args());
 }
 
@@ -44,7 +43,11 @@ function map() {
 function chain() {
     static $chain = false;
     $chain = $chain ?: curry(function($fn, $list) {
-        return concatAll(map($fn, $list));
+        $result = [];
+        foreach ($list as $item) {
+            $result = array_merge($result, $fn($item));
+        }
+        return $result;
     });
     return _apply($chain, func_get_args());
 }
@@ -66,8 +69,13 @@ function chain() {
  */
 function filter() {
     static $filter = false;
-    $filter = $filter ?: curry(function($fn, $list){
-        return array_values(array_filter($list, $fn));
+    $filter = $filter ?: curry(function($fn, $list) {
+        $result = [];
+        foreach ($list as $item) {
+            if ($fn($item))
+                $result[] = $item;
+        }
+        return $result;
     });
     return _apply($filter, func_get_args());
 }
@@ -120,7 +128,7 @@ function each() {
     static $each = false;
     $each = $each ?: curry(function($fn, $list){
         foreach ($list as $item) {
-            apply($fn, [$item]);
+            $fn($item);
         }
         return $list;
     });
@@ -146,11 +154,8 @@ function each() {
 function head() {
     static $head = false;
     $head = $head ?: curry(function($list) {
-        if(is_string($list))
-            return substr($list, 0, 1);
-        return (count($list) > 0)
-            ? $list[0]
-            : null;
+        if (isset($list[0])) return $list[0];
+        return is_string($list) ? '' : null;
     });
     return _apply($head, func_get_args());
 }
@@ -176,8 +181,9 @@ function last () {
     $last = $last ?: curry(function($list) {
         if(is_string($list))
             return substr($list, -1);
-        return (count($list) > 0)
-            ? $list[count($list) - 1]
+        $size = count($list);
+        return ($size > 0)
+            ? $list[$size - 1]
             : null;
     });
     return _apply($last, func_get_args());
@@ -203,12 +209,15 @@ function last () {
 function init () {
     static $init = false;
     $init = $init ?: curry(function($list) {
-        if(is_string($list))
-            return (strlen($list) > 1)
-                ? substr($list, 0, strlen($list) - 1)
+        if(is_string($list)) {
+            $size = strlen($list);
+            return ($size > 1)
+                ? substr($list, 0, $size - 1)
                 : '';
-        return (count($list) > 1)
-            ? array_slice($list, 0, count($list) - 1)
+        }
+        $size = count($list);
+        return ($size > 1)
+            ? array_slice($list, 0, $size - 1)
             : [];
     });
     return _apply($init, func_get_args());
@@ -311,7 +320,11 @@ function length() {
 function allSatisfies() {
     static $allSatisfies = false;
     $allSatisfies = $allSatisfies ?: curry(function($predicate, $list) {
-        return length(filter($predicate, $list)) == length($list);
+        foreach ($list as $item) {
+            if (! $predicate($item))
+                return false;
+        }
+        return true;
     });
     return _apply($allSatisfies, func_get_args());
 }
@@ -334,7 +347,11 @@ function allSatisfies() {
 function anySatisfies() {
     static $anySatisfies = false;
     $anySatisfies = $anySatisfies ?: curry(function($predicate, $list) {
-        return null != findIndex($predicate, $list);
+        foreach ($list as $item) {
+            if ($predicate($item))
+                return true;
+        }
+        return false;
     });
     return _apply($anySatisfies, func_get_args());
 }
@@ -380,8 +397,11 @@ function concat() {
 function concatAll() {
     static $concatAll = false;
     $concatAll = $concatAll ?: curry(function($lists) {
-        return length($lists) == 0 ? [] :
-            reduce(concat(), head($lists), tail($lists));
+        if (count($lists) == 0)
+            return [];
+        if (is_string($lists[0]))
+            return implode('', $lists);
+        return _apply('array_merge', $lists);
     });
     return _apply($concatAll, func_get_args());
 }
@@ -396,7 +416,11 @@ function concatAll() {
  * F\insert(11, 'x', [1, 2, 3, 4]); //=> [1, 2, 3, 4, 'x']
  * F\insert(0, 'x', [1, 2, 3, 4]); //=> ['x', 1, 2, 3, 4]
  * F\insert(-11, 'x', [1, 2, 3, 4]); //=> ['x', 1, 2, 3, 4]
+ * F\insert(32, 'd', 'Hello Worl'); //=> 'Hello World'
  * F\insert(3, 'l', 'Helo World'); //=> 'Hello World'
+ * F\insert(-7, 'l', 'Helo World'); //=> 'Hello World'
+ * F\insert(0, 'H', 'ello World'); //=> 'Hello World'
+ * F\insert(-70, 'H', 'ello World'); //=> 'Hello World'
  * ```
  *
  * @stream
@@ -410,7 +434,7 @@ function concatAll() {
 function insert() {
     static $insert = false;
     $insert = $insert ?: curry(function($position, $item, $list) {
-        return (is_string($list))
+        return is_string($list)
             ? insertAll($position, $item, $list)
             : insertAll($position, [$item], $list);
     });
@@ -440,14 +464,18 @@ function insert() {
 function insertAll() {
     static $insertAll = false;
     $insertAll = $insertAll ?: curry(function($position, $items, $list) {
-        $length = length($list);
+        $size = length($list);
         if ($position < 0)
-            $position = $length + $position;
+            $position = $size + $position;
         if ($position < 0)
             $position = 0;
-        return ($position >= $length)
-            ? concat($list, $items)
-            : concatAll([take($position, $list), $items, remove($position, $list)]);
+        if (is_string($list))
+            return ($position >= $size)
+                ? $list . $items
+                : substr($list, 0, $position) . $items . substr($list, $position);
+        return ($position >= $size)
+            ? array_merge($list, $items)
+            : array_merge(array_slice($list, 0, $position), $items, array_slice($list, $position));
     });
     return _apply($insertAll, func_get_args());
 }
@@ -470,7 +498,9 @@ function insertAll() {
 function append() {
     static $append = false;
     $append = $append ?: curry(function ($item, $list) {
-        return insert(length($list), $item, $list);
+        return is_string($list)
+            ? $list . $item
+            : array_merge($list, [$item]);
     });
     return _apply($append, func_get_args());
 }
@@ -492,17 +522,24 @@ function append() {
  * @return array
  */
 function prepend() {
-    return _apply(insert(0), func_get_args());
+    static $prepend = false;
+    $prepend = $prepend ?: curry(function ($item, $list) {
+        return is_string($list)
+            ? $item . $list
+            : array_merge([$item], $list);
+    });
+    return _apply($prepend, func_get_args());
 }
 
 /**
- * Takes a number of elements from an array.
+ * Takes a number of elements from an array or a number of characters from a string.
  *
- * If `$count` is negative, the elements are taken from the end of the array.
+ * If `$count` is negative, the elements are taken from the end of the array/string.
  * ```php
  * $items = ['Foo', 'Bar', 'Baz'];
  * F\take(2, $items); //=> ['Foo', 'Bar']
  * F\take(0, $items); //=> []
+ * F\take(7, $items); //=> ['Foo', 'Bar', 'Baz']
  * F\take(-2, $items); //=> ['Bar', 'Baz']
  * F\take(5, 'Hello World'); //=> 'Hello'
  * F\take(-5, 'Hello World'); //=> 'World'
@@ -520,7 +557,7 @@ function take() {
     $take = $take ?: curry(function($count, $list) {
         $length = length($list);
         if ($count > $length || $count < -$length)
-            return [];
+            return $list;
         if(is_string($list)) {
             return ($count >= 0)
                 ? substr($list, 0, $count)
@@ -552,11 +589,11 @@ function take() {
 function takeWhile() {
     static $takeWhile = false;
     $takeWhile = $takeWhile ?: curry(function($predicate, $list) {
-        $first = head($list);
-        return (null == $first || !$predicate($first))
-            ? []
-            : prepend($first, takeWhile($predicate, tail($list)));
-
+        $index = 0;
+        $size = length($list);
+        while ($index < $size && $predicate($list[$index]))
+            $index ++;
+        return array_slice($list, 0, $index);
     });
     return _apply($takeWhile, func_get_args());
 }
@@ -579,11 +616,10 @@ function takeWhile() {
 function takeLastWhile() {
     static $takeLastWhile = false;
     $takeLastWhile = $takeLastWhile ?: curry(function($predicate, $list) {
-        $last = last($list);
-        return (null == $last || !$predicate($last))
-            ? []
-            : append($last, takeLastWhile($predicate, init($list)));
-
+        $index = length($list) - 1;
+        while ($index >= 0 && $predicate($list[$index]))
+            $index --;
+        return array_slice($list, $index + 1);
     });
     return _apply($takeLastWhile, func_get_args());
 }
@@ -607,7 +643,11 @@ function takeLastWhile() {
 function takeUntil() {
     static $takeUntil = false;
     $takeUntil = $takeUntil ?: curry(function($predicate, $list) {
-        return takeWhile(pipe($predicate, not()), $list);
+        $index = 0;
+        $size = length($list);
+        while ($index < $size && !$predicate($list[$index]))
+            $index ++;
+        return array_slice($list, 0, $index);
     });
     return _apply($takeUntil, func_get_args());
 }
@@ -630,7 +670,10 @@ function takeUntil() {
 function takeLastUntil() {
     static $takeLastUntil = false;
     $takeLastUntil = $takeLastUntil ?: curry(function($predicate, $list) {
-        return takeLastWhile(pipe($predicate, not()), $list);
+        $index = length($list) - 1;
+        while ($index >= 0 && !$predicate($list[$index]))
+            $index --;
+        return array_slice($list, $index + 1);
     });
     return _apply($takeLastUntil, func_get_args());
 }
@@ -659,12 +702,21 @@ function takeLastUntil() {
 function remove() {
     static $remove = false;
     $remove = $remove ?: curry(function($count, $list) {
+        // ...
         $length = length($list);
         if ($count > $length || $count < -$length)
             return [];
-        return ($count > 0)
-            ? take($count - $length, $list)
-            : take($count + $length, $list);
+        $count = ($count > 0)
+            ? $count - $length
+            : $count + $length;
+        if(is_string($list)) {
+            return ($count >= 0)
+                ? substr($list, 0, $count)
+                : substr($list, $count);
+        }
+        return ($count >= 0)
+            ? array_slice($list, 0, $count)
+            : array_slice($list, $count);
     });
     return _apply($remove, func_get_args());
 }
@@ -688,7 +740,11 @@ function remove() {
 function removeWhile() {
     static $removeWhile = false;
     $removeWhile = $removeWhile ?: curry(function($predicate, $list) {
-        return remove(length(takeWhile($predicate, $list)), $list);
+        $index = 0;
+        $size = length($list);
+        while ($index < $size && $predicate($list[$index]))
+            $index ++;
+        return array_slice($list, $index);
     });
     return _apply($removeWhile, func_get_args());
 }
@@ -711,7 +767,10 @@ function removeWhile() {
 function removeLastWhile() {
     static $removeLastWhile = false;
     $removeLastWhile = $removeLastWhile ?: curry(function($predicate, $list) {
-        return remove(- length(takeLastWhile($predicate, $list)), $list);
+        $index = length($list) - 1;
+        while ($index >= 0 && $predicate($list[$index]))
+            $index --;
+        return array_slice($list, 0, $index + 1);
     });
     return _apply($removeLastWhile, func_get_args());
 }
@@ -736,7 +795,11 @@ function removeLastWhile() {
 function removeUntil() {
     static $removeUntil = false;
     $removeUntil = $removeUntil ?: curry(function($predicate, $list) {
-        return remove(length(takeUntil($predicate, $list)), $list);
+        $index = 0;
+        $size = length($list);
+        while ($index < $size && !$predicate($list[$index]))
+            $index ++;
+        return array_slice($list, $index);
     });
     return _apply($removeUntil, func_get_args());
 }
@@ -760,7 +823,10 @@ function removeUntil() {
 function removeLastUntil() {
     static $removeLastUntil = false;
     $removeLastUntil = $removeLastUntil ?: curry(function($predicate, $list) {
-        return remove(- length(takeLastUntil($predicate, $list)), $list);
+        $index = length($list) - 1;
+        while ($index >= 0 && !$predicate($list[$index]))
+            $index --;
+        return array_slice($list, 0, $index + 1);
     });
     return _apply($removeLastUntil, func_get_args());
 }
@@ -779,11 +845,12 @@ function removeLastUntil() {
  */
 function fromPairs() {
     static $fromPairs = false;
-    $fromPairs = $fromPairs ?: curry(function($pairs) {
-        return reduce(function($result, $pair) {
+    $fromPairs = $fromPairs ?: curry(function(&$pairs) {
+        $result = new \stdClass;
+        foreach ($pairs as &$pair) {
             $result->{$pair[0]} = $pair[1];
-            return $result;
-        }, new \stdClass, $pairs);
+        }
+        return $result;
     });
     return _apply($fromPairs, func_get_args());
 }
@@ -797,7 +864,7 @@ function fromPairs() {
  * $pairs("Hello World"); //=> ['He', 'll', 'o ', 'Wo', 'rl', 'd']
  * F\slices(5, [1, 2]); //=> [[1, 2]]
  * F\slices(3, []); //=> []
- * F\slices(3, ''); //=> ''
+ * F\slices(3, ''); //=> ['']
  * ```
  *
  * @stream
@@ -809,12 +876,18 @@ function fromPairs() {
  */
 function slices() {
     static $slices = false;
-    $slices = $slices ?: curry(function($size, $list) {
-        if(empty($list))
-            return is_string($list) ? '' : [];
-        if(length($list) <= $size)
-            return [$list];
-        return prepend(take($size, $list), slices($size, remove($size, $list)));
+    $slices = $slices ?: curry(function($size, &$list) {
+        $length = length($list);
+        if ($length == 0)
+            return is_string($list) ? [''] : [];
+        $start = 0;
+        $result = [];
+        $slicer = is_string($list) ? 'substr' : 'array_slice';
+        while ($start < $length) {
+            $result[] = $slicer($list, $start, $size);
+            $start += $size;
+        }
+        return $result;
     });
     return _apply($slices, func_get_args());
 }
@@ -839,7 +912,9 @@ function slices() {
 function contains() {
     static $contains = false;
     $contains = $contains ?: curry(function($item, $list) {
-        return -1 != indexOf($item, $list);
+        return is_string($list)
+            ? (strpos($list, $item) !== false)
+            : in_array($item, $list);
     });
     return _apply($contains, func_get_args());
 }
@@ -864,7 +939,7 @@ function contains() {
 function findIndex() {
     static $findIndex = false;
     $findIndex = $findIndex ?: curry(function($predicate, $list) {
-        foreach ($list as $key => $value) {
+        foreach ($list as $key => &$value) {
             if ($predicate($value))
                 return $key;
         }
@@ -893,9 +968,12 @@ function findIndex() {
 function findLastIndex() {
     static $findLastIndex = false;
     $findLastIndex = $findLastIndex ?: curry(function($predicate, $list) {
-        foreach (reverse(toPairs($list)) as $pair) {
-            if($predicate($pair[1]))
-                return $pair[0];
+        $keys = array_keys($list);
+        $index = count($keys) - 1;
+        while ($index >= 0) {
+            if ($predicate($list[$keys[$index]]))
+                return $keys[$index];
+            $index --;
         }
         return null;
     });
@@ -920,7 +998,11 @@ function findLastIndex() {
 function find() {
     static $find = false;
     $find = $find ?: curry(function($predicate, $list) {
-        return get(findIndex($predicate, $list), $list);
+        foreach ($list as $key => &$value) {
+            if ($predicate($value))
+                return $value;
+        }
+        return null;
     });
     return _apply($find, func_get_args());
 }
@@ -943,7 +1025,14 @@ function find() {
 function findLast() {
     static $findLast = false;
     $findLast = $findLast ?: curry(function($predicate, $list) {
-        return get(findLastIndex($predicate, $list), $list);
+        $keys = array_keys($list);
+        $index = count($keys) - 1;
+        while ($index >= 0) {
+            if ($predicate($list[$keys[$index]]))
+                return $list[$keys[$index]];
+            $index --;
+        }
+        return null;
     });
     return _apply($findLast, func_get_args());
 }
@@ -977,12 +1066,18 @@ function indexOf() {
     $indexOf = $indexOf ?: curry(function($item, $list) {
         if (is_string($list)) {
             $index = strpos($list, $item);
-        } else {
-            $index = findIndex(equals($item), $list);
+            return $index === false ? -1 : $index;
         }
-        return (false === $index || null === $index)
-            ? -1
-            : $index;
+        $list = (array) $list;
+        $index = 0;
+        $keys = array_keys($list);
+        $length = count($keys);
+        while ($index < $length) {
+            if (_equals($item, $list[$keys[$index]]))
+                return $keys[$index];
+            $index ++;
+        }
+        return -1;
     });
     return _apply($indexOf, func_get_args());
 }
@@ -1000,6 +1095,7 @@ function indexOf() {
  *
  * @stream
  * @signature a -> [a] -> Number
+ * @signature v -> {k: v} -> Maybe(k)
  * @signature String -> String -> Number
  * @param  mixed $item
  * @param  array $list
@@ -1010,12 +1106,17 @@ function lastIndexOf() {
     $lastIndexOf = $lastIndexOf ?: curry(function($item, $list) {
         if (is_string($list)) {
             $index = strrpos($list, $item);
-        } else {
-            $index = findLastIndex(equals($item), $list);
+            return $index === false ? -1 : $index;
         }
-        return (false === $index || null === $index)
-            ? -1
-            : $index;
+        $list = (array) $list;
+        $keys = array_keys($list);
+        $index = count($list) - 1;
+        while ($index >= 0) {
+            if (_equals($list[$keys[$index]], $item))
+                return $keys[$index];
+            $index --;
+        }
+        return -1;
     });
     return _apply($lastIndexOf, func_get_args());
 }
@@ -1038,18 +1139,24 @@ function lastIndexOf() {
 function uniqueBy() {
     static $uniqueBy = false;
     $uniqueBy = $uniqueBy ?: curry(function($areEqual, $list) {
-        // make sure the compare function is curried
-        $compare = function($a) use($areEqual) {
-            return function($b) use($areEqual, $a) {
-                return $areEqual($a, $b);
-            };
-        };
-
-        return reduce(function($result, $item) use($compare) {
-            return (null === findIndex($compare($item), $result))
-                ? append($item, $result)
-                : $result;
-        }, [], $list);
+        $result = [];
+        $size = 0;
+        foreach ($list as &$item) {
+            $found = false;
+            $index = 0;
+            while ($index < $size) {
+                if ($areEqual($result[$index], $item)) {
+                    $found = true;
+                    break;
+                }
+                $index ++;
+            }
+            if (! $found) {
+                $result[$size] = $item;
+                $size ++;
+            }
+        }
+        return $result;
     });
     return _apply($uniqueBy, func_get_args());
 }
@@ -1068,7 +1175,7 @@ function uniqueBy() {
  */
 function unique() {
     static $unique = false;
-    $unique = $unique ?: uniqueBy(equals());
+    $unique = $unique ?: uniqueBy(_f('_equals'));
     return _apply($unique, func_get_args());
 }
 
@@ -1103,13 +1210,14 @@ function unique() {
 function groupBy() {
     static $groupBy = false;
     $groupBy = $groupBy ?: curry(function($fn, $list) {
-        return reduce(function($result, $item) use($fn) {
+        $result = [];
+        foreach($list as $item) {
             $index = $fn($item);
             if (! isset($result[$index]))
                 $result[$index] = [];
             $result[$index][] = $item;
-            return $result;
-        }, [], $list);
+        }
+        return $result;
     });
     return _apply($groupBy, func_get_args());
 }
@@ -1133,15 +1241,18 @@ function groupBy() {
 function pairsFrom() {
     static $pairsFrom = false;
     $pairsFrom = $pairsFrom ?: curry(function($list1, $list2) {
-        $length1 = length($list1);
-        $length2 = length($list2);
+        $length1 = count($list1);
+        $length2 = count($list2);
         if (0 == $length1 || 0 == $length2)
             return [];
-        $list1 = values($list1);
-        $list2 = values($list2);
-        return map(function($index) use($list1, $list2) {
-            return [$list1[$index], $list2[$index]];
-        }, range(0, -1 + min($length1, $length2)));
+        $result = [];
+        $index = 0;
+        $length = min($length1, $length2);
+        while ($index < $length) {
+            $result[] = [$list1[$index], $list2[$index]];
+            $index ++;
+        }
+        return $result;
     });
     return _apply($pairsFrom, func_get_args());
 }

@@ -69,6 +69,7 @@ attributes(object|array $object) : array
 Converts an object to an associative array containing public non-static attributes.
 
 If `$object` is not an object, it is returned unchanged.
+
 ```php
 class AttributesTestClass {
     private $a;
@@ -269,7 +270,7 @@ Checks if an attribute/value of an object/array passes the given predicate.
 
 ```php
 $foo = ['name' => 'foo', 'age' => 11];
-$isAdult = F\satisfies(F\gt(F\__(), 18), 'age');
+$isAdult = F\satisfies(F\lte(18), 'age');
 F\satisfies(F\startsWith('f'), 'name', $foo); //=> true
 F\satisfies(F\startsWith('g'), 'name', $foo); //=> false
 F\satisfies(F\startsWith('g'), 'friends', $foo); //=> false
@@ -299,7 +300,7 @@ $persons = [
 
 $isValid = F\satisfiesAll([
     'name' => F\startsWith('b'),
-    'age' => F\gt(F\__(), 15)
+    'age' => F\lte(15)
 ]);
 
 F\filter($isValid, $persons); //=> [['name' => 'baz', 'age' => 16], ['name' => 'beta', 'age' => 25]]
@@ -328,7 +329,7 @@ $persons = [
 
 $isValid = F\satisfiesAny([
     'name' => F\startsWith('b'),
-    'age' => F\gt(F\__(), 15)
+    'age' => F\lte(15)
 ]);
 
 F\filter($isValid, $persons); //=> [['name' => 'bar', 'age' => 9], ['name' => 'baz', 'age' => 16], ['name' => 'zeta', 'age' => 33], ['name' => 'beta', 'age' => 25]]
@@ -342,6 +343,7 @@ toPairs(array $object) : array
 
 ```
 {k: v} -> [(k,v)]
+[v] -> [(Number,v)]
 ```
 
 Converts an object or associative array to an array of [key, value] pairs.

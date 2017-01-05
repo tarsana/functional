@@ -27,7 +27,7 @@
  */
 function clone_() {
     static $clone = false;
-    $clone = $clone ?: curry(function($value) {
+    $clone = $clone ?: curry(function($value) use(&$clone) {
         switch (type($value)) {
             case 'Null':
             case 'Boolean':
@@ -39,13 +39,13 @@ function clone_() {
             case 'ArrayObject':
             case 'Array':
             case 'List':
-                return map(clone_(), $value);
+                return array_map($clone, $value);
             case 'Error':
             case 'Stream':
             case 'Object':
                 $result = clone $value;
                 foreach (keys($value) as $key) {
-                    $result->{$key} = clone_($result->{$key});
+                    $result->{$key} = $clone($result->{$key});
                 }
                 return $result;
         }
@@ -58,6 +58,7 @@ function clone_() {
  * Converts an object to an associative array containing public non-static attributes.
  *
  * If `$object` is not an object, it is returned unchanged.
+ *
  * ```php
  * class AttributesTestClass {
  *     private $a;
@@ -104,7 +105,9 @@ function attributes() {
 function keys() {
     static $keys = false;
     $keys = $keys ?: curry(function($object) {
-        return array_keys(attributes($object));
+        return is_object($object)
+            ? array_keys(get_object_vars($object))
+            : array_keys($object);
     });
     return _apply($keys, func_get_args());
 }
@@ -127,7 +130,9 @@ function keys() {
 function values() {
     static $values = false;
     $values = $values ?: curry(function($object) {
-        return array_values(attributes($object));
+        return is_object($object)
+            ? array_values(get_object_vars($object))
+            : array_values($object);
     });
     return _apply($values, func_get_args());
 }
@@ -169,7 +174,9 @@ function values() {
 function has() {
     static $has = false;
     $has = $has ?: curry(function($name, $object){
-        return contains($name, keys($object));
+        if (is_object($object)) return isset($object->{$name});
+        if (is_array($object)) return isset($object[$name]);
+        return false;
     });
     return _apply($has, func_get_args());
 }
@@ -202,10 +209,9 @@ function has() {
 function get() {
     static $get = false;
     $get = $get ?: curry(function($name, $object){
-        $object = attributes($object);
-        return has($name, $object)
-            ? $object[$name]
-            : null;
+        return is_object($object)
+            ? (isset($object->{$name}) ? $object->{$name} : null)
+            : (isset($object[$name]) ? $object[$name] : null);
     });
     return _apply($get, func_get_args());
 }
@@ -233,12 +239,12 @@ function get() {
  */
 function getPath() {
     static $getPath = false;
-    $getPath = $getPath ?: curry(function($path, $object){
-        return reduce(function($result, $name) {
-            if ($result !== null)
-                $result = get($name, $result);
-            return $result;
-        }, $object, $path);
+    $getPath = $getPath ?: curry(function($path, $object) {
+        $result = $object;
+        foreach ($path as &$attr) {
+            $result = get($attr, $result);
+        }
+        return $result;
     });
     return _apply($getPath, func_get_args());
 }
@@ -267,10 +273,10 @@ function getPath() {
 function set() {
     static $set = false;
     $set = $set ?: curry(function($name, $value, $object) {
-        $object = clone_($object);
-        if (is_object($object))
+        if (is_object($object)) {
+            $object = clone_($object);
             $object->{$name} = $value;
-        else
+        } else
             $object[$name] = $value;
         return $object;
     });
@@ -312,7 +318,7 @@ function update() {
  *
  * ```php
  * $foo = ['name' => 'foo', 'age' => 11];
- * $isAdult = F\satisfies(F\gt(F\__(), 18), 'age');
+ * $isAdult = F\satisfies(F\lte(18), 'age');
  * F\satisfies(F\startsWith('f'), 'name', $foo); //=> true
  * F\satisfies(F\startsWith('g'), 'name', $foo); //=> false
  * F\satisfies(F\startsWith('g'), 'friends', $foo); //=> false
@@ -348,7 +354,7 @@ function satisfies() {
  *
  * $isValid = F\satisfiesAll([
  *     'name' => F\startsWith('b'),
- *     'age' => F\gt(F\__(), 15)
+ *     'age' => F\lte(15)
  * ]);
  *
  * F\filter($isValid, $persons); //=> [['name' => 'baz', 'age' => 16], ['name' => 'beta', 'age' => 25]]
@@ -363,11 +369,11 @@ function satisfies() {
 function satisfiesAll() {
     static $satisfiesAll = false;
     $satisfiesAll = $satisfiesAll ?: curry(function($predicates, $object) {
-        $predicates = map(function($pair) {
-            return satisfies($pair[1], $pair[0]);
-        }, toPairs($predicates));
-        $predicates = apply(_f('all'), $predicates);
-        return $predicates($object);
+        foreach ($predicates as $key => $predicate) {
+            if (!satisfies($predicate, $key, $object))
+                return false;
+        }
+        return true;
     });
     return _apply($satisfiesAll, func_get_args());
 }
@@ -386,7 +392,7 @@ function satisfiesAll() {
  *
  * $isValid = F\satisfiesAny([
  *     'name' => F\startsWith('b'),
- *     'age' => F\gt(F\__(), 15)
+ *     'age' => F\lte(15)
  * ]);
  *
  * F\filter($isValid, $persons); //=> [['name' => 'bar', 'age' => 9], ['name' => 'baz', 'age' => 16], ['name' => 'zeta', 'age' => 33], ['name' => 'beta', 'age' => 25]]
@@ -401,11 +407,11 @@ function satisfiesAll() {
 function satisfiesAny() {
     static $satisfiesAny = false;
     $satisfiesAny = $satisfiesAny ?: curry(function($predicates, $object) {
-        $predicates = map(function($pair) {
-            return satisfies($pair[1], $pair[0]);
-        }, toPairs($predicates));
-        $predicates = apply(_f('any'), $predicates);
-        return $predicates($object);
+        foreach ($predicates as $key => $predicate) {
+            if (satisfies($predicate, $key, $object))
+                return true;
+        }
+        return false;
     });
     return _apply($satisfiesAny, func_get_args());
 }
@@ -420,15 +426,20 @@ function satisfiesAny() {
  *
  * @stream
  * @signature {k: v} -> [(k,v)]
+ * @signature [v] -> [(Number,v)]
  * @param  array $object
  * @return array
  */
 function toPairs() {
     static $toPairs = false;
     $toPairs = $toPairs ?: curry(function($object) {
-        return map(function($key) use($object) {
-            return [$key, get($key, $object)];
-        }, keys($object));
+        if (is_object($object))
+            $object = get_object_vars($object);
+        $result = [];
+        foreach ($object as $key => $value) {
+            $result[] = [$key, $value];
+        }
+        return $result;
     });
     return _apply($toPairs, func_get_args());
 }

@@ -81,7 +81,9 @@ class Stream {
     public static function removeOperations($name)
     {
         $names = func_get_args();
-        self::$operations = filter(pipe(get('name'), contains(__(), $names), not()), self::$operations);
+        self::$operations = filter(function($operation) use($names) {
+            return !in_array(get('name', $operation), $names);
+        }, self::$operations);
     }
 
     /**

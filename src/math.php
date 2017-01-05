@@ -147,9 +147,7 @@ function modulo() {
  */
 function sum() {
     static $sum = false;
-    $sum = $sum ?: curry(function($numbers){
-        return reduce(plus(), 0, $numbers);
-    });
+    $sum = $sum ?: curry('array_sum');
     return _apply($sum, func_get_args());
 }
 
@@ -168,9 +166,7 @@ function sum() {
  */
 function product() {
     static $product = false;
-    $product = $product ?: curry(function($numbers){
-        return reduce(multiply(), 1, $numbers);
-    });
+    $product = $product ?: curry('array_product');
     return _apply($product, func_get_args());
 }
 

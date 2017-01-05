@@ -39,7 +39,6 @@ curry(callable $fn) : callable
 Returns a curried equivalent of the provided function.
 
 ```php
-// A closure
 $add = F\curry(function($x, $y) {
     return $x + $y;
 });
@@ -48,13 +47,18 @@ $add(1, 2); //=> 3
 $addFive = $add(5); // this is a function
 $addFive(1); //=> 6
 
-$sum = F\curry(function() use($add) {
-    $numbers = func_get_args();
-    return F\reduce($add, 0, $numbers);
-});
+$data = [1, 2, 3, 4, 5];
+$slice = F\curry('array_slice');
+$itemsFrom = $slice($data);
+$itemsFrom(2); //=> [3, 4, 5]
+$itemsFrom(1, 2); //=> [2, 3, 4, 5]
+// Notice that optional arguments are ignored !
 
-$sum(); //=> 0
-$sum(1, 2, 3, 4); //=> 10
+$polynomial = F\curry(function($a, $b, $c, $x) {
+    return $a * $x * $x + $b * $x + $c;
+});
+$f = $polynomial(0, 2, 1); // 2 * $x + 1
+$f(5); //=> 11
 ```
 
 # __
@@ -70,13 +74,19 @@ __() : Tarsana\Functional\Placeholder
 Argument placeholder to use with curried functions.
 
 ```php
-$minus = F\curry(function ($x, $y) { return $x - $y; });
-$decrement = $minus(F\__(), 1);
-$decrement(10); //=> 9
-
 $reduce = F\curry('array_reduce');
 $sum = $reduce(F\__(), F\plus());
 $sum([1, 2, 3, 4], 0); //=> 10
+
+$polynomial = F\curry(function($a, $b, $c, $x) {
+    return $a * $x * $x + $b * $x + $c;
+});
+
+$multiplier = $polynomial(0, F\__(), 0, F\__());
+$triple = $multiplier(3);
+$triple(5); //=> 15
+$multipleOfThree = $multiplier(F\__(), 3);
+$multipleOfThree(4); //=> 12
 ```
 
 # apply
@@ -111,8 +121,9 @@ Performs left-to-right function composition.
 
 The leftmost function may have any arity;
 the remaining functions must be unary.
-The result of pipe is curried.
-**Calling pipe() without any argument returns the `identity` function**
+The result of pipe is **not curried**.
+**Calling pipe() without any argument returns the `identity` function**.
+
 ```php
 $double = function($x) { return 2 * $x; };
 $addThenDouble = F\pipe(F\plus(), $double);
@@ -173,7 +184,7 @@ returns `true` only if all predicates are satisfied.
 If no predicate is given as argument, this function
 will return an always passing predicate.
 ```php
-$betweenOneAndTen = F\all(F\gte(F\__(), 1), F\lte(F\__(), 10));
+$betweenOneAndTen = F\all(F\lt(1), F\gt(10));
 $betweenOneAndTen(5); //=> true
 $betweenOneAndTen(0); //=> false
 $alwaysTrue = F\all();
@@ -222,7 +233,7 @@ complement(callable $fn) : callable
 Takes a function `f` and returns a function `g` so that if `f` returns
 `x` for some arguments; `g` will return `! x` for the same arguments.
 
-Note that `complement($fn) == pipe($fn, not())`.
+Note that `complement($fn) == pipe($fn, not())`, So the resulting function is not curried !.
 ```php
 $isOdd = function($number) {
     return 1 == $number % 2;

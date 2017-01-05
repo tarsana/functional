@@ -1,0 +1,71 @@
+155: et
+138: vitae
+133: nec, sed
+132: non, ut
+130: ac
+127: eget
+126: in
+120: at, id, quis
+116: eu
+115: a
+114: amet, sit
+111: vel
+96: ipsum
+93: Sed
+78: tincidunt
+77: nibh
+76: augue
+75: Donec
+74: faucibus
+73: elit, ex, felis
+72: purus, sapien
+71: erat
+70: eros, ligula
+69: turpis
+68: arcu, nisi, sem
+67: Pellentesque, velit
+66: diam, massa, vehicula
+65: ante, neque, nisl, orci
+64: Nulla, egestas, leo, lorem, urna
+63: Vestibulum, lacus
+62: luctus, volutpat
+61: mi
+60: lectus, malesuada, ultrices
+59: consectetur, est, pharetra, quam
+58: dolor
+57: tellus
+56: metus
+55: In, accumsan
+54: convallis, elementum, facilisis, mauris
+53: dui, libero, risus, sodales, tortor, tristique
+52: feugiat, interdum
+51: Vivamus, condimentum, nulla, scelerisque
+50: Fusce, Suspendisse, mollis, nunc, pellentesque, semper, venenatis
+49: bibendum, tempor
+48: congue, cursus, imperdiet, odio, rhoncus, varius
+47: Duis, auctor, enim, magna, mattis, suscipit
+46: Nam, aliquam, aliquet, justo, pulvinar, ultricies
+45: Nullam, efficitur, hendrerit, tempus
+44: blandit, dictum, fermentum, lobortis, posuere, sagittis
+43: Curabitur, Mauris, commodo, iaculis, lacinia, placerat, rutrum, ullamcorper
+42: Quisque, consequat, eleifend, sollicitudin, vestibulum, vulputate
+41: Aenean, viverra
+39: Maecenas, dapibus, ornare
+38: Aliquam, Etiam, Phasellus, fringilla, laoreet, maximus, porttitor
+37: Proin, Ut, gravida
+36: dignissim
+35: Nunc, pretium
+34: Morbi, Praesent, porta
+31: finibus, molestie
+30: Cras
+29: euismod
+25: Integer
+20: per
+19: fames
+18: primis
+12: habitant, morbi, netus, senectus
+11: Curae, cubilia, potenti
+10: Class, Cum, ad, aptent, conubia, dis, himenaeos, inceptos, litora, magnis, montes, mus, nascetur, natoque, nostra, parturient, penatibus, ridiculus, sociis, sociosqu, taciti, torquent
+9: facilisi
+8: Lorem, adipiscing, dictumst, habitasse, hac, platea
+7: Interdum

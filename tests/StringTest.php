@@ -76,10 +76,10 @@ class StringTest extends \Tarsana\UnitTests\Functional\UnitTest {
 	}
 
 	public function test_chunks() {
-		$groups = F\chunks('(){}', ',');
-		$this->assertEquals(['1', '2', '(3,4,5)', '{6,(7,8)}', '9'], $groups('1,2,(3,4,5),{6,(7,8)},9'));
 		$names = F\chunks('()""', ' ');
 		$this->assertEquals(['Foo', '"Bar Baz"', '(Some other name)'], $names('Foo "Bar Baz" (Some other name)'));
+		$groups = F\chunks('(){}', '->');
+		$this->assertEquals(['1', '2', '(3->4->5)', '{6->(7->8)}', '9'], $groups('1->2->(3->4->5)->{6->(7->8)}->9'));
 	}
 }
 

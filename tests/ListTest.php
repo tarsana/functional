@@ -103,7 +103,11 @@ class ListTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals([1, 2, 3, 4, 'x'], F\insert(11, 'x', [1, 2, 3, 4]));
 		$this->assertEquals(['x', 1, 2, 3, 4], F\insert(0, 'x', [1, 2, 3, 4]));
 		$this->assertEquals(['x', 1, 2, 3, 4], F\insert(-11, 'x', [1, 2, 3, 4]));
+		$this->assertEquals('Hello World', F\insert(32, 'd', 'Hello Worl'));
 		$this->assertEquals('Hello World', F\insert(3, 'l', 'Helo World'));
+		$this->assertEquals('Hello World', F\insert(-7, 'l', 'Helo World'));
+		$this->assertEquals('Hello World', F\insert(0, 'H', 'ello World'));
+		$this->assertEquals('Hello World', F\insert(-70, 'H', 'ello World'));
 	}
 
 	public function test_insertAll() {
@@ -129,6 +133,7 @@ class ListTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$items = ['Foo', 'Bar', 'Baz'];
 		$this->assertEquals(['Foo', 'Bar'], F\take(2, $items));
 		$this->assertEquals([], F\take(0, $items));
+		$this->assertEquals(['Foo', 'Bar', 'Baz'], F\take(7, $items));
 		$this->assertEquals(['Bar', 'Baz'], F\take(-2, $items));
 		$this->assertEquals('Hello', F\take(5, 'Hello World'));
 		$this->assertEquals('World', F\take(-5, 'Hello World'));
@@ -203,7 +208,7 @@ class ListTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals(['He', 'll', 'o ', 'Wo', 'rl', 'd'], $pairs("Hello World"));
 		$this->assertEquals([[1, 2]], F\slices(5, [1, 2]));
 		$this->assertEquals([], F\slices(3, []));
-		$this->assertEquals('', F\slices(3, ''));
+		$this->assertEquals([''], F\slices(3, ''));
 	}
 
 	public function test_contains() {

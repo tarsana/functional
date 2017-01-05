@@ -1,0 +1,71 @@
+15500: et
+13800: vitae
+13300: nec, sed
+13200: non, ut
+13000: ac
+12700: eget
+12600: in
+12000: at, id, quis
+11600: eu
+11500: a
+11400: amet, sit
+11100: vel
+9600: ipsum
+9300: Sed
+7800: tincidunt
+7700: nibh
+7600: augue
+7500: Donec
+7400: faucibus
+7300: elit, ex, felis
+7200: purus, sapien
+7100: erat
+7000: eros, ligula
+6900: turpis
+6800: arcu, nisi, sem
+6700: Pellentesque, velit
+6600: diam, massa, vehicula
+6500: ante, neque, nisl, orci
+6400: Nulla, egestas, leo, lorem, urna
+6300: Vestibulum, lacus
+6200: luctus, volutpat
+6100: mi
+6000: lectus, malesuada, ultrices
+5900: consectetur, est, pharetra, quam
+5800: dolor
+5700: tellus
+5600: metus
+5500: In, accumsan
+5400: convallis, elementum, facilisis, mauris
+5300: dui, libero, risus, sodales, tortor, tristique
+5200: feugiat, interdum
+5100: Vivamus, condimentum, nulla, scelerisque
+5000: Fusce, Suspendisse, mollis, nunc, pellentesque, semper, venenatis
+4900: bibendum, tempor
+4800: congue, cursus, imperdiet, odio, rhoncus, varius
+4700: Duis, auctor, enim, magna, mattis, suscipit
+4600: Nam, aliquam, aliquet, justo, pulvinar, ultricies
+4500: Nullam, efficitur, hendrerit, tempus
+4400: blandit, dictum, fermentum, lobortis, posuere, sagittis
+4300: Curabitur, Mauris, commodo, iaculis, lacinia, placerat, rutrum, ullamcorper
+4200: Quisque, consequat, eleifend, sollicitudin, vestibulum, vulputate
+4100: Aenean, viverra
+3900: Maecenas, dapibus, ornare
+3800: Aliquam, Etiam, Phasellus, fringilla, laoreet, maximus, porttitor
+3700: Proin, Ut, gravida
+3600: dignissim
+3500: Nunc, pretium
+3400: Morbi, Praesent, porta
+3100: finibus, molestie
+3000: Cras
+2900: euismod
+2500: Integer
+2000: per
+1900: fames
+1800: primis
+1200: habitant, morbi, netus, senectus
+1100: Curae, cubilia, potenti
+1000: Class, Cum, ad, aptent, conubia, dis, himenaeos, inceptos, litora, magnis, montes, mus, nascetur, natoque, nostra, parturient, penatibus, ridiculus, sociis, sociosqu, taciti, torquent
+900: facilisi
+800: Lorem, adipiscing, dictumst, habitasse, hac, platea
+700: Interdum
