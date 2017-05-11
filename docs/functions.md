@@ -1,4 +1,4 @@
-#functions
+# functions
 
 Functions dealing with functions.
 
@@ -9,6 +9,8 @@ Functions dealing with functions.
 - [apply](#apply) - Apply the provided function to the list of arguments.
 
 - [pipe](#pipe) - Performs left-to-right function composition.
+
+- [compose](#compose) - Performs right-to-left function composition.
 
 - [identity](#identity) - A function that takes one argument and
 returns exactly the given argument.
@@ -127,6 +129,29 @@ The result of pipe is **not curried**.
 ```php
 $double = function($x) { return 2 * $x; };
 $addThenDouble = F\pipe(F\plus(), $double);
+$addThenDouble(2, 3); //=> 10
+```
+
+# compose
+
+```php
+compose(callable $fns...) : callable
+```
+
+```
+(((a, b, ...) -> o), (o -> p), ..., (y -> z)) -> ((a, b, ...) -> z)
+```
+
+Performs right-to-left function composition.
+
+The rightmost function may have any arity;
+the remaining functions must be unary.
+The result of `compose` is **not curried**.
+**Calling compose() without any argument returns the `identity` function**.
+
+```php
+$double = function($x) { return 2 * $x; };
+$addThenDouble = F\compose($double, F\plus());
 $addThenDouble(2, 3); //=> 10
 ```
 

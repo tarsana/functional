@@ -50,6 +50,12 @@ class FunctionsTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals(10, $addThenDouble(2, 3));
 	}
 
+	public function test_compose() {
+		$double = function($x) { return 2 * $x; };
+		$addThenDouble = F\compose($double, F\plus());
+		$this->assertEquals(10, $addThenDouble(2, 3));
+	}
+
 	public function test_identity() {
 		$this->assertEquals('Hello', F\identity('Hello'));
 		$this->assertEquals([1, 2, 3], F\identity([1, 2, 3]));

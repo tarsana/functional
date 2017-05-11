@@ -1,0 +1,27 @@
+{
+  "name": "tarsana-functional",
+  "version": "2.1.1",
+  "description": "functional programming library for PHP",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "php vendor/bin/phpunit",
+    "build": "php build.php"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tarsana/functional.git"
+  },
+  "author": "Amine Ben hammou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tarsana/functional/issues"
+  },
+  "homepage": "https://github.com/tarsana/functional#readme",
+  "devDependencies": {
+    "dox": "^0.9.0"
+  }
+}

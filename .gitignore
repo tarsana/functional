@@ -4,3 +4,4 @@ composer.lock
 /packages
 *.sublime-*
 /about
+/node_modules

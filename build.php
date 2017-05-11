@@ -329,7 +329,7 @@ function generate_docs($module) {
 function generate_docs_header($module) {
     $name = $module->name;
     $description = get('description', head($module->blocks));
-    $module->docs .= "#{$name}\n\n{$description}\n\n";
+    $module->docs .= "# {$name}\n\n{$description}\n\n";
     return $module;
 }
 

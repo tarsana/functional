@@ -124,6 +124,37 @@ function pipe() {
 }
 
 /**
+ * Performs right-to-left function composition.
+ *
+ * The rightmost function may have any arity;
+ * the remaining functions must be unary.
+ * The result of `compose` is **not curried**.
+ * **Calling compose() without any argument returns the `identity` function**.
+ *
+ * ```php
+ * $double = function($x) { return 2 * $x; };
+ * $addThenDouble = F\compose($double, F\plus());
+ * $addThenDouble(2, 3); //=> 10
+ * ```
+ *
+ * @signature (((a, b, ...) -> o), (o -> p), ..., (y -> z)) -> ((a, b, ...) -> z)
+ * @param  callable $fns...
+ * @return callable
+ */
+function compose() {
+    $fns = array_reverse(func_get_args());
+    if(count($fns) < 1)
+        return identity();
+    return function () use ($fns) {
+        $result = _apply(array_shift($fns), func_get_args());
+        foreach ($fns as $fn) {
+            $result = $fn($result);
+        }
+        return $result;
+    };
+}
+
+/**
  * A function that takes one argument and
  * returns exactly the given argument.
  *

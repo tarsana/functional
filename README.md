@@ -175,6 +175,12 @@ All tests are under the `tests` directory. they can be run using `phpunit`.
 
 # Changes Log
 
+**Version 2.2.0**
+
+- [compose](https://github.com/tarsana/functional/blob/master/docs/functions.md#compose) function added as requested [here](https://github.com/tarsana/functional/issues/4).
+
+- **108** Functions, **151** Tests with **420** assertions.
+
 **Version 2.1.0**
 
 - Improving efficiency of the library.
