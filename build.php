@@ -183,6 +183,19 @@ function module_of($path) {
 }
 
 /**
+ * Fills the name of the Module based on the path.
+ * 'src/xxx/aaa.php' -> 'aaa'
+ *
+ * @signature Module -> Module
+ * @param  object $module
+ * @return object
+ */
+function fill_name($module) {
+    $module->name = apply(pipe(split('/'), last(), split('.'), head()), [$module->path]);
+    return $module;
+}
+
+/**
  * Fills documentation file path based on source file path.
  * 'src/xxx.php' -> 'docs/xxx.md'
  *
@@ -207,19 +220,6 @@ function fill_tests_path($module) {
     $name = ucfirst(camelCase($module->name));
     $dir = 'tests' . remove(3, dirname($module->path));
     $module->testsPath = "{$dir}/{$name}Test.php";
-    return $module;
-}
-
-/**
- * Fills the name of the Module based on the path.
- * 'src/xxx/aaa.php' -> 'aaa'
- *
- * @signature Module -> Module
- * @param  object $module
- * @return object
- */
-function fill_name($module) {
-    $module->name = apply(pipe(split('/'), last(), split('.'), head()), [$module->path]);
     return $module;
 }
 

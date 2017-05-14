@@ -21,6 +21,8 @@ Functional programming library for Tarsana
 
 - [Tests](#tests)
 
+- [Contributing](#contributing)
+
 - [Changes Log](#changes-log)
 
 
@@ -172,6 +174,10 @@ There is also the `Tarsana\Functional\Error` class which is just extending the d
 # Tests
 
 All tests are under the `tests` directory. they can be run using `phpunit`.
+
+# Contributing
+
+Please consider reading the [Contribution Guide](https://github.com/tarsana/functional/blob/master/CONTRIBUTING.md), it will help you to understand how is the project structured and why I am including a `build.php` and `package.json` files !
 
 # Changes Log
 

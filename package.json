@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "php vendor/bin/phpunit",
-    "build": "php build.php"
+    "build": "php build.php",
+    "perf": "php performance/run.php"
   },
   "repository": {
     "type": "git",

@@ -23,8 +23,8 @@ function tests() {
     if (null == $tests) {
         $tests = [
             (object) [
-                'input' => __DIR__ . '/tests/1K-words.input.txt',
-                'output' => trim(file_get_contents(__DIR__ . '/tests/1K-words.output.txt'))
+                'input' => __DIR__ . '/tests/1k-words.input.txt',
+                'output' => trim(file_get_contents(__DIR__ . '/tests/1k-words.output.txt'))
             ],
             (object) [
                 'input' => __DIR__ . '/tests/10k-words.input.txt',
