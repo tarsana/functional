@@ -185,7 +185,9 @@ Please consider reading the [Contribution Guide](https://github.com/tarsana/func
 
 - [compose](https://github.com/tarsana/functional/blob/master/docs/functions.md#compose) function added as requested [here](https://github.com/tarsana/functional/issues/4).
 
-- **108** Functions, **151** Tests with **420** assertions.
+- [Contribution Guide](https://github.com/tarsana/functional/blob/master/CONTRIBUTING.md) added.
+
+- **109** Functions, **152** Tests with **421** assertions.
 
 **Version 2.1.0**
 
