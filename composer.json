@@ -1,6 +1,6 @@
 {
     "name": "tarsana/functional",
-    "description": "functional programming library for Tarsana",
+    "description": "functional programming library for PHP",
     "type": "library",
     "license": "MIT",
     "authors": [

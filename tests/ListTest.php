@@ -170,6 +170,7 @@ class ListTest extends \Tarsana\UnitTests\Functional\UnitTest {
 		$this->assertEquals([], F\remove(5, $items));
 		$this->assertEquals('World', F\remove(6, 'Hello World'));
 		$this->assertEquals('Hello', F\remove(-6, 'Hello World'));
+		$this->assertEquals('', F\remove(3, 'a'));
 	}
 
 	public function test_removeWhile() {

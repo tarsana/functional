@@ -587,6 +587,7 @@ F\remove(-1, $items); //=> ['Foo', 'Bar']
 F\remove(5, $items); //=> []
 F\remove(6, 'Hello World'); //=> 'World'
 F\remove(-6, 'Hello World'); //=> 'Hello'
+F\remove(3, 'a'); //=> ''
 ```
 
 # removeWhile

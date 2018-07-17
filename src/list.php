@@ -690,6 +690,7 @@ function takeLastUntil() {
  * F\remove(5, $items); //=> []
  * F\remove(6, 'Hello World'); //=> 'World'
  * F\remove(-6, 'Hello World'); //=> 'Hello'
+ * F\remove(3, 'a'); //=> ''
  * ```
  *
  * @stream
@@ -702,10 +703,9 @@ function takeLastUntil() {
 function remove() {
     static $remove = false;
     $remove = $remove ?: curry(function($count, $list) {
-        // ...
         $length = length($list);
         if ($count > $length || $count < -$length)
-            return [];
+            return is_string($list) ? '' : [];
         $count = ($count > 0)
             ? $count - $length
             : $count + $length;

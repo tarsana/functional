@@ -5,3 +5,4 @@ composer.lock
 *.sublime-*
 /about
 /node_modules
+build

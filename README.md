@@ -3,9 +3,10 @@
 [![Build Status](https://travis-ci.org/tarsana/functional.svg?branch=master)](https://travis-ci.org/tarsana/functional)
 [![Coverage Status](https://coveralls.io/repos/github/tarsana/functional/badge.svg?branch=master)](https://coveralls.io/github/tarsana/functional?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tarsana/functional/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tarsana/functional/?branch=master)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/webneat)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/tarsana/functional/blob/master/LICENSE)
 
-Functional programming library for Tarsana
+Functional programming library for PHP.
 
 # Table of Contents
 
@@ -180,6 +181,10 @@ All tests are under the `tests` directory. they can be run using `phpunit`.
 Please consider reading the [Contribution Guide](https://github.com/tarsana/functional/blob/master/CONTRIBUTING.md), it will help you to understand how is the project structured and why I am including a `build.php` and `package.json` files !
 
 # Changes Log
+
+**Version 2.2.1**
+
+- Bug fixed on `remove`.
 
 **Version 2.2.0**
 
