@@ -312,8 +312,9 @@ function occurences() {
  * **Note that this function assumes that the given `$text` is well formatted**
  *
  * ```php
- * $names = F\chunks('()""', ' ');
+ * $names = F\chunks("''()\"\"", ' ');
  * $names('Foo "Bar Baz" (Some other name)'); //=> ['Foo', '"Bar Baz"', '(Some other name)']
+ * $names("This 'Quote\'s Test' is working"); //=> ['This', "'Quote\'s Test'", 'is', 'working']
  *
  * $groups = F\chunks('(){}', '->');
  * $groups('1->2->(3->4->5)->{6->(7->8)}->9'); //=> ['1', '2', '(3->4->5)', '{6->(7->8)}', '9']
@@ -369,6 +370,15 @@ function chunks() {
                 $index += $separatorLength;
             } else {
                 $c = $characters[$index];
+                if ($c == '\\') {
+                    $buffer .= $c;
+                    $index ++;
+                    if ($index < $length) {
+                        $buffer .= $characters[$index];
+                        $index ++;
+                    }
+                    continue;
+                }
                 $isOpening = array_key_exists($c, $counters['openings']);
                 $isClosing = array_key_exists($c, $counters['closings']);
                 if ($isOpening && $isClosing) { // when $c == '"' for example

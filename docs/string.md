@@ -277,8 +277,9 @@ the starting and ending characters of a group that should not be split.
 **Note that this function assumes that the given `$text` is well formatted**
 
 ```php
-$names = F\chunks('()""', ' ');
+$names = F\chunks("''()\"\"", ' ');
 $names('Foo "Bar Baz" (Some other name)'); //=> ['Foo', '"Bar Baz"', '(Some other name)']
+$names("This 'Quote\'s Test' is working"); //=> ['This', "'Quote\'s Test'", 'is', 'working']
 
 $groups = F\chunks('(){}', '->');
 $groups('1->2->(3->4->5)->{6->(7->8)}->9'); //=> ['1', '2', '(3->4->5)', '{6->(7->8)}', '9']
