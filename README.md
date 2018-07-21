@@ -182,6 +182,10 @@ Please consider reading the [Contribution Guide](https://github.com/tarsana/func
 
 # Changes Log
 
+**Version 2.2.2**
+
+- Bug fixed on `chunks`.
+
 **Version 2.2.1**
 
 - Bug fixed on `remove`.

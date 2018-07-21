@@ -1,6 +1,6 @@
 {
   "name": "tarsana-functional",
-  "version": "2.1.1",
+  "version": "2.2.2",
   "description": "functional programming library for PHP",
   "main": "index.js",
   "directories": {
